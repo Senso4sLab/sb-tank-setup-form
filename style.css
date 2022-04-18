@@ -45,12 +45,9 @@ div {
 }
 
 #error {
-    /* padding-left: 30vw; */
     font-size: 1rem;
     text-align: center;
     display: none;
-    /* width: 20vw; */
-    /* overflow-wrap: break-word; */
 }
 
 input,
@@ -67,54 +64,6 @@ select {
     font-weight: 600;
 }
 
-/* .units-div {
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: flex-start;
-} */
-
-/* .units-label {
-    margin-left: 30vw;
-} */
-
-/* .radio-button-box-div {
-    margin-left: 20vw;
-    padding: 10vh 0 0 10vw;
-    width: 60vw;
-    margin-top: 5vh;
-    border: 1px solid rgb(255, 255, 255);
-} */
-
-/* .percent-div,
-.liter-div,
-.meter-div {
-    width: 60vw;/*
-    /* margin-left: 10vw; */
-/*} */
-
-/* .checkbox-input {
-    width: initial;
-    margin-bottom: 2vh;
-    margin-right: 10vw;
-}
-
-.checkbox-label {
-    float: left;
-    width: 20vw;
-    text-align: left;
-} */
-
-/* .tank-shape-input,
-.media-input {
-    margin-right: 3vw;
-} */
-
-/* .tank-shape-input:disabled {
-    background-color: #fff;
-    border: 1px solid black;
-    opacity: 1;
-} */
-
 #error,
 .units-div,
 .media-div,
@@ -124,9 +73,7 @@ select {
 .tank-shape-div,
 .custom-labels,
 .custom-buttons,
-/* .tank-type-div, */
 .max-tank-filling-div
-/* .time-interval-div */
     {
         display: flex;
         flex-flow: row wrap;
@@ -134,23 +81,9 @@ select {
         align-items: center;
 }
 
-/* .units-div {
-    margin-left: 5vw;
-}
-
-.media-div {
-    margin-left: 5vw;
-} */
-
-/* .tank-shape-div {
-    margin-left: -2vw;
-} */
-
-
 .units-div,
 .media-div,
 .custom-density-adjustment,
-/* .custom-tank-shape-adjustment-inner, */
 .max-tank-height-div,
 .max-tank-volume-div,
 .tank-shape-div,
@@ -158,39 +91,13 @@ select {
     margin-left: 5vw;
 }
 
-/* .units-div,
-.media-div,
-.tank-shape-div {
-    margin-top: -2vh;
-} */
-
-
 .custom-density-adjustment {
     display: none;
 }
 
-/* Chrome, Safari, Edge, Opera
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-Firefox
-input[type=number] {
-    -moz-appearance: textfield;
-} */
-
 .custom-tank-shape-adjustment {
     display: none;
 }
-
-/* .custom-tank-shape-adjustment-inner {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-} */
 
 .custom-labels {
     width: 100%;
@@ -202,33 +109,12 @@ input[type=number] {
     font-weight: 600;
     text-align: center;
     margin-top: 3vh;
-    /* margin-left: 40vw;
-    margin-right: 40vw; */
     background-color: #0162a6;
     color: rgb(255, 255, 255);
-    /* padding: 1vh; */
     border-radius: 25px;
     border-color: rgb(255, 255, 255);
     padding: 1vh 2.5vw;
 }
-
-/* option {
-    color: rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
-} */
-
-/* Placeholders in select boxes*/
-/* select:required:invalid {
-    color: rgb(78, 79, 80);
-}
-
-option[value=""][disabled] {
-    display: none;
-} */
-
-
-
-/*---------------------------------*/
 
 .button {
     width: 20vw;
@@ -240,7 +126,6 @@ option[value=""][disabled] {
     margin-right: 40vw;
     background-color: #0162a6;
     color: rgb(255, 255, 255);
-    /* padding: 1vh; */
     border-radius: 25px;
     border-color: rgb(255, 255, 255);
     padding: 1vh 2.5vw;
@@ -250,14 +135,8 @@ option[value=""][disabled] {
     margin-bottom: 10vh;
 }
 
-/* .custom-density-adjustment, .custom-tank-shape-adjustment {
-    display: none;
-} */
-
 .custom-tank-shape-adjustment {
     position: relative;
-    /* margin-top: -35vh; */
-    /* margin-bottom: 40vh; */
 }
 
 #add-another1,
@@ -300,10 +179,7 @@ option[value=""][disabled] {
 
 .option {
     position: absolute;
-    /* position: relative; */
     width: 15vw;
-    /* right: 1.5vw; */
-    /* top: 0; */
     overflow: hidden;
     background: rgb(255, 255, 255);
     border: 1px solid #000;
@@ -311,29 +187,6 @@ option[value=""][disabled] {
     display: none;
     z-index: 1000;
 }
-
-/* #tank-shape-options {
-    width: 15vw;
-} */
-
-/* .tank-shape-div::before {
-    content: '';
-    position: absolute;
-    width: 0.75vh;
-    height: 0.75vh;
-    margin-right: 38.5vw;
-    margin-top: 44.7vh;
-    transform: rotate(45deg);
-    transition: 0.5s;
-    border: 0.5vh solid black;
-    border-top: #fff;
-    border-left: #fff;
-    right: 5.1vw;
-    top: 1.5vh;
-    z-index: 10000;
-    pointer-events: none;
-    cursor: default;
-} */
 
 .units-option-element,
 .shape-option-element,
@@ -363,13 +216,7 @@ option[value=""][disabled] {
     top: -20vh;
 }
 
-/* .tank-type-div {
-    position: relative;
-    margin-top: -35vh;
-}*/
-
 .modal {
-    /* position: absolute; */
     height: 100vh;
     width: 100vw;
     background: rgba(0, 0, 0, 0.7);
@@ -434,8 +281,6 @@ option[value=""][disabled] {
     text-align: left;
 }
 
-
-
 .modal-button {
     position: relative;
     width: 5vw;
@@ -466,8 +311,3 @@ option[value=""][disabled] {
 #cancel-button {
     left: 10vw;
 }
-
-/*MEDIA QUERIES*/
-
-
-/*Mobile phones ()*/
