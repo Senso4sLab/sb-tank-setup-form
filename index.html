@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wifi Form</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <h1 class="h1-font">TANK SETUP</h1>
+    <div id="error"></div>
+    <form class="tank-settings-form" autocomplete="off">
+      <div class="units-div">
+        <label class="label" for="units">Measure unit: </label>
+        <div class="input-and-options-div">
+          <input
+            type="text"
+            class="units-input"
+            id="units"
+            placeholder="Choose..."
+            value=""
+          />
+          <div class="option" id="units-options">
+            <div class="units-option-element" id="percent">Percent [%]</div>
+            <div class="units-option-element" id="meter">Meter [m]</div>
+            <div class="units-option-element" id="liter">Liter [l]</div>
+          </div>
+        </div>
+      </div>
+      <div class="media-div" onchange="customDensity();">
+        <label class="label" for="media">Medium type: </label>
+        <div class="input-and-options-div">
+          <input
+            type="text"
+            class="density-input"
+            id="media"
+            placeholder="Choose..."
+            value=""
+          />
+          <div class="option" id="media-options">
+            <div class="media-option-element" id="heating-oil">
+              Heating oil [845 kg/m3]
+            </div>
+            <div class="media-option-element" id="water">Water [999 kg/m3]</div>
+            <div class="media-option-element" id="diesel">
+              Diesel [830 kg/m3]
+            </div>
+            <div class="media-option-element" id="bio-diesel">
+              Bio-Diesel [880 kg/m3]
+            </div>
+            <div class="media-option-element" id="fatty-acid-methyl-esters">
+              FAME [880 kg/m3]
+            </div>
+            <div class="media-option-element" id="rapeseed-oil">
+              Rapeseed oil [915 kg/m3]
+            </div>
+            <div class="media-option-element" id="palm-oil">
+              Palm oil [910 kg/m3]
+            </div>
+            <div class="media-option-element" id="motor-oil">
+              Motor oil [865 kg/m3]
+            </div>
+            <div class="media-option-element" id="adblue">
+              AdBlue [1090 kg/m3]
+            </div>
+            <div class="media-option-element" id="normal-gasoline">
+              Normal Gasoline [743 kg/m3]
+            </div>
+            <div class="media-option-element" id="super-gasoline">
+              Super Gasoline [750 kg/m3]
+            </div>
+            <div class="media-option-element" id="hydrotreated-vegetable-oil">
+              HVO [780 kg/m3]
+            </div>
+            <div class="media-option-element" id="user-specific-density">
+              User specific density
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-density-adjustment">
+        <label class="label" for="density-picker">Density [kg/m3]:</label>
+        <input
+          type="number"
+          id="density-picker"
+          name="density-picker"
+          value=""
+          disabled
+          placeholder="Insert value..."
+        />
+      </div>
+
+      <div class="max-tank-height-div" id="complete-tank-height">
+        <label class="label" for="max-height">Tank height [m]:</label>
+        <input
+          type="number"
+          id="max-height"
+          name="max-height"
+          step="0.01"
+          value=""
+          placeholder="Insert value..."
+        />
+      </div>
+      <div class="max-tank-volume-div" id="complete-tank-volume">
+        <label class="label" for="max-volume">Tank volume [l]:</label>
+        <input
+          type="number"
+          id="max-volume"
+          name="max-volume"
+          step="0.01"
+          value=""
+          placeholder="Insert value..."
+        />
+      </div>
+      <div class="tank-shape-div">
+        <label class="label" for="shape">Tank shape: </label>
+        <div class="input-and-options-div">
+          <input
+            type="text"
+            class="tank-shape-input"
+            placeholder="Choose..."
+            value=""
+          />
+          <div class="option" id="tank-shape-options">
+            <div class="shape-option-element" id="linear">
+              <img src="images/Linear.jpg" alt="linear" />Linear
+            </div>
+            <div class="shape-option-element" id="cylinder-small">
+              <img src="images/Cylinder.jpg" alt="small cylinder" />Cylinder
+              [<=50000l]
+            </div>
+            <div class="shape-option-element" id="cylinder-big">
+              <img src="images/Cylinder2.jpg" alt="big cylinder" />Cylinder
+              [>50000l]
+            </div>
+            <div class="shape-option-element" id="ball">
+              <img src="images/Ball.jpg" alt="ball" />Ball
+            </div>
+            <div class="shape-option-element" id="oval">
+              <img src="images/Oval.jpg" alt="oval" />Oval
+            </div>
+            <div class="shape-option-element" id="convex">
+              <img src="images/Konvex.jpg" alt="convex" />Convex
+            </div>
+            <div class="shape-option-element" id="concave">
+              <img src="images/Konkav.jpg" alt="concave" />Concave
+            </div>
+            <div class="shape-option-element" id="steel-tank">
+              <img src="images/SteelTank.jpg" alt="steel tank" />Sheet steel or
+              battery
+            </div>
+            <div class="shape-option-element" id="custom">
+              <img src="images/Custom.png" alt="custom" />Custom tank shape
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="custom-tank-shape-adjustment">
+        <div class="custom-labels">
+          <label class="label" id="custom-height-label" for="custom-max-height"
+            >Height [m]:</label
+          >
+          <label class="label" id="custom-volume-label" for="custom-max-volume"
+            >Volume [l]:</label
+          >
+        </div>
+        <div
+          class="custom-tank-shape-adjustment-inner"
+          id="custom-tank-shape-adjustment-inner"
+        >
+          <input
+            type="number"
+            id="custom-max-height1"
+            name="custom-max-height1"
+            value="0"
+            step="0.01"
+            placeholder="Insert value..."
+            disabled
+          />
+
+          <input
+            type="number"
+            id="custom-max-volume1"
+            name="custom-max-volume1"
+            value="0"
+            step="1"
+            placeholder="Insert value..."
+            disabled
+          />
+        </div>
+        <div
+          class="custom-tank-shape-adjustment-inner2"
+          id="custom-tank-shape-adjustment-inner2"
+        >
+          <input
+            type="number"
+            id="custom-max-height2"
+            name="custom-max-height"
+            value=""
+            step="0.01"
+            placeholder="Insert value..."
+            disabled
+          />
+
+          <input
+            type="number"
+            id="custom-max-volume2"
+            name="custom-max-volume"
+            value=""
+            step="1"
+            placeholder="Insert value..."
+            disabled
+          />
+          <div class="custom-buttons">
+            <input
+              class="custom-button"
+              id="add-another2"
+              type="button"
+              value="+"
+              onclick="addAnotherCustomTankShape();"
+            />
+            <input
+              class="custom-button"
+              id="delete2"
+              type="button"
+              value="-"
+              onclick="deleteCustomTankShape('custom-tank-shape-adjustment-inner');"
+            />
+          </div>
+        </div>
+        <div
+          class="custom-tank-shape-adjustment-innerMax"
+          id="custom-tank-shape-adjustment-innerMax"
+        >
+          <input
+            type="number"
+            id="custom-max-heightMax"
+            name="custom-max-heightMax"
+            value=""
+            step="0.01"
+            placeholder="Insert value..."
+            disabled
+          />
+          <input
+            type="number"
+            id="custom-max-volumeMax"
+            name="custom-max-volumeMax"
+            value=""
+            step="1"
+            placeholder="Insert value..."
+            disabled
+          />
+        </div>
+      </div>
+      <div class="max-tank-filling-div">
+        <label class="label" for="fill">Filling limit [%]:</label>
+        <input
+          type="number"
+          id="max-fill"
+          class="max-filling"
+          name="fill"
+          step="0.01"
+          value=""
+          placeholder="Insert value..."
+        />
+      </div>
+      <input class="button" type="submit" value="PROCEED" id="proceed-button" />
+    </form>
+    <div class="modal">
+      <div class="inner-modal">
+        <form class="modal-form">
+          <div class="inner-modal-header">
+            <input type="submit" value="X" class="close" id="x-button" />
+          </div>
+          <div class="inner-modal-settings-list">
+            <h3>Please check the entered data:</h3>
+            <br />
+          </div>
+          <input
+            type="submit"
+            value="CONFIRM"
+            class="modal-button"
+            id="ok-button"
+          />
+          <input
+            type="submit"
+            value="BACK"
+            class="modal-button"
+            id="cancel-button"
+          />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
