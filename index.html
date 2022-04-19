@@ -13,7 +13,7 @@
     <div id="error"></div>
     <form class="tank-settings-form" autocomplete="off">
       <div class="units-div">
-        <label class="label" for="units">Measure unit: </label>
+        <label class="label" for="units">Measuring unit: </label>
         <div class="input-and-options-div">
           <input
             type="text"
@@ -75,7 +75,7 @@
               HVO [780 kg/m3]
             </div>
             <div class="media-option-element" id="user-specific-density">
-              User specific density
+              Custom
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
           type="number"
           id="max-volume"
           name="max-volume"
-          step="0.01"
+          step="1"
           value=""
           placeholder="Insert value..."
         />
@@ -129,12 +129,16 @@
               <img src="images/Linear.jpg" alt="linear" />Linear
             </div>
             <div class="shape-option-element" id="cylinder-small">
-              <img src="images/Cylinder.jpg" alt="small cylinder" />Cylinder
-              [<=50000l]
+              <img
+                src="images/Cylinder.jpg"
+                alt="small cylinder"
+              />Cylinder(<=50000l)
             </div>
             <div class="shape-option-element" id="cylinder-big">
-              <img src="images/Cylinder2.jpg" alt="big cylinder" />Cylinder
-              [>50000l]
+              <img
+                src="images/Cylinder2.jpg"
+                alt="big cylinder"
+              />Cylinder(>50000l)
             </div>
             <div class="shape-option-element" id="ball">
               <img src="images/Ball.jpg" alt="ball" />Ball
@@ -153,7 +157,7 @@
               battery
             </div>
             <div class="shape-option-element" id="custom">
-              <img src="images/Custom.png" alt="custom" />Custom tank shape
+              <img src="images/Custom.png" alt="custom" />Custom
             </div>
           </div>
         </div>
@@ -175,7 +179,7 @@
             type="number"
             id="custom-max-height1"
             name="custom-max-height1"
-            value="0"
+            value=""
             step="0.01"
             placeholder="Insert value..."
             disabled
@@ -185,7 +189,7 @@
             type="number"
             id="custom-max-volume1"
             name="custom-max-volume1"
-            value="0"
+            value=""
             step="1"
             placeholder="Insert value..."
             disabled
@@ -262,7 +266,7 @@
           id="max-fill"
           class="max-filling"
           name="fill"
-          step="0.01"
+          step="0.1"
           value=""
           placeholder="Insert value..."
         />
@@ -276,7 +280,9 @@
             <input type="submit" value="X" class="close" id="x-button" />
           </div>
           <div class="inner-modal-settings-list">
-            <h3>Please check the entered data:</h3>
+            <h3 class="inner-modal-settings-list-title">
+              Please check the entered data:
+            </h3>
             <br />
           </div>
           <input
