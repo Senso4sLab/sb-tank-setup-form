@@ -311,3 +311,10 @@ select {
 #cancel-button {
     left: 10vw;
 }
+
+/*Success.html*/
+
+#success-message-paragraph {
+    text-align: center;
+    margin-bottom: 5vh;
+}

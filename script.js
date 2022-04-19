@@ -55,17 +55,17 @@ const validateUserInput = (e) => {
   if (e.target.className == "units-option-element") {
     if (unitsInput.value == "" || unitsInput.value == undefined) {
       errorMessages = errorMessages.filter(
-        (message) => message != "Units are required."
+        (message) => message != "Measuring units are required."
       );
       unitsInput.style.borderColor = "red";
-      errorMessages.push("Units are required.");
+      errorMessages.push("Measuring units are required.");
       error.style.display = "block";
       error.style.color = "red";
       error.style.fontWeight = "900";
     } else {
       unitsInput.style.borderColor = "black";
       errorMessages = errorMessages.filter(
-        (message) => message != "Units are required."
+        (message) => message != "Measuring units are required."
       );
     }
   } else if (e.target.className == "media-option-element") {
@@ -153,13 +153,17 @@ const validateUserInput = (e) => {
     );
     tankShape.style.borderColor = "black";
   } else if (e.target == customMaxHeight2 || e.target == customMaxVolume2) {
-    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-      (element) => element.id != customMaxHeight2.id
-    );
-    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-      (element) => element.id != customMaxVolume2.id
-    );
+    let heightError = true;
+    let volumeError = true;
+    // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+    //   (element) => element.id != customMaxHeight2.id
+    // );
+    // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+    //   (element) => element.id != customMaxVolume2.id
+    // );
     if (e.target == customMaxHeight2) {
+      console.log("Custom max height:");
+      console.log(userInput);
       if (
         userInput < 0 ||
         userInput > 2.5 ||
@@ -170,6 +174,10 @@ const validateUserInput = (e) => {
           (message) => message != "Invalid height-volume pair(s)."
         );
         errorMessages.push("Invalid height-volume pair(s).");
+        otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
         otherCustomMaxHeightsAndVolumes.push({
           id: e.target.id,
           value: e.target.value != "" ? Number.parseFloat(e.target.value) : "",
@@ -183,16 +191,24 @@ const validateUserInput = (e) => {
           (height) => height[0] != e.target.id
         );
         e.target.style.borderColor = "black";
-        errorMessages = errorMessages.filter(
-          (message) => message != "Invalid height-volume pair(s)."
-        );
+        // errorMessages = errorMessages.filter(
+        //   (message) => message != "Invalid height-volume pair(s)."
+        // );
         otherCustomMaxHeightsAndVolumes =
           otherCustomMaxHeightsAndVolumes.filter(
             (element) => element.id != customMaxHeight2.id
           );
         customHeights.push([e.target.id, e.target.value]);
+        heightError = false;
+        if (heightError == false && volumeError == false) {
+          errorMessages = errorMessages.filter(
+              (message) => message != "Invalid height-volume pair(s)."
+            );
+        }
       }
     } else if (e.target == customMaxVolume2) {
+      console.log("Custom max volume:");
+      console.log(userInput);
       if (
         userInput < 0 ||
         userInput > 2500 ||
@@ -203,6 +219,10 @@ const validateUserInput = (e) => {
           (message) => message != "Invalid height-volume pair(s)."
         );
         errorMessages.push("Invalid height-volume pair(s).");
+        otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
         otherCustomMaxHeightsAndVolumes.push({
           id: e.target.id,
           value: e.target.value != "" ? Number.parseFloat(e.target.value) : "",
@@ -216,16 +236,23 @@ const validateUserInput = (e) => {
           (volume) => volume[0] != e.target.id
         );
         e.target.style.borderColor = "black";
-        errorMessages = errorMessages.filter(
-          (message) => message != "Invalid height-volume pair(s)."
-        );
+        // errorMessages = errorMessages.filter(
+        //   (message) => message != "Invalid height-volume pair(s)."
+        // );
         otherCustomMaxHeightsAndVolumes =
           otherCustomMaxHeightsAndVolumes.filter(
             (element) => element.id != customMaxVolume2.id
           );
         customVolumes.push([e.target.id, e.target.value]);
+        volumeError = false;
+        if (heightError == false && volumeError == false) {
+          errorMessages = errorMessages.filter(
+              (message) => message != "Invalid height-volume pair(s)."
+            );
+        }
       }
     }
+    
   } else if (otherCustomMaxHeightsAndVolumes.length > 0) {
     otherCustomMaxHeightsAndVolumes.forEach((el) => {
       const inputField = document.querySelector(`#${el.id}`);
@@ -595,17 +622,17 @@ const submitSettingsForm = (e) => {
   }
   if (unitsInput.value == "" || unitsInput.value == undefined) {
     errorMessages = errorMessages.filter(
-      (message) => message != "Units are required."
+      (message) => message != "Measuring units are required."
     );
     unitsInput.style.borderColor = "red";
-    errorMessages.push("Units are required.");
+    errorMessages.push("Measuring units are required.");
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
   } else {
     unitsInput.style.borderColor = "black";
     errorMessages = errorMessages.filter(
-      (message) => message != "Units are required."
+      (message) => message != "Measuring units are required."
     );
   }
   if (densityInput.value === "" || densityInput.value == undefined) {
@@ -858,7 +885,7 @@ const submitSettingsForm = (e) => {
 
   const mediumType = document.createElement("p");
   if (densityInput.value == "Custom") {
-    mediumType.textContent = `Medium type: Custom [${densityPicker.value} kg/m3]`;
+    mediumType.textContent = `Medium type: Custom (${densityPicker.value} kg/m3)`;
   } else {
     mediumType.textContent = `Medium type: ${densityInput.value}`;
   }
@@ -920,8 +947,12 @@ const cancelAndExitModal = (e) => {
   modal.style.display = "none";
   while (
     settingsListDiv.firstChild.className != "inner-modal-settings-list-title"
-  ) {
-    settingsListDiv.removeChild(settingsListDiv.firstChild);
+  ) { if (settingsListDiv.firstChild.className == "inner-modal-settings-list-title") {
+    break;
+  } else {
+    settingsListDiv.removeChild(settingsListDiv.lastChild);
+  }
+    
   }
 };
 
