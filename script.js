@@ -976,10 +976,14 @@ const cancelAndExitModal = (e) => {
 
 //   modal.style.display = "none";
 // };
-const submitModalForm = async (e) => {
+const submitModalForm = (e) => {
   e.preventDefault();
+
+  window.location.href = "success.html";
+
   modal.style.display = "none";
 };
+
 window.addEventListener("click", toggleUnitsInput);
 window.addEventListener("click", toggleTankShapeInput);
 window.addEventListener("click", toggleMediaInput);
