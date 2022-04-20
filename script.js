@@ -152,16 +152,8 @@ const validateUserInput = (e) => {
       (message) => message != "Tank shape is required."
     );
     tankShape.style.borderColor = "black";
-  } // else if (e.target == customMaxHeight2 || e.target == customMaxVolume2) {
-    // let heightError = true;
-    // let volumeError = true;
-    // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    //   (element) => element.id != customMaxHeight2.id
-    // );
-    // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    //   (element) => element.id != customMaxVolume2.id
-    // );
-    else if /*if*/ (e.target == customMaxHeight2) {
+  } 
+    else if (e.target == customMaxHeight2) {
       
       if (
         userInput < 0 ||
@@ -242,7 +234,6 @@ const validateUserInput = (e) => {
           );
         customVolumes.push([e.target.id, e.target.value]);
       }
-    //}
   } else if (otherCustomMaxHeightsAndVolumes.length > 0) {
     otherCustomMaxHeightsAndVolumes.forEach((el) => {
       const inputField = document.querySelector(`#${el.id}`);
@@ -946,57 +937,6 @@ const cancelAndExitModal = (e) => {
   }
 };
 
-// const submitModalForm = async (e) => {
-//   e.preventDefault();
-
-//   const data = {
-//     units: {
-//       percent: percentRadioButton.checked,
-//       meter: meterRadioButton.checked,
-//       liter: literRadioButton.checked
-//     },
-//     date: today,
-//     media: {
-//       media: densityInput.value,
-//       density: densityPicker.value != "" ? densityPicker.value : null,
-//     },
-//     maxHeight: maxHeight.value,
-//     maxVolume: maxVolume.value,
-//     tankShape: {
-//       tankShape: tankShape.value,
-//       customMaxHeight: customMaxHeight.value != "" ? customMaxHeight.value : null,
-//       customMaxVolume: customMaxVolume.value != "" ? customMaxVolume.value : null,
-//       customMaxHeight2: customMaxHeight2.value != "" ? customMaxHeight2.value : null,
-//       customMaxVolume2: customMaxVolume2.value != "" ? customMaxVolume2.value : null,
-//       customHeightMax: customHeightMax.value != "" ? customHeightMax.value : null,
-//       customVolumeMax: customVolumeMax.value != "" ? customVolumeMax.value : null,
-//     },
-//     // tankType: tankType.options[tankType.selectedIndex].text,
-//     maxFilling: maxFilling.value,
-//     // interval: interval.options[interval.selectedIndex].text,
-//   };
-
-//   console.log(today);
-//   //console.log(selectedValue.options[selectedValue.selectedIndex].text);
-//   //console.log(densityPicker.value);
-//   console.log(maxHeight.value);
-//   console.log(maxVolume.value);
-//   console.log(customMaxHeight.value);
-//   console.log(customMaxVolume.value);
-//   // console.log(tankType.options[tankType.selectedIndex].text);
-//   console.log(maxFilling.value);
-//   //console.log(interval.options[interval.selectedIndex].text);
-
-//   await fetch("http://localhost:3000/tank-settings", {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify(data),
-//   })
-//     .then((response) => console.log(response))
-//     .catch((err) => console.log(err));
-
-//   modal.style.display = "none";
-// };
 const submitModalForm = (e) => {
   e.preventDefault();
 
