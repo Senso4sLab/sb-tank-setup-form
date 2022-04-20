@@ -152,18 +152,17 @@ const validateUserInput = (e) => {
       (message) => message != "Tank shape is required."
     );
     tankShape.style.borderColor = "black";
-  } else if (e.target == customMaxHeight2 || e.target == customMaxVolume2) {
-    let heightError = true;
-    let volumeError = true;
+  } // else if (e.target == customMaxHeight2 || e.target == customMaxVolume2) {
+    // let heightError = true;
+    // let volumeError = true;
     // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
     //   (element) => element.id != customMaxHeight2.id
     // );
     // otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
     //   (element) => element.id != customMaxVolume2.id
     // );
-    if (e.target == customMaxHeight2) {
-      console.log("Custom max height:");
-      console.log(userInput);
+    else if /*if*/ (e.target == customMaxHeight2) {
+      
       if (
         userInput < 0 ||
         userInput > 2.5 ||
@@ -176,7 +175,7 @@ const validateUserInput = (e) => {
         errorMessages.push("Invalid height-volume pair(s).");
         otherCustomMaxHeightsAndVolumes =
             otherCustomMaxHeightsAndVolumes.filter(
-              (element) => element.id != el.id
+              (element) => element.id != customMaxHeight2.id
             );
         otherCustomMaxHeightsAndVolumes.push({
           id: e.target.id,
@@ -191,24 +190,20 @@ const validateUserInput = (e) => {
           (height) => height[0] != e.target.id
         );
         e.target.style.borderColor = "black";
-        // errorMessages = errorMessages.filter(
-        //   (message) => message != "Invalid height-volume pair(s)."
-        // );
+        if (customMaxVolume2.style.borderColor == "black") {
+          errorMessages = errorMessages.filter(
+          (message) => message != "Invalid height-volume pair(s)."
+        );
+        }
+        
         otherCustomMaxHeightsAndVolumes =
           otherCustomMaxHeightsAndVolumes.filter(
             (element) => element.id != customMaxHeight2.id
           );
         customHeights.push([e.target.id, e.target.value]);
-        heightError = false;
-        if (heightError == false && volumeError == false) {
-          errorMessages = errorMessages.filter(
-              (message) => message != "Invalid height-volume pair(s)."
-            );
-        }
       }
     } else if (e.target == customMaxVolume2) {
-      console.log("Custom max volume:");
-      console.log(userInput);
+      
       if (
         userInput < 0 ||
         userInput > 2500 ||
@@ -221,7 +216,7 @@ const validateUserInput = (e) => {
         errorMessages.push("Invalid height-volume pair(s).");
         otherCustomMaxHeightsAndVolumes =
             otherCustomMaxHeightsAndVolumes.filter(
-              (element) => element.id != el.id
+              (element) => element.id != customMaxVolume2.id
             );
         otherCustomMaxHeightsAndVolumes.push({
           id: e.target.id,
@@ -236,23 +231,18 @@ const validateUserInput = (e) => {
           (volume) => volume[0] != e.target.id
         );
         e.target.style.borderColor = "black";
-        // errorMessages = errorMessages.filter(
-        //   (message) => message != "Invalid height-volume pair(s)."
-        // );
+        if (customMaxHeight2.style.borderColor == "black") {
+          errorMessages = errorMessages.filter(
+            (message) => message != "Invalid height-volume pair(s)."
+          );
+        }
         otherCustomMaxHeightsAndVolumes =
           otherCustomMaxHeightsAndVolumes.filter(
             (element) => element.id != customMaxVolume2.id
           );
         customVolumes.push([e.target.id, e.target.value]);
-        volumeError = false;
-        if (heightError == false && volumeError == false) {
-          errorMessages = errorMessages.filter(
-              (message) => message != "Invalid height-volume pair(s)."
-            );
-        }
       }
-    }
-    
+    //}
   } else if (otherCustomMaxHeightsAndVolumes.length > 0) {
     otherCustomMaxHeightsAndVolumes.forEach((el) => {
       const inputField = document.querySelector(`#${el.id}`);
