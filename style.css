@@ -104,8 +104,8 @@ select {
 }
 
 .custom-button {
-    width: 10vw;
-    font-size: 0.6rem;
+    width: 5vw;
+    font-size: 1.2rem;
     font-weight: 600;
     text-align: center;
     margin-top: 3vh;
@@ -113,7 +113,7 @@ select {
     color: rgb(255, 255, 255);
     border-radius: 25px;
     border-color: rgb(255, 255, 255);
-    padding: 1vh 2.5vw;
+    padding: .5vh .5vw;
 }
 
 .button {
@@ -131,8 +131,14 @@ select {
     padding: 1vh 2.5vw;
 }
 
-#proceed-button {
+#proceed-button,
+#back-button {
     margin-bottom: 10vh;
+    width: 10vw;
+}
+
+#back-button {
+    margin-left: 45vw;
 }
 
 .custom-tank-shape-adjustment {

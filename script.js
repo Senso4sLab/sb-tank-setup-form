@@ -55,17 +55,17 @@ const validateUserInput = (e) => {
   if (e.target.className == "units-option-element") {
     if (unitsInput.value == "" || unitsInput.value == undefined) {
       errorMessages = errorMessages.filter(
-        (message) => message != "Measuring units are required."
+        (message) => message != "Measuring unit is required."
       );
       unitsInput.style.borderColor = "red";
-      errorMessages.push("Measuring units are required.");
+      errorMessages.push("Measuring unit is required.");
       error.style.display = "block";
       error.style.color = "red";
       error.style.fontWeight = "900";
     } else {
       unitsInput.style.borderColor = "black";
       errorMessages = errorMessages.filter(
-        (message) => message != "Measuring units are required."
+        (message) => message != "Measuring unit is required."
       );
     }
   } else if (e.target.className == "media-option-element") {
@@ -603,17 +603,17 @@ const submitSettingsForm = (e) => {
   }
   if (unitsInput.value == "" || unitsInput.value == undefined) {
     errorMessages = errorMessages.filter(
-      (message) => message != "Measuring units are required."
+      (message) => message != "Measuring unit is required."
     );
     unitsInput.style.borderColor = "red";
-    errorMessages.push("Measuring units are required.");
+    errorMessages.push("Measuring unit is required.");
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
   } else {
     unitsInput.style.borderColor = "black";
     errorMessages = errorMessages.filter(
-      (message) => message != "Measuring units are required."
+      (message) => message != "Measuring unit is required."
     );
   }
   if (densityInput.value === "" || densityInput.value == undefined) {
@@ -860,8 +860,14 @@ const submitSettingsForm = (e) => {
   }
   today = new Date();
 
+  const modalTitle = document.createElement("h3");
+  modalTitle.className = "inner-modal-settings-list-title";
+  modalTitle.textContent = "Please check the entered data:";
+  settingsListDiv.appendChild(modalTitle);
+  const lineBreak = document.createElement("br");
+  settingsListDiv.appendChild(lineBreak);
   const unitsType = document.createElement("p");
-  unitsType.textContent = `Measure unit: ${unitsInput.value}`;
+  unitsType.textContent = `Measuring unit: ${unitsInput.value}`;
   settingsListDiv.appendChild(unitsType);
 
   const mediumType = document.createElement("p");
@@ -927,13 +933,9 @@ const cancelAndExitModal = (e) => {
   e.preventDefault();
   modal.style.display = "none";
   while (
-    settingsListDiv.firstChild.className != "inner-modal-settings-list-title"
-  ) { if (settingsListDiv.firstChild.className == "inner-modal-settings-list-title") {
-    break;
-  } else {
+    settingsListDiv.lastChild
+  ) {
     settingsListDiv.removeChild(settingsListDiv.lastChild);
-  }
-    
   }
 };
 
