@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wifi Form</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js" defer></script>
   </head>
   <body>
     <h1 class="h1-font">TANK SETUP</h1>
@@ -212,15 +212,17 @@
               id="add-another2"
               type="button"
               value="+"
-              onclick="addAnotherCustomTankShape();"
-            />
+              />
+              <!-- onclick="addAnotherCustomTankShape();" -->
+            
             <input
               class="custom-button"
               id="delete2"
               type="button"
               value="-"
-              onclick="deleteCustomTankShape('custom-tank-shape-adjustment-inner');"
-            />
+              />
+              <!-- onclick="deleteCustomTankShape('custom-tank-shape-adjustment-inner');" -->
+            
           </div>
         </div>
         <div
