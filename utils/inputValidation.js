@@ -1,190 +1,198 @@
-const isError = (boolean, element, errorMessage, errorMessages) => {
+const isError = (boolean, element) => {
   if (boolean) {
-    errorMessages = errorMessages.filter(
-      (message) => message != errorMessage
-    );
     element.style.borderColor = "red";
-    errorMessages.push(errorMessage);
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
   } else {
     element.style.borderColor = "black";
-    errorMessages = errorMessages.filter(
-      (message) => message != errorMessage
-    );
   }
   
 };
 
-export const dropdownValidation = (event, subElement, cssIdentifier, errorMessage, errorMessages) => {
-  if (event.target.className == cssIdentifier) {
-    if (subElement.value == "" || subElement.value == undefined) {
-     isError(true, event.target, errorMessage, errorMessages);
-    } else {
-      isError(false, event.target, errorMessage, errorMessages);
-    }
+export const dropdownValidation = (element, errorMessage) => {
+  if (element.value == "" || element.value == undefined || element.value.length == 0) {
+  isError(true, element);
+  return errorMessage;
+   } else {
+   isError(false, element);
+   return "";
+   }
+   
+};
+
+export const regularNumberValidation = (element, errorMessage) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  if (
+    (userInput < 0 ||
+      userInput == undefined ||
+      userInput == "" || userInput == '') 
+      &&
+    element.disabled == false
+  ) {
+   isError(true, element);
+   return errorMessage;
+  } else {
+   isError(false, element);
+   return "";
   }
 };
 
-export const regularNumberValidation = (event, element, errorMessage, errorMessages) => {
-    let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
-
-    if (event.target == element) {
-      if (
-        (userInput < 0 ||
-          userInput == undefined ||
-          userInput == "") &&
-        userInput.disabled == false
-      ) {
-        isError(true, element, errorMessage, errorMessages);
-      } else {
-        isError(false, element, errorMessage, errorMessages);
-      }
-    }
-};
-
-export const maxHeightValidation = (event, element, errorMessage, errorMessages) => {
-  let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
-
-  if (event.target == element) {
+export const maxHeightValidation = (element, errorMessage) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput > 2.5 ||
       userInput == undefined ||
       userInput == ""
     ) {
-      isError(true, element, errorMessage, errorMessages);
-    } else {
-      isError(false, element, errorMessage, errorMessages);
-    }
-  }
+      isError(true, element);
+      return errorMessage;
+     } else {
+      isError(false, element);
+      return "";
+     }
 };
 
-export const maxVolumeValidation = (event, element, errorMessage, errorMessages) => {
-  let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
+export const maxVolumeValidation = (element, errorMessage) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
 
-  if (event.target == element) {
     if (
       userInput < 0 ||
       userInput > 2500 ||
       userInput == undefined ||
       userInput == ""
     ) {
-      isError(true, element, errorMessage, errorMessages);
-    } else {
-      isError(false, element, errorMessage, errorMessages);
-    }
+      isError(true, element);
+      return errorMessage;
+     } else {
+      isError(false, element);
+      return "";
+     }
+};
+
+export const tankShapeValidation = (element, errorMessage) => {
+  if (
+    element.value == "Choose..." ||
+    element.value == "" ||
+    element.value == undefined
+  ) {
+    isError(true, element);
+    return errorMessage;
+  } else {
+    isError(false, element);
+    return "";
   }
 };
 
-export const customHeightValidation = (event, element, errorMessage, customHeightsAndVolumesArray = [], customHeights = [], errorMessages) => {
-  let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
-
-  if (event.target == element) {
+export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customHeights = []) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput > 2.5 ||
       userInput == undefined ||
       userInput == ""
-    ) {
-      
-      isError(true, element, errorMessage, errorMessages);
-      customHeightsAndVolumesArray =
-        customHeightsAndVolumesArray.filter((el) => el.id != element.id);
-        customHeightsAndVolumesArray.push({id: event.target.id, value: userInput,});
+    ) {  
+      isError(true, element);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+        customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
     } else {
-      customHeights = customHeights.filter((height) => height[0] != event.target.id);
-      isError(false, element, errorMessage, errorMessages);
-      customHeightsAndVolumesArray =
-          customHeightsAndVolumesArray.filter(
-            (el) => el.id != element.id
-          );
-        customHeights.push([event.target.id, event.target.value]);
+      isError(false, element);
+      customHeights = customHeights.filter((height) => height.id != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+        customHeights.push([element.id, element.value]);
+        return ([customHeightsAndVolumesArray, customHeights, ""]);
     }
-  }
 };
 
-export const customVolumeValidation = (event, element, errorMessage, customHeightsAndVolumesArray = [], customVolumes = [], errorMessages) => {
-  let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
-
-  if (event.target == element) {
+export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customVolumes = []) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput > 2500 ||
       userInput == undefined ||
       userInput == ""
     ) {
-      isError(true, element, errorMessage, errorMessages);
-        customHeightsAndVolumesArray =
-        customHeightsAndVolumesArray.filter((el) => el.id != element.id);
-        customHeightsAndVolumesArray.push({id: event.target.id, value: userInput,});
-        return ([customHeightsAndVolumesArray, customVolumes]);
+      isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+        customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
     } else {
-      customVolumes = customVolumes.filter((volume) => volume[0] != event.target.id);
-      isError(false, element, errorMessage, errorMessages);
-      customHeightsAndVolumesArray =
-          customHeightsAndVolumesArray.filter(
-            (el) => el.id != element.id
-          );
-          customVolumes.push([event.target.id, event.target.value]);
-          return ([customHeightsAndVolumesArray, customVolumes]);
+      isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume.id != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
     }
-  }
 };
 
-export const addedCustomFieldValidation = (event, errorMessage, customHeightsAndVolumesArray = [], customHeights = [], customVolumes = [], errorMessages) => {
+// dokončaj validacijo
+// export const addedCustomFieldValidation = (errorMessage, customHeightsAndVolumesArray, customHeights, customVolumes) => {
+  
+//   // customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter(element => element.id != "custom-max-height2");
+//   // customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter(element => element.id != "custom-max-volume2");
+//   console.log(customHeightsAndVolumesArray);
+  
+//   const newCustomHeightsAndVolumesArray = [];
+//   if (customHeightsAndVolumesArray.length > 2) {
+//     for (let i = 2; i < customHeightsAndVolumesArray.length; i++) {
+//       let el = customHeightsAndVolumesArray[i];
+//       if (customHeightsAndVolumesArray.indexOf(el) === 0 || customHeightsAndVolumesArray.indexOf(el) === 1 || customHeightsAndVolumesArray.indexOf(el) === 2) {
+//         newCustomHeightsAndVolumesArray.push(el);
+//       }
+//     }
+//   }
 
-  if (customHeightsAndVolumesArray.length > 0) {
-    customHeightsAndVolumesArray.forEach((el) => {
-      const inputField = document.querySelector(`#${el.id}`);
-      
-      if (inputField.id.includes("height")) {
-        customHeightValidation(event, inputField, errorMessage, customHeightsAndVolumesArray, customHeights, errorMessages);
-      } else if (inputField.id.includes("volume")) {
-        customVolumeValidation(event, inputField, errorMessage, customHeightsAndVolumesArray, customVolumes, errorMessages);
-      } else {
-        errorMessages = errorMessages.filter(
-          (message) => message != errorMessage
-        );
-      }
-    });
-    if (customHeightsAndVolumesArray.length == 0) {
-      errorMessages = errorMessages.filter(
-        (message) => message != errorMessage
-      );
-    }
-  }
-};
+//   console.log(newCustomHeightsAndVolumesArray);
+//   customHeightsAndVolumesArray.length = 0;
+//   customHeightsAndVolumesArray.push(...newCustomHeightsAndVolumesArray);
+//   console.log("New customHeightAndVolumeArray: " + customHeightsAndVolumesArray);
 
-export const maxFillingValidation = (event, element, errorMessage, errorMessages) => {
-  let userInput = (event.target.value != "") ? Number.parseFloat(event.target.value) : "";
-     if (event.target == element) {
+//   if (customHeightsAndVolumesArray.length > 2) {
+//   for (let element of customHeightsAndVolumesArray) {  
+//   const inputField = document.querySelector(`#${element.id}`);
+//   console.log(inputField);
+//   if (inputField.id.includes("height")) {
+//   console.log("height");
+//   } else if (inputField.id.includes("volume")) {
+//     console.log("volume");
+//   }
+// }
+//   }
+//   return ([errorMessage, customHeightsAndVolumesArray, customHeights, customVolumes]);
+// };
+
+// dokončaj validacijo
+export const maxFillingValidation = (element, errorMessage) => {
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput == "" ||
       userInput == undefined ||
       userInput < 0 ||
       userInput > 100
     ) {
-      isError(true, element, errorMessage, errorMessages);
+      isError(true, element);
+      return errorMessage;
     } else {
-      isError(false, element, errorMessage, errorMessages);
+      isError(false, element);
+      return "";
     }
-  }
 };
 
-export const errorMessageOutput = (event, element, errorMessages) => {
+// dokončaj validacijo
+export const errorMessageOutput = (element, errorMessages) => {
   if (errorMessages.length > 0) {
     let firstChild = element.firstChild;
     while (element.children.length > 0) {
       element.removeChild(firstChild);
       firstChild = element.firstChild;
     }
-    event.preventDefault();
     element.style.display = "block";
     errorMessages.forEach((message) => {
       const errorParagraph = document.createElement("p");
       errorParagraph.textContent = message;
+      console.log(errorParagraph);
       error.appendChild(errorParagraph);
     });
     return;

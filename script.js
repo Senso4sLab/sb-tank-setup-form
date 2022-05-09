@@ -3,9 +3,10 @@ import {
   regularNumberValidation, 
   maxHeightValidation, 
   maxVolumeValidation, 
+  tankShapeValidation,
   customHeightValidation, 
   customVolumeValidation, 
-  addedCustomFieldValidation, 
+  //addedCustomFieldValidation, 
   maxFillingValidation,
   errorMessageOutput,
 } from './utils/inputValidation.js';
@@ -62,332 +63,125 @@ const customTankShapeOption = document.querySelector("#custom");
 const maxFilling = document.querySelector("#max-fill");
 const settingsListDiv = document.querySelector(".inner-modal-settings-list");
 
-const validateUserInput = (e) => {
-  dropdownValidation(e, unitsInput, "units-option-element", "Measuring unit is required.", errorMessages);
-  dropdownValidation(e, densityInput, "media-option-element", "Medium type is required.", errorMessages);
-  regularNumberValidation(e, densityPicker, "Invalid density.", errorMessages);
-  maxHeightValidation(e, maxHeight, "Invalid tank height.", errorMessages);
-  maxVolumeValidation(e, maxVolume, "Invalid tank volume.", errorMessages);
-  const returnedTankShapeArrays = dropdownValidation(e, tankShapeOptions, "shape-option-element", "Tank shape is required.", errorMessages);
-  console.log(returnedTankShapeArrays);
-  customHeightValidation(e, customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, errorMessages);
-  customVolumeValidation(e, customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes, errorMessages);
-  addedCustomFieldValidation(e, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, customVolumes, errorMessages);
-  maxFillingValidation(e, maxFilling, "Invalid filling limit.", errorMessages);
-  errorMessageOutput(e, error, errorMessages);
+const validateUserInput = () => {
+  errorMessages.length = 0;
+  // otherCustomMaxHeightsAndVolumes = 0;
+  // customHeights.length = 0;
+  // customVolumes.length = 0;
+  errorMessages.push(dropdownValidation(unitsInput, "Measuring unit is required."));
+  errorMessages.push(dropdownValidation(densityInput, "Medium type is required."));
+  errorMessages.push(regularNumberValidation(densityPicker, "Invalid density."));
+  errorMessages.push(maxHeightValidation (maxHeight, "Invalid tank height."));
+  errorMessages.push(maxVolumeValidation(maxVolume, "Invalid tank volume."));
+  errorMessages.push(tankShapeValidation(tankShape, "Tank shape is required."));
+  const chvArray = customHeightValidation(customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights);
+  otherCustomMaxHeightsAndVolumes.push(...chvArray[0]);
+  customHeights.push(...chvArray[1]);
+  errorMessages = errorMessages.filter(element => element != chvArray[2]);
+  errorMessages.push(chvArray[2]);
+  const cvvArray = customVolumeValidation(customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes);
+  otherCustomMaxHeightsAndVolumes.push(...cvvArray[0]);
+  customVolumes.push(...cvvArray[1]);
+  errorMessages = errorMessages.filter(element => element != cvvArray[2]);
+  errorMessages.push(cvvArray[2]);
+  // Added/removed custom fields validation
+  if (otherCustomMaxHeightsAndVolumes.length > 0) {
+    otherCustomMaxHeightsAndVolumes.forEach((el) => {
+      const inputField = document.querySelector(`#${el.id}`);
+      if (inputField.id.includes("height")) {
+        if (
+          inputField.value == "" ||
+          inputField.value == undefined ||
+          inputField.value < 0 ||
+          inputField.value > 2.5
+        ) {
+          errorMessages = errorMessages.filter(
+            (message) => message != "Invalid height-volume pair(s)."
+          );
+          errorMessages.push("Invalid height-volume pair(s).");
+          otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
+          otherCustomMaxHeightsAndVolumes.push({
+            id: inputField.id,
+            value:
+              inputField.value != "" ? Number.parseFloat(inputField.value) : "",
+          });
+          inputField.style.borderColor = "red";
+          error.style.display = "block";
+          error.style.color = "red";
+          error.style.fontWeight = "900";
+        } else {
+          customHeights = customHeights.filter(
+            (height) => height[0] != inputField.id
+          );
+          inputField.style.borderColor = "black";
+          otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
+          customHeights.push([inputField.id, inputField.value]);
+        }
+      } else if (inputField.id.includes("volume")) {
+        if (
+          inputField.value == "" ||
+          inputField.value == undefined ||
+          inputField.value < 0 ||
+          inputField.value > 2500
+        ) {
+          errorMessages = errorMessages.filter(
+            (message) => message != "Invalid height-volume pair(s)."
+          );
+          errorMessages.push("Invalid height-volume pair(s).");
+          otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
+          otherCustomMaxHeightsAndVolumes.push({
+            id: inputField.id,
+            value:
+              inputField.value != "" ? Number.parseFloat(inputField.value) : "",
+          });
+          inputField.style.borderColor = "red";
+          error.style.display = "block";
+          error.style.color = "red";
+          error.style.fontWeight = "900";
+        } else {
+          customVolumes = customVolumes.filter(
+            (volume) => volume[0] != inputField.id
+          );
+          inputField.style.borderColor = "black";
+          otherCustomMaxHeightsAndVolumes =
+            otherCustomMaxHeightsAndVolumes.filter(
+              (element) => element.id != el.id
+            );
+          customVolumes.push([inputField.id, inputField.value]);
+        }
+      } else {
+        errorMessages = errorMessages.filter(
+          (message) => message != "Invalid height-volume pair(s)."
+        );
+      }
+    });
+    console.log(otherCustomMaxHeightsAndVolumes);
+    if (otherCustomMaxHeightsAndVolumes.length == 0) {
+      errorMessages = errorMessages.filter(
+        (message) => message != "Invalid height-volume pair(s)."
+      );
+    }
+  }
+  // Added/removed custom fields validation (refactoring)
+//   const acfvArray = addedCustomFieldValidation("Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, customVolumes);
+//  otherCustomMaxHeightsAndVolumes.length = 0;
+//  otherCustomMaxHeightsAndVolumes.push(...acfvArray[1]);
 
-  // let userInput = e.target.value != "" ? Number.parseFloat(e.target.value) : "";
+   const mfvArray = maxFillingValidation(maxFilling, "Invalid filling limit.");
+   console.log(mfvArray);
+   //errorMessages = errorMessages.filter(element => element != mfvArray[1]);
+    //errorMessages.push(mfvArray[1]);
 
-  // if (e.target.className == "units-option-element") {
-  //   if (unitsInput.value == "" || unitsInput.value == undefined) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Measuring unit is required."
-  //     );
-  //     unitsInput.style.borderColor = "red";
-  //     errorMessages.push("Measuring unit is required.");
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     unitsInput.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Measuring unit is required."
-  //     );
-  //   }
-  // } else if (e.target.className == "media-option-element") {
-  //   if (densityInput.value == "" || densityInput.value == undefined) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Medium type is required."
-  //     );
-  //     densityInput.style.borderColor = "red";
-  //     errorMessages.push("Medium type is required.");
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     densityInput.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Medium type is required."
-  //     );
-  //   }
-  // } else if (e.target == densityPicker) {
-  //   if (
-  //     (userInput < 0 ||
-  //       densityPicker.value == undefined ||
-  //       densityPicker.value == "") &&
-  //     densityPicker.disabled == false
-  //   ) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid density."
-  //     );
-  //     errorMessages.push("Invalid density.");
-  //     e.target.style.borderColor = "red";
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     e.target.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid density."
-  //     );
-  //   }
-  // } else if (e.target == maxHeight) {
-  //   if (
-  //     userInput < 0 ||
-  //     userInput > 2.5 ||
-  //     userInput == undefined ||
-  //     userInput == ""
-  //   ) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid tank height."
-  //     );
-  //     errorMessages.push("Invalid tank height.");
-  //     e.target.style.borderColor = "red";
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     e.target.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid tank height."
-  //     );
-  //   }
-  // } else if (e.target == maxVolume) {
-  //   if (
-  //     userInput < 0 ||
-  //     userInput > 2500 ||
-  //     userInput == undefined ||
-  //     userInput == ""
-  //   ) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid tank volume."
-  //     );
-  //     errorMessages.push("Invalid tank volume.");
-  //     e.target.style.borderColor = "red";
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     e.target.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid tank volume."
-  //     );
-  //   }
-  // } else if (e.target.className == "shape-option-element") {
-  //   errorMessages = errorMessages.filter(
-  //     (message) => message != "Tank shape is required."
-  //   );
-  //   tankShape.style.borderColor = "black";
-  // } 
-    // else if (e.target == customMaxHeight2) {
-      
-    //   if (
-    //     userInput < 0 ||
-    //     userInput > 2.5 ||
-    //     userInput == "" ||
-    //     userInput == undefined
-    //   ) {
-    //     errorMessages = errorMessages.filter(
-    //       (message) => message != "Invalid height-volume pair(s)."
-    //     );
-    //     errorMessages.push("Invalid height-volume pair(s).");
-    //     otherCustomMaxHeightsAndVolumes =
-    //         otherCustomMaxHeightsAndVolumes.filter(
-    //           (element) => element.id != customMaxHeight2.id
-    //         );
-    //     otherCustomMaxHeightsAndVolumes.push({
-    //       id: e.target.id,
-    //       value: e.target.value != "" ? Number.parseFloat(e.target.value) : "",
-    //     });
-    //     e.target.style.borderColor = "red";
-    //     error.style.display = "block";
-    //     error.style.color = "red";
-    //     error.style.fontWeight = "900";
-    //   } else {
-    //     customHeights = customHeights.filter(
-    //       (height) => height[0] != e.target.id
-    //     );
-    //     e.target.style.borderColor = "black";
-    //     if (customMaxVolume2.style.borderColor == "black") {
-    //       errorMessages = errorMessages.filter(
-    //       (message) => message != "Invalid height-volume pair(s)."
-    //     );
-    //     }
-        
-    //     otherCustomMaxHeightsAndVolumes =
-    //       otherCustomMaxHeightsAndVolumes.filter(
-    //         (element) => element.id != customMaxHeight2.id
-    //       );
-    //     customHeights.push([e.target.id, e.target.value]);
-    //   }
-    // } 
-    // else if (e.target == customMaxVolume2) {
-      
-    //   if (
-    //     userInput < 0 ||
-    //     userInput > 2500 ||
-    //     userInput == "" ||
-    //     userInput == undefined
-    //   ) {
-    //     errorMessages = errorMessages.filter(
-    //       (message) => message != "Invalid height-volume pair(s)."
-    //     );
-    //     errorMessages.push("Invalid height-volume pair(s).");
-    //     otherCustomMaxHeightsAndVolumes =
-    //         otherCustomMaxHeightsAndVolumes.filter(
-    //           (element) => element.id != customMaxVolume2.id
-    //         );
-    //     otherCustomMaxHeightsAndVolumes.push({
-    //       id: e.target.id,
-    //       value: e.target.value != "" ? Number.parseFloat(e.target.value) : "",
-    //     });
-    //     e.target.style.borderColor = "red";
-    //     error.style.display = "block";
-    //     error.style.color = "red";
-    //     error.style.fontWeight = "900";
-    //   } else {
-    //     customVolumes = customVolumes.filter(
-    //       (volume) => volume[0] != e.target.id
-    //     );
-    //     e.target.style.borderColor = "black";
-    //     if (customMaxHeight2.style.borderColor == "black") {
-    //       errorMessages = errorMessages.filter(
-    //         (message) => message != "Invalid height-volume pair(s)."
-    //       );
-    //     }
-    //     otherCustomMaxHeightsAndVolumes =
-    //       otherCustomMaxHeightsAndVolumes.filter(
-    //         (element) => element.id != customMaxVolume2.id
-    //       );
-    //     customVolumes.push([e.target.id, e.target.value]);
-    //   }
-  // } else if (otherCustomMaxHeightsAndVolumes.length > 0) {
-  //   otherCustomMaxHeightsAndVolumes.forEach((el) => {
-  //     const inputField = document.querySelector(`#${el.id}`);
-  //     if (inputField.id.includes("height")) {
-  //       if (
-  //         inputField.value == "" ||
-  //         inputField.value == undefined ||
-  //         inputField.value < 0 ||
-  //         inputField.value > 2.5
-  //       ) {
-  //         errorMessages = errorMessages.filter(
-  //           (message) => message != "Invalid height-volume pair(s)."
-  //         );
-  //         errorMessages.push("Invalid height-volume pair(s).");
-  //         otherCustomMaxHeightsAndVolumes =
-  //           otherCustomMaxHeightsAndVolumes.filter(
-  //             (element) => element.id != el.id
-  //           );
-  //         otherCustomMaxHeightsAndVolumes.push({
-  //           id: inputField.id,
-  //           value:
-  //             inputField.value != "" ? Number.parseFloat(inputField.value) : "",
-  //         });
-  //         inputField.style.borderColor = "red";
-  //         error.style.display = "block";
-  //         error.style.color = "red";
-  //         error.style.fontWeight = "900";
-  //       } else {
-  //         customHeights = customHeights.filter(
-  //           (height) => height[0] != inputField.id
-  //         );
-  //         inputField.style.borderColor = "black";
-  //         otherCustomMaxHeightsAndVolumes =
-  //           otherCustomMaxHeightsAndVolumes.filter(
-  //             (element) => element.id != el.id
-  //           );
-  //         customHeights.push([inputField.id, inputField.value]);
-  //       }
-  //     } else if (inputField.id.includes("volume")) {
-  //       if (
-  //         inputField.value == "" ||
-  //         inputField.value == undefined ||
-  //         inputField.value < 0 ||
-  //         inputField.value > 2500
-  //       ) {
-  //         errorMessages = errorMessages.filter(
-  //           (message) => message != "Invalid height-volume pair(s)."
-  //         );
-  //         errorMessages.push("Invalid height-volume pair(s).");
-  //         otherCustomMaxHeightsAndVolumes =
-  //           otherCustomMaxHeightsAndVolumes.filter(
-  //             (element) => element.id != el.id
-  //           );
-  //         otherCustomMaxHeightsAndVolumes.push({
-  //           id: inputField.id,
-  //           value:
-  //             inputField.value != "" ? Number.parseFloat(inputField.value) : "",
-  //         });
-  //         inputField.style.borderColor = "red";
-  //         error.style.display = "block";
-  //         error.style.color = "red";
-  //         error.style.fontWeight = "900";
-  //       } else {
-  //         customVolumes = customVolumes.filter(
-  //           (volume) => volume[0] != inputField.id
-  //         );
-  //         inputField.style.borderColor = "black";
-  //         otherCustomMaxHeightsAndVolumes =
-  //           otherCustomMaxHeightsAndVolumes.filter(
-  //             (element) => element.id != el.id
-  //           );
-  //         customVolumes.push([inputField.id, inputField.value]);
-  //       }
-  //     } else {
-  //       errorMessages = errorMessages.filter(
-  //         (message) => message != "Invalid height-volume pair(s)."
-  //       );
-  //     }
-  //   });
-  //   console.log(otherCustomMaxHeightsAndVolumes);
-  //   if (otherCustomMaxHeightsAndVolumes.length == 0) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid height-volume pair(s)."
-  //     );
-  //   }
-  // } else if (e.target == maxFilling) {
-  //   if (
-  //     userInput == "Choose..." ||
-  //     userInput == "" ||
-  //     userInput == undefined ||
-  //     userInput < 0 ||
-  //     userInput > 100
-  //   ) {
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid filling limit."
-  //     );
-  //     errorMessages.push("Invalid filling limit.");
-  //     maxFilling.style.borderColor = "red";
-  //     error.style.display = "block";
-  //     error.style.color = "red";
-  //     error.style.fontWeight = "900";
-  //   } else {
-  //     maxFilling.style.borderColor = "black";
-  //     errorMessages = errorMessages.filter(
-  //       (message) => message != "Invalid filling limit."
-  //     );
-  //   }
-  // }
-
-  // if (errorMessages.length > 0) {
-  //   let firstChild = error.firstChild;
-  //   while (error.children.length > 0) {
-  //     error.removeChild(firstChild);
-  //     firstChild = error.firstChild;
-  //   }
-  //   e.preventDefault();
-  //   error.style.display = "block";
-  //   errorMessages.forEach((message) => {
-  //     const errorParagraph = document.createElement("p");
-  //     errorParagraph.textContent = message;
-  //     error.appendChild(errorParagraph);
-  //   });
-  //   return;
-  // } else {
-  //   error.style.display = "none";
-  //   error.textContent = "";
-  // }
+   errorMessageOutput(error, errorMessages);
 };
 
 unitsOptions.forEach((option) => {
@@ -495,6 +289,12 @@ const customTankShape = (id) => {
     customVolumeMax.disabled = true;
     addAnotherButton.style.display = "block";
     deleteButton.style.display = "none";
+    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+      (element) => element.id != customMaxHeight2.id
+    );
+    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+      (element) => element.id != customMaxVolume2.id
+    );
     otherCustomMaxHeightsAndVolumes.push(
       { id: customMaxHeight2.id, value: customMaxHeight2.value },
       { id: customMaxVolume2.id, value: customMaxVolume2.value }
@@ -537,6 +337,7 @@ const addAnotherCustomTankShape = () => {
   heightInput.placeholder = "Insert value...";
   heightInput.step = "0.01";
   heightInput.value = "";
+  heightInput.addEventListener("focus", validateUserInput);
   heightInput.addEventListener("input", validateUserInput);
   heightInput.addEventListener("input", storeIntoCustomArray);
   heightInput.addEventListener("keypress", (event) => {
@@ -551,6 +352,7 @@ const addAnotherCustomTankShape = () => {
   volumeInput.placeholder = "Insert value...";
   volumeInput.value = "";
   volumeInput.step = "1";
+  volumeInput.addEventListener("focus", validateUserInput);
   volumeInput.addEventListener("input", validateUserInput);
   volumeInput.addEventListener("input", storeIntoCustomArray);
   volumeInput.addEventListener("keypress", (event) => {
@@ -632,64 +434,10 @@ const submitSettingsForm = (e) => {
   ) {
     otherCustomMaxHeightsAndVolumes.pop();
   }
-  if (unitsInput.value == "" || unitsInput.value == undefined) {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Measuring unit is required."
-    );
-    unitsInput.style.borderColor = "red";
-    errorMessages.push("Measuring unit is required.");
-    error.style.display = "block";
-    error.style.color = "red";
-    error.style.fontWeight = "900";
-  } else {
-    unitsInput.style.borderColor = "black";
-    errorMessages = errorMessages.filter(
-      (message) => message != "Measuring unit is required."
-    );
-  }
-  if (densityInput.value === "" || densityInput.value == undefined) {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Medium type is required."
-    );
-    densityInput.style.borderColor = "red";
-    errorMessages.push("Medium type is required.");
-    error.style.display = "block";
-    error.style.color = "red";
-    error.style.fontWeight = "900";
-  } else {
-    densityInput.style.borderColor = "black";
-    errorMessages = errorMessages.filter(
-      (message) => message != "Medium type is required."
-    );
-  }
 
-  if (
-    (densityPicker.value == undefined || densityPicker.value == "") &&
-    densityPicker.disabled == false
-  ) {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid density."
-    );
-    densityPicker.style.borderColor = "red";
-    errorMessages.push("Invalid density.");
-    error.style.display = "block";
-    error.style.color = "red";
-    error.style.fontWeight = "900";
-  } else if (densityPicker.value < 0 && densityPicker.disabled == false) {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid density."
-    );
-    densityPicker.style.borderColor = "red";
-    errorMessages.push("Invalid density.");
-    error.style.display = "block";
-    error.style.color = "red";
-    error.style.fontWeight = "900";
-  } else {
-    densityPicker.style.borderColor = "black";
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid density."
-    );
-  }
+  errorMessages.push(dropdownValidation(unitsInput, "Measuring unit is required."));
+  errorMessages.push(dropdownValidation(densityInput, "Medium type is required."));
+  errorMessages.push(regularNumberValidation(densityPicker, "Invalid density."));
   if (
     maxHeight.value == "" ||
     maxHeight.value == undefined ||
