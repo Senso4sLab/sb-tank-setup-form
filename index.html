@@ -80,7 +80,19 @@
       </div>
 
       <div class="custom-density-adjustment">
-        <label class="label" for="density-picker">Density [kg/m3]:</label>
+        <div class="medium-name">
+        <label class="label" id="medium-name-input-label" for="medium-name-input">Medium name:</label>
+        <input
+          type="text"
+          id="medium-name-input"
+          name="medium-name-input"
+          value=""
+          disabled
+          placeholder="Insert name..."
+        />
+      </div>
+      <div class="density-value">
+        <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
         <input
           type="number"
           id="density-picker"
@@ -90,7 +102,7 @@
           placeholder="Insert value..."
         />
       </div>
-
+    </div>
       <div class="max-tank-height-div" id="complete-tank-height">
         <label class="label" for="max-height">Tank height [m]:</label>
         <input
@@ -212,6 +224,7 @@
               id="add-another2"
               type="button"
               value="+"
+              disabled
               />
               <!-- onclick="addAnotherCustomTankShape();" -->
             
@@ -256,8 +269,8 @@
           id="max-fill"
           class="max-filling"
           name="fill"
-          step="0.1"
-          value=""
+          step="1"
+          value="95"
           placeholder="Insert value..."
         />
       </div>

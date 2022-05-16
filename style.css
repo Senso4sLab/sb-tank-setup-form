@@ -54,6 +54,7 @@ input,
 select {
     width: 10vw;
     margin-right: 10vw;
+    border: 1px solid rgb(0, 0, 0);
 }
 
 .label {
@@ -64,10 +65,17 @@ select {
     font-weight: 600;
 }
 
+/* #medium-name-input-label,
+#density-picker-label {
+    
+} */
+
 #error,
 .units-div,
 .media-div,
-.custom-density-adjustment,
+/* .custom-density-adjustment, */
+.medium-name,
+.density-value,
 .max-tank-height-div,
 .max-tank-volume-div,
 .tank-shape-div,
@@ -91,16 +99,10 @@ select {
     margin-left: 5vw;
 }
 
-.custom-density-adjustment {
-    display: none;
-}
-
+.custom-density-adjustment,
+/* .medium-name, */
 .custom-tank-shape-adjustment {
     display: none;
-}
-
-.custom-labels {
-    width: 100%;
 }
 
 .custom-button {
@@ -151,6 +153,10 @@ select {
     display: none;
 }
 
+#add-another2 {
+    opacity: 0.7;
+}
+
 .date {
     text-align: center;
     margin-bottom: 5vh;
@@ -159,6 +165,7 @@ select {
 
 .units-input,
 .density-input,
+#medium-name-input,
 #density-picker,
 #max-height,
 #max-volume,
@@ -324,3 +331,54 @@ select {
     text-align: center;
     margin-bottom: 5vh;
 }
+
+/*
+Mobile: 360 x 640
+Mobile: 375 x 667
+Mobile: 360 x 720
+iPhone X: 375 x 812
+Pixel 2: 411 x 731
+Tablet: 768 x 1024
+Laptop: 1366 x 768
+High-res laptop or desktop: 1920 x 1080
+*/
+
+/* 
+Responsive breakpoints:
+576px for portrait phones
+768px for tablets
+992px for laptops
+1200px for large devices
+*/
+
+/* 
+Common layout elements:
+Wrapper or Container
+Header
+Content
+Sidebar
+Footer
+*/
+
+/* 
+Responsive images:
+
+img {
+    width: 100%;
+} 
+*/
+
+/* 
+CSS Units and values:
+px – a single pixel
+em – relative unit based on the font-size of the element.
+rem – relative unit based on the font-size of the element.
+vh, vw – % of the viewport’s height or width.
+% – the percentage of the parent element
+*/
+
+/* 
+Mobile-friendly test:
+
+https://search.google.com/test/mobile-friendly 
+*/

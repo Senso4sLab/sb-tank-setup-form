@@ -6,8 +6,22 @@ const isError = (boolean, element) => {
     error.style.fontWeight = "900";
   } else {
     element.style.borderColor = "black";
+  } 
+};
+
+export const limitDecimals = (element, number, errorMessage) => {
+  const stringNum = String(number);
+  if (stringNum.includes(".")) {
+    let numberOfDecimals = stringNum.split(".")[1].length;
+    if (numberOfDecimals > 2) {
+      isError(true, element);
+       return errorMessage;
+    } else {
+   isError(false, element);
+       return "";
+}
   }
-  
+  ;
 };
 
 export const dropdownValidation = (element, errorMessage) => {
@@ -18,11 +32,10 @@ export const dropdownValidation = (element, errorMessage) => {
    isError(false, element);
    return "";
    }
-   
 };
 
 export const regularNumberValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
   if (
     (userInput < 0 ||
       userInput == undefined ||
@@ -39,10 +52,10 @@ export const regularNumberValidation = (element, errorMessage) => {
 };
 
 export const maxHeightValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
-      userInput > 2.5 ||
+      userInput > 4.7 ||
       userInput == undefined ||
       userInput == ""
     ) {
@@ -55,11 +68,9 @@ export const maxHeightValidation = (element, errorMessage) => {
 };
 
 export const maxVolumeValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
-
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
-      userInput > 2500 ||
       userInput == undefined ||
       userInput == ""
     ) {
@@ -71,12 +82,11 @@ export const maxVolumeValidation = (element, errorMessage) => {
      }
 };
 
-export const tankShapeValidation = (element, errorMessage) => {
-  if (
-    element.value == "Choose..." ||
+export const regularTextValidation = (element, errorMessage) => {
+  if ((
     element.value == "" ||
     element.value == undefined
-  ) {
+  ) && element.disabled === false) {
     isError(true, element);
     return errorMessage;
   } else {
@@ -86,86 +96,58 @@ export const tankShapeValidation = (element, errorMessage) => {
 };
 
 export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customHeights = []) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
-      userInput > 2.5 ||
+      userInput > 4.7 ||
       userInput == undefined ||
       userInput == ""
     ) {  
       isError(true, element);
       customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
         customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        customHeights = customHeights.filter(el => el[0] != element.id);
         return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
     } else {
       isError(false, element);
-      customHeights = customHeights.filter((height) => height.id != element.id);
       customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights = customHeights.filter(el => el[0] != element.id);
         customHeights.push([element.id, element.value]);
         return ([customHeightsAndVolumesArray, customHeights, ""]);
     }
 };
 
 export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customVolumes = []) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
-      userInput > 2500 ||
       userInput == undefined ||
       userInput == ""
     ) {
       isError(true, element);
         customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
         customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
         return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
     } else {
       isError(false, element);
-      customVolumes = customVolumes.filter((volume) => volume.id != element.id);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
       customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
           customVolumes.push([element.id, element.value]);
           return ([customHeightsAndVolumesArray, customVolumes, ""]);
     }
 };
 
-// dokončaj validacijo
-// export const addedCustomFieldValidation = (errorMessage, customHeightsAndVolumesArray, customHeights, customVolumes) => {
-  
-//   // customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter(element => element.id != "custom-max-height2");
-//   // customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter(element => element.id != "custom-max-volume2");
-//   console.log(customHeightsAndVolumesArray);
-  
-//   const newCustomHeightsAndVolumesArray = [];
-//   if (customHeightsAndVolumesArray.length > 2) {
-//     for (let i = 2; i < customHeightsAndVolumesArray.length; i++) {
-//       let el = customHeightsAndVolumesArray[i];
-//       if (customHeightsAndVolumesArray.indexOf(el) === 0 || customHeightsAndVolumesArray.indexOf(el) === 1 || customHeightsAndVolumesArray.indexOf(el) === 2) {
-//         newCustomHeightsAndVolumesArray.push(el);
-//       }
-//     }
-//   }
+export const enableButton = (heightElement, volumeElement) => {
+  if ((heightElement.value > 0 && heightElement.value <= 4.7) && (volumeElement.value > 0)) {
+    return false;
+  } else {
+    return true;
+  }
+};
 
-//   console.log(newCustomHeightsAndVolumesArray);
-//   customHeightsAndVolumesArray.length = 0;
-//   customHeightsAndVolumesArray.push(...newCustomHeightsAndVolumesArray);
-//   console.log("New customHeightAndVolumeArray: " + customHeightsAndVolumesArray);
-
-//   if (customHeightsAndVolumesArray.length > 2) {
-//   for (let element of customHeightsAndVolumesArray) {  
-//   const inputField = document.querySelector(`#${element.id}`);
-//   console.log(inputField);
-//   if (inputField.id.includes("height")) {
-//   console.log("height");
-//   } else if (inputField.id.includes("volume")) {
-//     console.log("volume");
-//   }
-// }
-//   }
-//   return ([errorMessage, customHeightsAndVolumesArray, customHeights, customVolumes]);
-// };
-
-// dokončaj validacijo
 export const maxFillingValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput == "" ||
       userInput == undefined ||
@@ -180,24 +162,28 @@ export const maxFillingValidation = (element, errorMessage) => {
     }
 };
 
-// dokončaj validacijo
 export const errorMessageOutput = (element, errorMessages) => {
+  const proceedButton = document.querySelector("#proceed-button");
   if (errorMessages.length > 0) {
     let firstChild = element.firstChild;
     while (element.children.length > 0) {
       element.removeChild(firstChild);
       firstChild = element.firstChild;
     }
+    proceedButton.disabled = true;
+    proceedButton.style.opacity = 0.7;
     element.style.display = "block";
     errorMessages.forEach((message) => {
       const errorParagraph = document.createElement("p");
       errorParagraph.textContent = message;
-      console.log(errorParagraph);
       error.appendChild(errorParagraph);
     });
-    return;
-  } else {
+    return errorMessages;
+  } else if (errorMessages.length == 0) {
+    proceedButton.disabled = false;
+    proceedButton.style.opacity = 1;
     error.style.display = "none";
     error.textContent = "";
+    return [];
   }
 };
