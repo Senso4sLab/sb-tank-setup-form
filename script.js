@@ -1,4 +1,6 @@
- import {
+ 
+
+import {
   limitDecimals,
   dropdownValidation, 
   regularNumberValidation, 
@@ -18,6 +20,10 @@ import {
   submitModalForm,
 } from "./utils/modal.js";
 
+let maxHeightCount = 0;
+let customMaxHeightCount = 0;
+let customMaxHeight2Count = 0;
+let heightInputCount = 0;
 let counter = 3;
 let otherCustomMaxHeightsAndVolumes = [];
 const heightsAndVolumes = [];
@@ -162,14 +168,12 @@ const maxFillingUserInputValidation = () => {
 };
 
 const checkForErrorMessages = () => {
-  console.log(errorMessages);
  errorMessages = errorMessageOutput(error, errorMessages);
  errorMessages = errorMessages.filter(message => message != "");
  errorMessages = errorMessages.filter(message => message != undefined);
- console.log(errorMessages);
  if (errorMessages.length == 0) {
   proceedButton.disabled = false;
-  proceedButton.style.opacity = 1;
+  proceedButton.style.backgroundColor = "#0162a6";
  }
 };
 
@@ -213,6 +217,9 @@ const customTankShape = (id) => {
     customMaxHeight2.style.borderColor = "black";
       customMaxVolume2.style.borderColor = "black";
         errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+        otherCustomMaxHeightsAndVolumes.length = 0;
+        customHeights.length = 0;
+        customVolumes.length = 0;
   }
   tankShape.value = id.trim();
 };
@@ -281,6 +288,7 @@ const saveIntoCustomMaxVolume = (e) => {
 const addReadonly = () => {
   tankShape.setAttribute("readonly", "true");
   densityInput.setAttribute("readonly", "true");
+  unitsInput.setAttribute("readonly", "true");
 };
 
 const getUnitsIntoInput = (id) => {
@@ -325,46 +333,85 @@ const addAnotherCustomTankShape = () => {
   innerDiv.className = "custom-tank-shape-adjustment-inner";
   innerDiv.id = "custom-tank-shape-adjustment-inner" + counter;
 
-  heightInput.type = "number";
+  heightInput.type = "text";
+  heightInput.inputMode = "decimal";
   heightInput.id = `custom-max-height${counter}`;
+  heightInput.className = "custom-fields";
   heightInput.name = `custom-max-height${counter}`;
   heightInput.placeholder = "Insert value...";
   heightInput.step = "0.01";
   heightInput.value = "";
   heightInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
-  heightInput.addEventListener("keypress", (event) => {
-    if (event.key === "-") {
-      event.preventDefault();
+  heightInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
+  heightInput.addEventListener("input", () => maxTwoDecimalsValidation(heightInput));
+  heightInput.addEventListener("input", (event) => {
+    if (event.data === "-" || event.data === " ") {
+      heightInput.value = heightInput.value.replace(event.data, "");
+    } else if(event.data === ",") {
+      heightInputCount++;
+      if (heightInput.value.includes(".")) {
+        heightInput.value = heightInput.value.replace(event.data, "");
+      } else if (heightInputCount > 1) {
+        heightInput.value = heightInput.value.replace(/.$/, "");
+        heightInputCount--;
+      } 
+      if (heightInput.value[0] === ",") {
+        heightInput.value = "0".concat(heightInput.value);
+      } 
+    } else if (event.data === ".") {
+      heightInputCount++;
+      if (heightInput.value.includes(",")) {
+        heightInput.value = heightInput.value.replace(event.data, "");
+      } else if (heightInputCount > 1) {
+        heightInput.value = heightInput.value.replace(/.$/, "");
+        heightInputCount--;
+      }
+      if (heightInput.value[0] === ".") {
+        heightInput.value = "0".concat(heightInput.value);
+      } 
+    } else if (event.data == null) {
+      if (heightInput.value.includes(".") === false && heightInput.value.includes(",") === false) {
+        heightInputCount = 0;
+        customAddedHeightUserInputValidation(heightInput);
+      }
     }
   });
   heightInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
     if (!addButton.disabled) {
-      addButton.style.opacity = 1;
+      addButton.style.backgroundColor = "#0162a6";
     } else {
-      addButton.style.opacity = 0.7;
+      addButton.style.backgroundColor = "gray";
+      proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
     }
   });
-  heightInput.addEventListener("input", () => maxTwoDecimalsValidation(heightInput));
 
-  volumeInput.type = "number";
+  volumeInput.type = "text";
+  volumeInput.inputMode = "decimal";
   volumeInput.id = `custom-max-volume${counter}`;
+  volumeInput.className = "custom-fields";
   volumeInput.name = `custom-max-volume${counter}`;
   volumeInput.placeholder = "Insert value...";
   volumeInput.value = "";
   volumeInput.step = "1";
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
-  volumeInput.addEventListener("keypress", (event) => {
-    if (event.key === "." || event.key === "-") {
-      event.preventDefault();
+  volumeInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
+  volumeInput.addEventListener("input", (event) => {
+    if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+      volumeInput.value = volumeInput.value.replace(event.data, "");
+    } else if (event.data == null) {
+      customAddedVolumeUserInputValidation(volumeInput);
     }
   });
   volumeInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
     if (!addButton.disabled) {
-      addButton.style.opacity = 1;
+      addButton.style.backgroundColor = "#0162a6";
      } else {
-      addButton.style.opacity = 0.7;
+      addButton.style.backgroundColor = "gray";
+      proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
     }
   });
 
@@ -386,8 +433,10 @@ const addAnotherCustomTankShape = () => {
   addButton.type = "button";
   addButton.value = "+";
   addButton.addEventListener("click", addAnotherCustomTankShape);
-  addButton.style.opacity = 0.7;
+  addButton.style.backgroundColor = "gray";
   addButton.disabled = true;
+  proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
 
   deleteButton.className = "custom-button";
   deleteButton.id = "delete" + counter;
@@ -586,7 +635,7 @@ const submitSettingsForm = (e) => {
     window.scrollTo(0, 0);
     e.preventDefault();
     proceedButton.disabled = true;
-    proceedButton.style.opacity = 0.7;
+    proceedButton.style.backgroundColor = "gray";
     error.style.display = "block";
     errorMessages.forEach((message) => {
       const errorParagraph = document.createElement("p");
@@ -596,7 +645,7 @@ const submitSettingsForm = (e) => {
     return;
   } else {
     proceedButton.disabled = false;
-    proceedButton.style.opacity = 1;
+    proceedButton.style.backgroundColor = "#0162a6";
   }
   today = new Date();
 
@@ -616,87 +665,191 @@ const submitSettingsForm = (e) => {
     maxFilling);
 };
 
+
+// window.addEventListener("beforeunload", event => {
+//   (event || window.event).returnValue = modal;
+//  return modal;
+//  });
+window.addEventListener("load", () => {
+  console.log(window.navigator);
+  proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+});
 window.addEventListener("click", toggleUnitsInput);
 window.addEventListener("click", toggleTankShapeInput);
 window.addEventListener("click", toggleMediaInput);
+
 mediumNameInput.addEventListener("input", mediumNameUserInputValidation);
-mediumNameInput.addEventListener("keypress", (event) => {
-  if (!event.code.includes("Key") && event.code != "Space") {
-    event.preventDefault();
-  }
-});
 densityPicker.addEventListener("input", mediumDensityUserInputValidation);
-densityPicker.addEventListener("keypress", (event) => {
-  if (event.key === "." || event.key === "-") {
-    event.preventDefault();
+densityPicker.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    densityPicker.value = densityPicker.value.replace(event.data, "");
   }
 });
-maxHeight.addEventListener("keypress", (event) => {
-  if (event.key === "-") {
-    event.preventDefault();
+maxHeight.addEventListener("input", (event) => {
+  console.log(maxHeightCount);
+  console.log(event);
+  if (event.data === "-" || event.data === " ") {
+    maxHeight.value = maxHeight.value.replace(event.data, "");
+  } else if(event.data === ",") {
+    console.log(maxHeight.value);
+    maxHeightCount++;
+    if (maxHeight.value.includes(".")) {
+      maxHeight.value = maxHeight.value.replace(event.data, "");
+    } else if (maxHeightCount > 1) {
+      maxHeight.value = maxHeight.value.replace(/.$/, "");
+      maxHeightCount--;
+    } 
+    if (maxHeight.value[0] === ",") {
+      maxHeight.value = "0".concat(maxHeight.value);
+    } 
+  } else if (event.data === ".") {
+    console.log(maxHeight.value);
+    maxHeightCount++;
+    if (maxHeight.value.includes(",")) {
+      maxHeight.value = maxHeight.value.replace(event.data, "");
+    } else if (maxHeightCount > 1) {
+      maxHeight.value = maxHeight.value.replace(/.$/, "");
+      maxHeightCount--;
+    }
+    if (maxHeight.value[0] === ".") {
+      maxHeight.value = "0".concat(maxHeight.value);
+    } 
+  } else if (event.data === null) {
+    if (maxHeight.value.includes(".") === false && maxHeight.value.includes(",") === false) {
+      console.log("Doesn't include '.' or ','.");
+      maxHeightCount = 0;
+    }
   }
 });
 maxHeight.addEventListener("input", maxHeightUserInputValidation);
 maxHeight.addEventListener("input", saveIntoCustomMaxHeight);
 maxHeight.addEventListener("input",() => maxTwoDecimalsValidation(maxHeight));
-maxVolume.addEventListener("keypress", (event) => {
-  if (event.key === "." || event.key === "-") {
-    event.preventDefault();
-  }
+maxVolume.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    maxVolume.value = maxVolume.value.replace(event.data, "");
+  } 
 });
 maxVolume.addEventListener("input", maxVolumeUserInputValidation);
 maxVolume.addEventListener("input", saveIntoCustomMaxVolume);
+unitsInput.addEventListener("focus", addReadonly);
 densityInput.addEventListener("change", customDensity);
 densityInput.addEventListener("focus", addReadonly);
 tankShape.addEventListener("focus", addReadonly);
 tankShape.addEventListener("change", customTankShape);
-customMaxHeight.addEventListener("keypress", (event) => {
-  if (event.key === "-") {
-    event.preventDefault();
+customMaxHeight.addEventListener("input", (event) => {
+  if (event.data === "-" || event.data === " ") {
+    customMaxHeight.value = customMaxHeight.value.replace(event.data, "");
+  } else if (event.data === ",") {
+    customMaxHeightCount++;
+    if (customMaxHeight.value.includes(".")) {
+      customMaxHeight.value = customMaxHeight.value.replace(event.data, "");
+    } else if (customMaxHeightCount > 1) {
+      customMaxHeight.value = customMaxHeight.value.replace(/.$/, "");
+      customMaxHeightCount--;
+    } 
+    if (customMaxHeight.value[0] === ",") {
+      customMaxHeight.value = "0".concat(customMaxHeight.value);
+    }   
+  } else if (event.data === ".") {
+    customMaxHeightCount++;
+    if (customMaxHeight.value.includes(",")) {
+      customMaxHeight.value = customMaxHeight.value.replace(event.data, "");
+    } else if (customMaxHeightCount > 1) {
+      customMaxHeight.value = customMaxHeight.value.replace(/.$/, "");
+      customMaxHeightCount--;
+    } 
+    if (customMaxHeight.value[0] === ".") {
+      customMaxHeight.value = "0".concat(customMaxHeight.value);
+    }
+  } else if (event.data === null) {
+    if (customMaxHeight.value.includes(".") === false && customMaxHeight.value.includes(",") === false) {
+      console.log("Doesn't include '.' or ','.");
+      customMaxHeightCount = 0;
+    }
   }
 });
-customMaxVolume.addEventListener("keypress", (event) => {
-  if (event.key === "." || event.key === "-") {
-    event.preventDefault();
-  }
+customMaxVolume.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    customMaxVolume.value = customMaxVolume.value.replace(event.data, "");
+  } 
 });
 customMaxHeight2.addEventListener("input", () => {
   addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
   if (!addAnotherButton.disabled) {
-    addAnotherButton.style.opacity = 1;
+    addAnotherButton.style.backgroundColor = "#0162a6";
   } else {
-    addAnotherButton.style.opacity = 0.7;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
   }
 });
 customMaxVolume2.addEventListener("input", () => {
   addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
   if (!addAnotherButton.disabled) {
-    addAnotherButton.style.opacity = 1;
+    addAnotherButton.style.backgroundColor = "#0162a6";
   } else {
-    addAnotherButton.style.opacity = 0.7;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
   }
 });
 customMaxHeight2.addEventListener("input", customHeightUserInputValidation);
+customMaxHeight2.addEventListener("input", customVolumeUserInputValidation);
 customMaxHeight2.addEventListener("input", () => maxTwoDecimalsValidation(customMaxHeight2));
 customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
-customMaxHeight2.addEventListener("keypress", (event) => {
-  if (event.key === "-") {
-    event.preventDefault();
+customMaxVolume2.addEventListener("input", customHeightUserInputValidation);
+customMaxHeight2.addEventListener("input", (event) => {
+  if (event.data === "-" || event.data === " ") {
+    customMaxHeight2.value = customMaxHeight2.value.replace(event.data, "");
+  } else if (event.data === ",") {
+    customMaxHeight2Count++;
+    if (customMaxHeight2.value.includes(".")) {
+      customMaxHeight2.value = customMaxHeight2.value.replace(event.data, "");
+    } else if (customMaxHeight2Count > 1) {
+      customMaxHeight2.value = customMaxHeight2.value.replace(/.$/, "");
+      customMaxHeight2Count--;
+    } 
+    if (customMaxHeight2.value[0] === ",") {
+      customMaxHeight2.value = "0".concat(customMaxHeight2.value);
+    }
+  } else if (event.data === ".") {
+    customMaxHeight2Count++;
+    if (customMaxHeight2.value.includes(",")) {
+      customMaxHeight2.value = customMaxHeight2.value.replace(event.data, "");
+    } else if (customMaxHeight2Count > 1) {
+      customMaxHeight2.value = customMaxHeight2.value.replace(/.$/, "");
+      customMaxHeight2Count--;
+    } 
+    if (customMaxHeight2.value[0] === ".") {
+      customMaxHeight2.value = "0".concat(customMaxHeight2.value);
+    }
+  } else if (event.data == null) {
+    if (customMaxHeight2.value.includes(".") === false && customMaxHeight2.value.includes(",") === false) {
+      customMaxHeight2Count = 0;
+      customHeightUserInputValidation();
+    }
   }
 });
-customMaxVolume2.addEventListener("keypress", (event) => {
-  if (event.key === "." || event.key === "-") {
-    event.preventDefault();
+customMaxVolume2.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
+  } else if (event.data == null) {
+      customVolumeUserInputValidation();
   }
 });
 
 maxFilling.addEventListener("input", maxFillingUserInputValidation);
-maxFilling.addEventListener("keypress", (event) => {
-  if (event.key === "." || event.key === "-") {
-    event.preventDefault();
-  }
+maxFilling.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    maxFilling.value = maxFilling.value.replace(event.data, "");
+  } 
 });
 form.addEventListener("submit", submitSettingsForm);
 modalXButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
+modalXButton.addEventListener("click", () => {
+});
 modalCancelButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
+modalCancelButton.addEventListener("click", () => {
+});
 modalOkButton.addEventListener("click", (e) => submitModalForm(e, modal));

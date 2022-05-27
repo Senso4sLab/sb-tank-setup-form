@@ -1,4 +1,4 @@
-export const modalContent = (
+export const modalContent = async (
     modal,
     settingsListDiv,
     unitsInput, 
@@ -15,15 +15,15 @@ export const modalContent = (
     ) => {
         const modalTitle = document.createElement("h3");
   modalTitle.className = "inner-modal-settings-list-title";
-  modalTitle.textContent = "Please check the entered data:";
-  settingsListDiv.appendChild(modalTitle);
+  modalTitle.textContent = "Please check the entered data";
+  await settingsListDiv.appendChild(modalTitle);
 
   const lineBreak = document.createElement("br");
-  settingsListDiv.appendChild(lineBreak);
+  await settingsListDiv.appendChild(lineBreak);
 
   const unitsType = document.createElement("p");
   unitsType.textContent = `Measuring unit: ${unitsInput.value}`;
-  settingsListDiv.appendChild(unitsType);
+  await settingsListDiv.appendChild(unitsType);
 
   const mediumType = document.createElement("p");
   if (densityInput.value == "Custom") {
@@ -31,19 +31,19 @@ export const modalContent = (
   } else {
     mediumType.textContent = `Medium type: ${densityInput.value}`;
   }
-  settingsListDiv.appendChild(mediumType);
+  await settingsListDiv.appendChild(mediumType);
 
   const maximumHeight = document.createElement("p");
   maximumHeight.textContent = `Tank height [m]: ${maxHeight.value}`;
-  settingsListDiv.appendChild(maximumHeight);
+  await settingsListDiv.appendChild(maximumHeight);
 
   const maximumVolume = document.createElement("p");
   maximumVolume.textContent = `Tank volume [l]: ${maxVolume.value}`;
-  settingsListDiv.appendChild(maximumVolume);
+  await settingsListDiv.appendChild(maximumVolume);
 
   const tankShapeInput = document.createElement("p");
   tankShapeInput.textContent = `Tank shape: ${tankShape.value}`;
-  settingsListDiv.appendChild(tankShapeInput);
+  await settingsListDiv.appendChild(tankShapeInput);
 
   if (tankShape.value == "Custom") {
     heightsAndVolumes.length = 0;
@@ -52,7 +52,7 @@ export const modalContent = (
     // customVolumes = customVolumes.filter((el) => !el[0].includes("height"));
     let currentHeightId = "";
     let uniqueHeights = [];
-    customHeights.forEach((height) => {
+   await customHeights.forEach((height) => {
       if (height[0] != currentHeightId) {
         currentHeightId = height[0];
         uniqueHeights.push(height);
@@ -61,7 +61,7 @@ export const modalContent = (
     uniqueHeights = uniqueHeights.sort();
     let currentVolumeId = "";
     let uniqueVolumes = [];
-    customVolumes.forEach((volume) => {
+   await customVolumes.forEach((volume) => {
       if (volume[0] != currentVolumeId) {
         currentVolumeId = volume[0];
         uniqueVolumes.push(volume);
@@ -69,37 +69,37 @@ export const modalContent = (
     });
     uniqueVolumes = uniqueVolumes.sort();
     for (let i = 0; i < uniqueHeights.length; i++) {
-      const height = uniqueHeights[i][1];
+      const height = await uniqueHeights[i][1];
       for (let j = 0; j < uniqueVolumes.length; j++) {
-        const volume = uniqueVolumes[j][1];
+        const volume = await uniqueVolumes[j][1];
         if (j == i) {
-          heightsAndVolumes.push(`(${height} m, ${volume} l)`);
+         await heightsAndVolumes.push(`(${height} m, ${volume} l)`);
           break;
         }
       }
     }
-    customHeightVolumePairs.textContent = `Height - Volume pairs: ${heightsAndVolumes.join(", ")}`;
-    settingsListDiv.appendChild(customHeightVolumePairs);
+   customHeightVolumePairs.textContent = `Height - Volume pairs: ${heightsAndVolumes.join(", ")}`;
+   await settingsListDiv.appendChild(customHeightVolumePairs);
   }
 
   const fillingLimit = document.createElement("p");
   fillingLimit.textContent = `Filling limit [%]: ${maxFilling.value}`;
-  settingsListDiv.appendChild(fillingLimit);
+  await settingsListDiv.appendChild(fillingLimit);
 
   modal.style.display = "block";
     };
 
-  export const cancelAndExitModal = (event, element, listElement) => {
+  export const cancelAndExitModal = async (event, element, listElement) => {
         event.preventDefault();
         element.style.display = "none";
         while (
           listElement.lastChild
         ) {
-          listElement.removeChild(listElement.lastChild);
+          await listElement.removeChild(listElement.lastChild);
         }
       };
       
-  export const submitModalForm = (event, element) => {
+  export const submitModalForm = async (event, element) => {
         event.preventDefault();
         window.location.href = "success.html";
         element.style.display = "none";

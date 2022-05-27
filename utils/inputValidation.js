@@ -20,8 +20,16 @@ export const limitDecimals = (element, number, errorMessage) => {
    isError(false, element);
        return "";
 }
+  } else if (stringNum.includes(",")) {
+    let numberOfDecimals = stringNum.split(",")[1].length;
+    if (numberOfDecimals > 2) {
+      isError(true, element);
+       return errorMessage;
+    } else {
+   isError(false, element);
+       return ""; 
   }
-  ;
+}
 };
 
 export const dropdownValidation = (element, errorMessage) => {
@@ -35,11 +43,25 @@ export const dropdownValidation = (element, errorMessage) => {
 };
 
 export const regularNumberValidation = (element, errorMessage) => {
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  }
   let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  // let userInput = "";
+  // try {
+  //   userInput = Number.parseFloat(element.value).toFixed(2);
+  // } catch (error) {
+  //   console.log("That couldn't be done!!");
+  //   userInput = "";
+  // }
+  
+
+
   if (
     (userInput < 0 ||
       userInput == undefined ||
-      userInput == "" || userInput == '') 
+      userInput == "") 
       &&
     element.disabled == false
   ) {
@@ -52,7 +74,11 @@ export const regularNumberValidation = (element, errorMessage) => {
 };
 
 export const maxHeightValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  if (element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  } else {
+    let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
       userInput > 4.7 ||
@@ -65,10 +91,16 @@ export const maxHeightValidation = (element, errorMessage) => {
       isError(false, element);
       return "";
      }
+  }
+  
 };
 
 export const maxVolumeValidation = (element, errorMessage) => {
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  } else {
+    let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
       userInput == undefined ||
@@ -80,6 +112,8 @@ export const maxVolumeValidation = (element, errorMessage) => {
       isError(false, element);
       return "";
      }
+  }
+  
 };
 
 export const regularTextValidation = (element, errorMessage) => {
@@ -95,7 +129,11 @@ export const regularTextValidation = (element, errorMessage) => {
   }
 };
 
-export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customHeights = []) => {
+export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray, customHeights) => {
+  if (element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  }
   let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
@@ -117,7 +155,11 @@ export const customHeightValidation = (element, errorMessage, customHeightsAndVo
     }
 };
 
-export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray = [], customVolumes = []) => {
+export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray, customVolumes) => {
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  }
   let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput < 0 ||
@@ -139,7 +181,9 @@ export const customVolumeValidation = (element, errorMessage, customHeightsAndVo
 };
 
 export const enableButton = (heightElement, volumeElement) => {
-  if ((heightElement.value > 0 && heightElement.value <= 4.7) && (volumeElement.value > 0)) {
+  const heightElementValue = Number.parseFloat(heightElement.value);
+  const volumeElementValue = Number.parseInt(volumeElement.value); 
+  if ((heightElementValue > 0 && heightElementValue <= 4.7) && (volumeElementValue > 0)) {
     return false;
   } else {
     return true;
@@ -147,12 +191,16 @@ export const enableButton = (heightElement, volumeElement) => {
 };
 
 export const maxFillingValidation = (element, errorMessage) => {
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  }
   let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
     if (
       userInput == "" ||
       userInput == undefined ||
       userInput < 0 ||
-      userInput > 100
+      userInput > 100 
     ) {
       isError(true, element);
       return errorMessage;
@@ -171,7 +219,7 @@ export const errorMessageOutput = (element, errorMessages) => {
       firstChild = element.firstChild;
     }
     proceedButton.disabled = true;
-    proceedButton.style.opacity = 0.7;
+    proceedButton.backgroundColor = "gray";
     element.style.display = "block";
     errorMessages.forEach((message) => {
       const errorParagraph = document.createElement("p");
@@ -181,7 +229,7 @@ export const errorMessageOutput = (element, errorMessages) => {
     return errorMessages;
   } else if (errorMessages.length == 0) {
     proceedButton.disabled = false;
-    proceedButton.style.opacity = 1;
+    proceedButton.backgroundColor = "#0162a6";
     error.style.display = "none";
     error.textContent = "";
     return [];

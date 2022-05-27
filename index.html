@@ -8,16 +8,18 @@
     <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js" defer></script>
   </head>
-  <body>
+  <body id="index-body">
+    <form class="tank-settings-form" autocomplete="off">
     <h1 class="h1-font">TANK SETUP</h1>
     <div id="error"></div>
-    <form class="tank-settings-form" autocomplete="off">
+    <!-- <form class="tank-settings-form" autocomplete="off"> -->
       <div class="units-div">
         <label class="label" for="units">Measuring unit: </label>
         <div class="input-and-options-div">
           <input
             type="text"
-            class="units-input"
+            inputmode="none"
+            class="units-input input"
             id="units"
             placeholder="Choose..."
             value=""
@@ -34,7 +36,8 @@
         <div class="input-and-options-div">
           <input
             type="text"
-            class="density-input"
+            inputmode="none"
+            class="density-input input"
             id="media"
             placeholder="Choose..."
             value=""
@@ -84,8 +87,10 @@
         <label class="label" id="medium-name-input-label" for="medium-name-input">Medium name:</label>
         <input
           type="text"
+          inputmode="text"
           id="medium-name-input"
           name="medium-name-input"
+          class="input"
           value=""
           disabled
           placeholder="Insert name..."
@@ -94,9 +99,11 @@
       <div class="density-value">
         <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
         <input
-          type="number"
+          type="text"
+          inputmode="decimal"
           id="density-picker"
           name="density-picker"
+          class="input"
           value=""
           disabled
           placeholder="Insert value..."
@@ -104,10 +111,12 @@
       </div>
     </div>
       <div class="max-tank-height-div" id="complete-tank-height">
-        <label class="label" for="max-height">Tank height [m]:</label>
+        <label class="label" id="max-height-label" for="max-height">Tank height [m]:</label>
         <input
-          type="number"
+          type="text"
+          inputmode="decimal"
           id="max-height"
+          class="input"
           name="max-height"
           step="0.01"
           value=""
@@ -115,10 +124,12 @@
         />
       </div>
       <div class="max-tank-volume-div" id="complete-tank-volume">
-        <label class="label" for="max-volume">Tank volume [l]:</label>
+        <label class="label" id="max-volume-label" for="max-volume">Tank volume [l]:</label>
         <input
-          type="number"
+          type="text"
+          inputmode="decimal"
           id="max-volume"
+          class="input"
           name="max-volume"
           step="1"
           value=""
@@ -130,7 +141,8 @@
         <div class="input-and-options-div">
           <input
             type="text"
-            class="tank-shape-input"
+            inputmode="none"
+            class="tank-shape-input input"
             placeholder="Choose..."
             value=""
           />
@@ -176,18 +188,22 @@
           id="custom-tank-shape-adjustment-inner"
         >
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-height1"
+            class="input"
             name="custom-max-height1"
-            value=""
+            value="0"
             step="0.01"
             placeholder="Insert value..."
             disabled
           />
 
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-volume1"
+            class="input"
             name="custom-max-volume1"
             value="0"
             step="1"
@@ -200,18 +216,22 @@
           id="custom-tank-shape-adjustment-inner2"
         >
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-height2"
+            class="input"
             name="custom-max-height"
-            value="0"
+            value=""
             step="0.01"
             placeholder="Insert value..."
             disabled
           />
 
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-volume2"
+            class="input"
             name="custom-max-volume"
             value=""
             step="1"
@@ -243,8 +263,10 @@
           id="custom-tank-shape-adjustment-innerMax"
         >
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-heightMax"
+            class="input"
             name="custom-max-heightMax"
             value=""
             step="0.01"
@@ -252,8 +274,10 @@
             disabled
           />
           <input
-            type="number"
+            type="text"
+            inputmode="decimal"
             id="custom-max-volumeMax"
+            class="input"
             name="custom-max-volumeMax"
             value=""
             step="1"
@@ -263,16 +287,19 @@
         </div>
       </div>
       <div class="max-tank-filling-div">
+        <!-- <div class="max-tank-filling-div-inner"> -->
         <label class="label" for="fill">Filling limit [%]:</label>
         <input
-          type="number"
+          type="text"
+          inputmode="decimal"
           id="max-fill"
-          class="max-filling"
+          class="max-filling input"
           name="fill"
           step="1"
           value="95"
           placeholder="Insert value..."
         />
+      <!-- </div> -->
       </div>
       <input class="button" type="submit" value="PROCEED" id="proceed-button" />
     </form>
