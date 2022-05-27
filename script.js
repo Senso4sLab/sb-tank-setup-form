@@ -345,11 +345,21 @@ const addAnotherCustomTankShape = () => {
   heightInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
   heightInput.addEventListener("input", () => maxTwoDecimalsValidation(heightInput));
   heightInput.addEventListener("input", (event) => {
+    let currentDecimal = "";
+    customHeights.forEach(height => {
+      console.log(height[1].includes("."));
+      console.log(height[1].includes(","));
+      if (height[1].includes(".")) {
+       return currentDecimal = ".";
+      } else if (height[1].includes(",")) {
+       return currentDecimal = ",";
+      }
+    });
     if (event.data === "-" || event.data === " ") {
       heightInput.value = heightInput.value.replace(event.data, "");
     } else if(event.data === ",") {
       heightInputCount++;
-      if (heightInput.value.includes(".")) {
+      if (heightInput.value.includes(".") || currentDecimal === ".") {
         heightInput.value = heightInput.value.replace(event.data, "");
       } else if (heightInputCount > 1) {
         heightInput.value = heightInput.value.replace(/.$/, "");
@@ -360,7 +370,7 @@ const addAnotherCustomTankShape = () => {
       } 
     } else if (event.data === ".") {
       heightInputCount++;
-      if (heightInput.value.includes(",")) {
+      if (heightInput.value.includes(",") || currentDecimal === ",") {
         heightInput.value = heightInput.value.replace(event.data, "");
       } else if (heightInputCount > 1) {
         heightInput.value = heightInput.value.replace(/.$/, "");
