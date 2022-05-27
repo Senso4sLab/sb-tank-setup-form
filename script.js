@@ -34,7 +34,6 @@ let customTankShapeError = false;
 let isUnitsOpen = false;
 let isTankShapeOpen = false;
 let isMediaOpen = false;
-let today;
 
 const error = document.querySelector("#error");
 const form = document.querySelector(".tank-settings-form");
@@ -188,6 +187,7 @@ const customTankShape = (id) => {
     customMaxVolume2.value = "";
     customHeightMax.disabled = true;
     customVolumeMax.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
     addAnotherButton.style.display = "block";
     deleteButton.style.display = "none";
     otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
@@ -647,7 +647,6 @@ const submitSettingsForm = (e) => {
     proceedButton.disabled = false;
     proceedButton.style.backgroundColor = "#0162a6";
   }
-  today = new Date();
 
   modalContent(
     modal,
@@ -672,8 +671,8 @@ const submitSettingsForm = (e) => {
 //  });
 window.addEventListener("load", () => {
   console.log(window.navigator);
-  proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
+  // proceedButton.disabled = true;
+  //   proceedButton.style.backgroundColor = "gray";
 });
 window.addEventListener("click", toggleUnitsInput);
 window.addEventListener("click", toggleTankShapeInput);

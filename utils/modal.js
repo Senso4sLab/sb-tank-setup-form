@@ -103,4 +103,5 @@ export const modalContent = async (
         event.preventDefault();
         window.location.href = "success.html";
         element.style.display = "none";
+        let date = new Date().toLocaleString();
       };
