@@ -45,39 +45,50 @@ export const modalContent = async (
   tankShapeInput.textContent = `Tank shape: ${tankShape.value}`;
   await settingsListDiv.appendChild(tankShapeInput);
 
+  // Prvi custom par dodaj v customHeights in customVolumes
   if (tankShape.value == "Custom") {
     heightsAndVolumes.length = 0;
     const customHeightVolumePairs = document.createElement("p");
-    // customHeights = customHeights.filter((el) => !el[0].includes("volume"));
-    // customVolumes = customVolumes.filter((el) => !el[0].includes("height"));
-    let currentHeightId = "";
-    let uniqueHeights = [];
-   await customHeights.forEach((height) => {
-      if (height[0] != currentHeightId) {
-        currentHeightId = height[0];
-        uniqueHeights.push(height);
-      }
-    });
-    uniqueHeights = uniqueHeights.sort();
-    let currentVolumeId = "";
-    let uniqueVolumes = [];
-   await customVolumes.forEach((volume) => {
-      if (volume[0] != currentVolumeId) {
-        currentVolumeId = volume[0];
-        uniqueVolumes.push(volume);
-      }
-    });
-    uniqueVolumes = uniqueVolumes.sort();
-    for (let i = 0; i < uniqueHeights.length; i++) {
-      const height = await uniqueHeights[i][1];
-      for (let j = 0; j < uniqueVolumes.length; j++) {
-        const volume = await uniqueVolumes[j][1];
+    for (let i = 0; i < customHeights.length; i++) {
+      const height = await customHeights[i][1];
+      for (let j = 0; j < customVolumes.length; j++) {
+        const volume = await customVolumes[j][1];
         if (j == i) {
          await heightsAndVolumes.push(`(${height} m, ${volume} l)`);
           break;
         }
       }
     }
+    // customHeights = customHeights.filter((el) => !el[0].includes("volume"));
+    // customVolumes = customVolumes.filter((el) => !el[0].includes("height"));
+  //   let currentHeightId = "";
+  //   let uniqueHeights = [];
+  //  await customHeights.forEach((height) => {
+  //     if (height[0] != currentHeightId) {
+  //       currentHeightId = height[0];
+  //       uniqueHeights.push(height);
+  //     }
+  //   });
+  //   uniqueHeights = uniqueHeights.sort();
+  //   let currentVolumeId = "";
+  //   let uniqueVolumes = [];
+  //  await customVolumes.forEach((volume) => {
+  //     if (volume[0] != currentVolumeId) {
+  //       currentVolumeId = volume[0];
+  //       uniqueVolumes.push(volume);
+  //     }
+  //   });
+  //   uniqueVolumes = uniqueVolumes.sort();
+  //   for (let i = 0; i < uniqueHeights.length; i++) {
+  //     const height = await uniqueHeights[i][1];
+  //     for (let j = 0; j < uniqueVolumes.length; j++) {
+  //       const volume = await uniqueVolumes[j][1];
+  //       if (j == i) {
+  //        await heightsAndVolumes.push(`(${height} m, ${volume} l)`);
+  //         break;
+  //       }
+  //     }
+  //   }
    customHeightVolumePairs.textContent = `Height - Volume pairs: ${heightsAndVolumes.join(", ")}`;
    await settingsListDiv.appendChild(customHeightVolumePairs);
   }

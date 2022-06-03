@@ -48,16 +48,7 @@ export const regularNumberValidation = (element, errorMessage) => {
       return errorMessage;
   }
   let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
-  // let userInput = "";
-  // try {
-  //   userInput = Number.parseFloat(element.value).toFixed(2);
-  // } catch (error) {
-  //   console.log("That couldn't be done!!");
-  //   userInput = "";
-  // }
-  
-
-
+ 
   if (
     (userInput < 0 ||
       userInput == undefined ||
@@ -130,7 +121,7 @@ export const regularTextValidation = (element, errorMessage) => {
 };
 
 export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray, customHeights) => {
-  if (element.value.includes("-")) {
+  if (element.value.includes("-") || element.value.includes(" ")) {
     isError(true, element);
       return errorMessage;
   }
@@ -156,7 +147,7 @@ export const customHeightValidation = (element, errorMessage, customHeightsAndVo
 };
 
 export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray, customVolumes) => {
-  if (element.value.includes(".") || element.value.includes("-")) {
+  if (element.value.includes(".") || element.value.includes("-") || element.value.includes(",") || element.value.includes(" ")) {
     isError(true, element);
       return errorMessage;
   }
@@ -181,6 +172,12 @@ export const customVolumeValidation = (element, errorMessage, customHeightsAndVo
 };
 
 export const enableButton = (heightElement, volumeElement) => {
+  if (heightElement.value.includes(".")) {
+      const numOfDecimals = heightElement.value.split(".")[1].length;
+      if (numOfDecimals > 2) {
+        return true;
+      }  
+  }
   const heightElementValue = Number.parseFloat(heightElement.value);
   const volumeElementValue = Number.parseInt(volumeElement.value); 
   if ((heightElementValue > 0 && heightElementValue <= 4.7) && (volumeElementValue > 0)) {
@@ -191,7 +188,7 @@ export const enableButton = (heightElement, volumeElement) => {
 };
 
 export const maxFillingValidation = (element, errorMessage) => {
-  if (element.value.includes(".") || element.value.includes("-")) {
+  if (element.value.includes(".") || element.value.includes("-") || element.value.includes(",") || element.value.includes(" ")) {
     isError(true, element);
       return errorMessage;
   }

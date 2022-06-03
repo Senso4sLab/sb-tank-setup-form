@@ -56,6 +56,10 @@ select {
     border: 1px solid rgb(0, 0, 0);
 }
 
+input[type="button"] {
+    overflow: hidden;
+}
+
 .label {
     width: 20vw;
     margin-top: 2vh;
@@ -330,7 +334,7 @@ select {
 }
 
 /* Mobile phones (portrait) */
-@media /*(min-width:360px) and (min-height:640px) and*/ (max-width:900px) and (max-height:1023px) {
+@media /*(min-width:360px) and (min-height:640px) and*/ (max-width:1200px) and (max-height:1440px) {
    * {
        width: 100vw;
     -webkit-overflow-x: hidden;
@@ -352,9 +356,17 @@ select {
 }
 
 .label {
-    width: 50vw;
-    font-size: 20px;
+    width: 100vw;
+    text-align: center;
+    padding-right: 10vw;
+    font-size: 18px;
 }
+
+/* #tank-shape-label {
+    width: 100vw;
+    text-align: center;
+    padding-right: 10vw;
+} */
 
 .input,
 .option {
@@ -368,7 +380,8 @@ select {
     position: static;
 }
 
-.button {
+.button,
+.custom-button {
     width: 50vw;
     font-size: 20px;
 }
@@ -410,23 +423,33 @@ select {
 .custom-button,
 #add-another2,
 #delete2 {
-    width: 20vw;
-    height: 7vh;
+    width: 10vw;
+    height: max-content;
+    margin-right: 20vw;
+    margin-left: 10vw;
 }
 
 #medium-name-input-label,
 #density-picker-label,
 #max-height-label,
-#max-volume-label {
+#max-volume-label,
+#max-fill-label {
     margin-bottom: 5vh;
 }
 
 #custom-height-label,
 #custom-volume-label {
-/* #custom-volume-label { */
-    width: 40vw;
+    width: 50vw;
     margin-left: 0vw;
-    margin-right: 0;   
+    margin-right: 0vw;   
+}
+
+#custom-height-label {
+    padding-left: 10vw;
+}
+
+#custom-volume-label {
+    padding-right: 20vw;
 }
 
 #proceed-button {
@@ -511,7 +534,7 @@ select {
     }
 }
 
-/* Mobile phones (portrait) */
+/*Mobile phones (portrait)*/
 @media (width:375px) and (height:667px) {
 
 }

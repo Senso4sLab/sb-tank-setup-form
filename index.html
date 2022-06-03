@@ -138,10 +138,11 @@
         />
       </div>
       <div class="tank-shape-div">
-        <label class="label" for="shape">Tank shape: </label>
+        <label id="tank-shape-label" class="label" for="shape">Tank shape: </label>
         <div class="input-and-options-div">
           <input
             type="text"
+            id="shape"
             inputmode="none"
             class="tank-shape-input input"
             placeholder="Choose..."
@@ -289,7 +290,7 @@
       </div>
       <div class="max-tank-filling-div">
         <!-- <div class="max-tank-filling-div-inner"> -->
-        <label class="label" for="fill">Filling limit [%]:</label>
+        <label id="max-fill-label" class="label" for="fill">Filling limit [%]:</label>
         <input
           type="text"
           inputmode="decimal"
