@@ -1,3 +1,5 @@
+/* Popravi razmake med posameznimi vrsticami tako, da bodo le-te med seboj enako oddaljene. */
+
 * {
     margin: 0;
     padding: 0;
@@ -172,7 +174,13 @@ input[type="button"] {
 .density-input,
 .tank-shape-input {
     margin-top: 3vh;
-    z-index: 1000;
+    z-index: 600;
+}
+
+#complete-tank-height,
+#complete-tank-volume,
+#max-tank-filling-div {
+   height: 8vh;
 }
 
 .units-input::placeholder,
@@ -216,9 +224,9 @@ input[type="button"] {
     width: 2vw;
 }
 
-#complete-tank-height {
+/* #complete-tank-height {
     top: -20vh;
-}
+} */
 
 .modal {
     height: 100vh;
@@ -362,11 +370,10 @@ input[type="button"] {
     font-size: 18px;
 }
 
-/* #tank-shape-label {
-    width: 100vw;
-    text-align: center;
-    padding-right: 10vw;
-} */
+#complete-tank-height,
+#complete-tank-volume {
+   height: max-content;
+}
 
 .input,
 .option {

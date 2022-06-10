@@ -154,7 +154,6 @@ const tankShapeUserInputValidation = () => {
 const customHeightUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
   const chvArray = customHeightValidation(customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights);
-  console.log(`Type: ${typeof(chvArray[0])}.`);
   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
   customHeights = [...chvArray[1]];
   errorMessages.push(chvArray[2]);
@@ -164,7 +163,6 @@ const customHeightUserInputValidation = () => {
 const customVolumeUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
   const cvvArray = customVolumeValidation(customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes);
-  console.log(`Type: ${typeof(cvvArray[0])}.`);
   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
   customVolumes = [...cvvArray[1]];
   errorMessages.push(cvvArray[2]);
@@ -211,15 +209,6 @@ const checkForErrorMessages = () => {
 const customTankShape = (id) => {
   proceedButton.style.display = "gray";
   proceedButton.disabled = true;
-  // unitsUserInputValidation();
-  // densityUserInputValidation();
-  // if (densityInput.value == "Custom") {
-  //   mediumNameUserInputValidation();
-  //   mediumDensityUserInputValidation();
-  // }
-  // maxHeightUserInputValidation();
-  // maxVolumeUserInputValidation();
-  // maxFillingUserInputValidation();
   customMaxHeight.value = 0;
   customMaxVolume.value = 0;
   if (id.trim() === "Custom") {
@@ -439,9 +428,6 @@ const addAnotherCustomTankShape = () => {
         heightInputCount = 1;
       }
     }
-    console.log(heightInputCount);
-    console.log("Event:");
-    console.log(event);
     let length = heightInput.value.length;
     if (event.data === "-" || event.data === " ") {
       heightInput.value = heightInput.value.replace(event.data, "");
@@ -463,8 +449,6 @@ const addAnotherCustomTankShape = () => {
           return;
         } else {
           for (let char of heightInput.value) {
-            console.log(char);
-            console.log(heightInputCount);
             if (char === ".") {
               if (heightInputCount > 1) {
                 heightInput.value = heightInput.value.slice(0, length - 1);
@@ -472,7 +456,6 @@ const addAnotherCustomTankShape = () => {
               }
             }
           }
-          console.log(heightInputCount);
         }
         return;
       }
@@ -492,8 +475,6 @@ const addAnotherCustomTankShape = () => {
           heightInputCount--;
         } else {
           for (let char of heightInput.value) {
-            console.log(char);
-            console.log(heightInputCount);
             if (char == ".") {
               if (heightInputCount > 1) {
                 heightInput.value = heightInput.value.slice(0, length - 1);
@@ -501,7 +482,6 @@ const addAnotherCustomTankShape = () => {
               }
             }
           }
-          console.log(heightInputCount);
         }
         return;
       } 
@@ -524,9 +504,7 @@ const addAnotherCustomTankShape = () => {
       } 
     });
   heightInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
-  heightInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
-  volumeInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
   heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
   heightInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
@@ -602,14 +580,6 @@ const addAnotherCustomTankShape = () => {
 addAnotherButton.addEventListener("click", addAnotherCustomTankShape);
 
 const deleteCustomTankShape = (id) => {
-// popravi logiko da pri brisanju praznih vrstic ne bo brisalo elementov iz customHeights in customVolumes - OPRAVLJENO!
-// in da se pri brisanju vrstice gumb proceed vklopi če so za to izpolnjeni pogoji - OPRAVLJENO!
-// potrebno je popraviti logiko da bo delovalo preverjanje dodajanja decimalk. - OPRAVLJENO!
-
- 
-  console.log(heightInputCount);
-  //heightInputCount = 1;
-
   counter--;
   document.querySelector("#add-another" + (counter - 1)).style.display = "block";
   document.querySelector("#delete" + (counter - 1)).style.display = "block";
@@ -618,12 +588,8 @@ const deleteCustomTankShape = (id) => {
   if (id === "custom-tank-shape-adjustment-inner3") {
     document.querySelector("#delete2").style.display = "none";
   }
-
   customHeights = customHeights.filter(height => height[0] != document.querySelector("#" + id).children[0].id);
-  console.log(customHeights);
-  customVolumes = customVolumes.filter(volume => volume[0] != document.querySelector("#" + id).children[1].id);
-  console.log(customVolumes);
-    
+  customVolumes = customVolumes.filter(volume => volume[0] != document.querySelector("#" + id).children[1].id);  
   document
     .querySelector(".custom-tank-shape-adjustment")
     .removeChild(document.querySelector("#" + id));
@@ -674,15 +640,11 @@ const submitSettingsForm = (e) => {
   if (maxHeight.value.endsWith(".")) {
     maxHeight.value = maxHeight.value.slice(0, - 1);
   }
-  customHeights.forEach(element => console.log(element));
   customHeights.forEach(element => {
     if (element[1].endsWith(".")) {
       element[1] = element[1].slice(0, - 1);
-      console.log(element[1]);
     }
   });
-  customHeights.forEach(element => console.log(element));
-  console.log(otherCustomMaxHeightsAndVolumes);
   errorMessages.length = 0;
   error.textContent = "";
   if (
@@ -800,8 +762,6 @@ densityPicker.addEventListener("input", (event) => {
 
 maxHeight.addEventListener("input", (event) => {
   let length = maxHeight.value.length;
-  console.log(event.data);
-  console.log(length);
   if (event.data === "-" || event.data === " ") {
     maxHeight.value = maxHeight.value.replace(event.data, "");
   } else if(event.data === ",") {
@@ -818,8 +778,6 @@ maxHeight.addEventListener("input", (event) => {
         return;
       } else {
         for (let char of maxHeight.value) {
-          console.log(char);
-          console.log(maxHeightCount);
           if (char === ".") {
             if (maxHeightCount > 1) {
               maxHeight.value = maxHeight.value.slice(0, length - 1);
@@ -827,7 +785,6 @@ maxHeight.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(maxHeightCount);
       }
       return;
     }
@@ -847,8 +804,6 @@ maxHeight.addEventListener("input", (event) => {
         maxHeightCount--;
       } else {
         for (let char of maxHeight.value) {
-          console.log(char);
-          console.log(maxHeightCount);
           if (char == ".") {
             if (maxHeightCount > 1) {
               maxHeight.value = maxHeight.value.slice(0, length - 1);
@@ -856,7 +811,6 @@ maxHeight.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(maxHeightCount);
       }
       return;
     } 
@@ -909,8 +863,6 @@ customMaxHeight.addEventListener("input", (event) => {
         return;
       } else {
         for (let char of customMaxHeight.value) {
-          console.log(char);
-          console.log(customMaxHeightCount);
           if (char === ".") {
             if (customMaxHeightCount > 1) {
               customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
@@ -918,7 +870,6 @@ customMaxHeight.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(customMaxHeightCount);
       }
       return;
     }
@@ -938,8 +889,6 @@ customMaxHeight.addEventListener("input", (event) => {
         customMaxHeightCount--;
       } else {
         for (let char of customMaxHeight.value) {
-          console.log(char);
-          console.log(customMaxHeightCount);
           if (char == ".") {
             if (customMaxHeightCount > 1) {
               customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
@@ -947,7 +896,6 @@ customMaxHeight.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(customMaxHeightCount);
       }
       return;
     } 
@@ -995,8 +943,6 @@ customMaxHeight2.addEventListener("input", (event) => {
         return;
       } else {
         for (let char of customMaxHeight2.value) {
-          console.log(char);
-          console.log(customMaxHeight2Count);
           if (char === ".") {
             if (customMaxHeight2Count > 1) {
               customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
@@ -1004,7 +950,6 @@ customMaxHeight2.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(customMaxHeight2Count);
       }
       return;
     }
@@ -1024,8 +969,6 @@ customMaxHeight2.addEventListener("input", (event) => {
         customMaxHeight2Count--;
       } else {
         for (let char of customMaxHeight2.value) {
-          console.log(char);
-          console.log(customMaxHeight2Count);
           if (char == ".") {
             if (customMaxHeight2Count > 1) {
               customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
@@ -1033,7 +976,6 @@ customMaxHeight2.addEventListener("input", (event) => {
             }
           }
         }
-        console.log(customMaxHeight2Count);
       }
       return;
     } 
@@ -1076,10 +1018,8 @@ customMaxVolume2.addEventListener("input", () => {
   }
 });
 customMaxHeight2.addEventListener("input", customHeightUserInputValidation);
-customMaxHeight2.addEventListener("input", customVolumeUserInputValidation);
 customMaxHeight2.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(customMaxHeight2));
 customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
-customMaxVolume2.addEventListener("input", customHeightUserInputValidation);
 
 maxFilling.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
