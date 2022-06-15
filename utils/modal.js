@@ -1,9 +1,33 @@
+const modal = document.querySelector(".modal");
+const modalOkButton = document.querySelector("#ok-button");
+const modalCloseButton = document.querySelector("#close-button");
+const modalCancelButton = document.querySelector("#cancel-button");
+const modalXButton = document.querySelector("#x-button");
+const settingsListDiv = document.querySelector(".inner-modal-settings-list");
+
 let units;
 let medium;
 let maxH;
 let maxV;
 let tShape;
 let mFill;
+
+export const messageModalContent = async (modal, settingsListDiv, message) => {
+  
+  while (
+    settingsListDiv.lastChild
+  ) {
+    await settingsListDiv.removeChild(settingsListDiv.lastChild);
+  }
+  const ms = document.createElement("p");
+  ms.textContent = `${message}`;
+  await settingsListDiv.appendChild(ms);
+  modal.style.display = "block";
+  modalOkButton.style.display = "none";
+  modalCancelButton.style.display = "none";
+  modalXButton.style.display = "none";
+  modalCloseButton.style.display = "inline";
+};
 
 export const modalContent = async (
     modal,
@@ -20,6 +44,11 @@ export const modalContent = async (
     heightsAndVolumes, 
     maxFilling
     ) => {
+      modalOkButton.style.display = "inline";
+      modalXButton.style.display = "block";
+      modalCancelButton.value = "BACK";
+      modalCancelButton.style.display = "inline";
+      modalCloseButton.style.display = "none";
         const modalTitle = document.createElement("h3");
   modalTitle.className = "inner-modal-settings-list-title";
   modalTitle.textContent = "Please check the entered data";
@@ -100,13 +129,9 @@ export const modalContent = async (
         }
       };
       
-  export const submitModalForm = async (event, elementData) => {
+  export const submitModalForm = async (event) => {
         event.preventDefault();
-        // window.location.href = "success.html";
-        // element.style.display = "none";
         let date = new Date().toLocaleString();
-
-        // Shrani vrednosti vseh lastnosti (tudi gnezdenih) v en sam niz znakov (kot pri prikazu v modal-u)
 
         const data = JSON.stringify({
           units: units,
@@ -118,18 +143,25 @@ export const modalContent = async (
           creationDate: date
         });
 
-        fetch("https://192.168.4.1/data", {
+        fetch("/data", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: data
-        }).then(res => {
-          return res.json();
         })
-        .then(data => {
-          console.log(data);
-          alert(`${data.units}, ${data.medium}, ${data.maxHeight}, ${data.maxVolume}, ${data.tankShape}, ${data.fillingLimit}, ${data.creationDate}.`);
+        .then(res => {
+
+          if (res.ok) {
+            modalCloseButton.style.display = "none";
+            messageModalContent(modal, settingsListDiv, "Tank form was successfully filled. Press button to exit the modal and then close the browser.");
+          } else {
+            modalCloseButton.style.display = "none";
+            messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form.");
+          }
         })
-        .catch(error => console.log('ERROR:' + error));
+        .catch(error => {
+          
+          console.log('ERROR:' + error)
+      });
       };

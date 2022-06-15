@@ -73,8 +73,7 @@ input[type="button"] {
 #error,
 .units-div,
 .media-div,
-.medium-name,
-.density-value,
+.custom-density-adjustment,
 .max-tank-height-div,
 .max-tank-volume-div,
 .tank-shape-div,
@@ -88,9 +87,15 @@ input[type="button"] {
         align-items: center;
 }
 
+.custom-density-adjustment {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: center;
+        align-items: center;
+}
+
 .units-div,
 .media-div,
-.custom-density-adjustment,
 .max-tank-height-div,
 .max-tank-volume-div,
 .tank-shape-div,
@@ -101,6 +106,11 @@ input[type="button"] {
 .custom-density-adjustment,
 .custom-tank-shape-adjustment {
     display: none;
+}
+
+.custom-density-adjustment {
+    margin-right: 20vw;
+    margin-left: 20vw;
 }
 
 .custom-button {
@@ -138,6 +148,7 @@ input[type="button"] {
 
 .custom-tank-shape-adjustment {
     position: relative;
+    margin-bottom: 5vh;
 }
 
 #add-another1,
@@ -145,10 +156,6 @@ input[type="button"] {
     margin-left: 35vw;
     display: none;
 }
-
-/* #add-another2 {
-    opacity: 0.7;
-} */
 
 .date {
     text-align: center;
@@ -158,8 +165,6 @@ input[type="button"] {
 
 .units-input,
 .density-input,
-#medium-name-input,
-#density-picker,
 #max-height,
 #max-volume,
 .tank-shape-input,
@@ -168,6 +173,17 @@ input[type="button"] {
     z-index: 100;
     width: 15vw;
     cursor: default;
+}
+
+#medium-name-input,
+#density-picker {
+    position: relative;
+    width: 10vw;
+    text-align: left;
+}
+
+#medium-name-input {
+    margin-left: 5vw;
 }
 
 .units-input,
@@ -180,6 +196,7 @@ input[type="button"] {
 #complete-tank-height,
 #complete-tank-volume,
 #max-tank-filling-div {
+    position: relative;
    height: 8vh;
 }
 
@@ -223,10 +240,6 @@ input[type="button"] {
     height: 2vh;
     width: 2vw;
 }
-
-/* #complete-tank-height {
-    top: -20vh;
-} */
 
 .modal {
     height: 100vh;
@@ -312,12 +325,16 @@ input[type="button"] {
 }
 
 #ok-button {
-    width: 5vw;
     margin-right: 5vw;
 }
 
 #ok-button:hover {
     background: rgb(0, 255, 0);
+}
+
+#close-button {
+    display: none;
+    margin-left: 12.5vw;
 }
 
 #cancel-button {
@@ -341,6 +358,34 @@ input[type="button"] {
     margin-left: 45vw;
 }
 
+#medium-name-input-label {
+    width: 30vw;
+    text-align: center;
+    margin-right: 10vw;
+}
+#density-picker-label {
+    width: 30vw;
+    text-align: center;
+    margin-right: 10vw;
+}
+
+.custom-density-adjustment {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+/* #custom-labels-density {
+    margin-top: 5vh;
+} */
+
+#custom-density-adjustment-inner {
+    width: 90vw;
+    margin-left: 5vw;
+    margin-top: 3vh;
+    display: flex;
+    flex-flow: row no-wrap;
+}
+
 /* Mobile phones (portrait) */
 @media /*(min-width:360px) and (min-height:640px) and*/ (max-width:1200px) and (max-height:1440px) {
    * {
@@ -353,14 +398,18 @@ input[type="button"] {
    } 
 .units-div,
 .media-div,
-.custom-density-adjustment,
 .max-tank-height-div,
 .max-tank-volume-div,
 .tank-shape-div,
-.max-tank-filling-div,
-.medium-name,
-.density-value {
+.max-tank-filling-div
+{
     flex-flow: column wrap;
+}
+
+.custom-density-adjustment {
+    margin-left: 0;
+    margin-right: 0%;
+    width: 90vw;
 }
 
 .label {
@@ -399,19 +448,23 @@ input[type="button"] {
     width: 100%;
 }
 
-/* .units-option-element {
-    text-align: center;
-} */
+.custom-density-adjustment {
+    margin-left: 5vw;
+}
 
-#medium-name-input,
-#density-picker,
 #max-height,
 #max-volume,
 #max-fill {
-    width: 40vw;
+    width: 80vw;
     text-align: center;
 }
 
+.custom-tank-shape-adjustment {
+    width: 90vw;
+}
+
+#medium-name-input,
+#density-picker,
 #custom-max-height1,
 #custom-max-height2,
 #custom-max-heightMax,
@@ -419,21 +472,28 @@ input[type="button"] {
 #custom-max-volume2,
 #custom-max-volumeMax {
     width: 30vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    text-align: center;
+    font-size: 20px;
 }
 
+
 .custom-fields {
+    margin-left: 5vw;
+    margin-right: 5vw;
     width: 30vw;
-    font-size: 20px;
     text-align: center;
+    font-size: 20px;
 }
 
 .custom-button,
 #add-another2,
 #delete2 {
-    width: 10vw;
+    width: 15vw;
     height: max-content;
     margin-right: 20vw;
-    margin-left: 10vw;
+    margin-left: 15vw;
 }
 
 #medium-name-input-label,
@@ -441,22 +501,47 @@ input[type="button"] {
 #max-height-label,
 #max-volume-label,
 #max-fill-label {
+
     margin-bottom: 5vh;
 }
 
+
+
+#medium-name-input-label,
+#density-picker-label,
 #custom-height-label,
 #custom-volume-label {
-    width: 50vw;
-    margin-left: 0vw;
-    margin-right: 0vw;   
+    width: min-content;
+    font-size: 16px;  
+}
+
+#medium-name-input-label {
+    position: relative;
+    width: min-content;
+    margin-right: 0;
+    padding-right: 0;
+}
+
+#density-picker-label {
+    position: relative;
+    width: min-content;
+    margin-left: 10vw;
+    margin-right: 0;
+    padding-right: 0;
 }
 
 #custom-height-label {
-    padding-left: 10vw;
+    position: relative;
+    width: fit-content;
+    margin-left: 10vw;
+    margin-right: 5vw;
 }
 
+
 #custom-volume-label {
-    padding-right: 20vw;
+    position: relative;
+    width: fit-content;
+    margin-left: 5vw;
 }
 
 #proceed-button {
@@ -511,9 +596,8 @@ input[type="button"] {
         text-align: center;
     }
 
-    
-
     #ok-button,
+    #close-button,
     #cancel-button {
         position: relative;
         margin-top: 5vh;
@@ -540,89 +624,3 @@ input[type="button"] {
         margin-left: 35vw;
     }
 }
-
-/*Mobile phones (portrait)*/
-@media (width:375px) and (height:667px) {
-
-}
-
-/* Mobile phones (portrait) */
-@media (width:360px) and (height:720px) {
-
-}
-
-/* Iphone X */
-@media (width:375px) and (height:812px) {
-
-}
-
-/* Pixel 2 */
-@media (width:411px) and (height:731px) {
-
-}
-
-/* Tablet */
-@media (min-width:768px) and (min-height:1024px) {
-
-}
-
-/* Laptop */
-@media (min-width:1366px) and (min-height:768px) {
-
-}
-
-/* High-res laptop or desktop */
-@media (min-width:1920px) and (min-height:1080px) {
-
-}
-
-/*
-Mobile: 360 x 640
-Mobile: 375 x 667
-Mobile: 360 x 720
-iPhone X: 375 x 812
-Pixel 2: 411 x 731
-Tablet: 768 x 1024
-Laptop: 1366 x 768
-High-res laptop or desktop: 1920 x 1080
-*/
-
-/* 
-Responsive breakpoints:
-576px for portrait phones
-768px for tablets
-992px for laptops
-1200px for large devices
-*/
-
-/* 
-Common layout elements:
-Wrapper or Container
-Header
-Content
-Sidebar
-Footer
-*/
-
-/* 
-Responsive images:
-
-img {
-    width: 100%;
-} 
-*/
-
-/* 
-CSS Units and values:
-px – a single pixel
-em – relative unit based on the font-size of the element.
-rem – relative unit based on the font-size of the element.
-vh, vw – % of the viewport’s height or width.
-% – the percentage of the parent element
-*/
-
-/* 
-Mobile-friendly test:
-
-https://search.google.com/test/mobile-friendly 
-*/

@@ -60,6 +60,7 @@ const proceedButton = document.querySelector("#proceed-button");
 const modal = document.querySelector(".modal");
 const modalXButton = document.querySelector("#x-button");
 const modalOkButton = document.querySelector("#ok-button");
+const modalCloseButton = document.querySelector("#close-button");
 const modalCancelButton = document.querySelector("#cancel-button");
 const unitsInput = document.querySelector(".units-input");
 const densityInput = document.querySelector(".density-input");
@@ -332,29 +333,11 @@ const getUnitsIntoInput = (id) => {
 };
 
 const customDensity = (id) => {
-  // unitsUserInputValidation();
-  // tankShapeUserInputValidation();
-  // maxHeightUserInputValidation();
-  // maxVolumeUserInputValidation();
-  // if (tankShape.value == "Custom") {
-  //   customAddedHeightUserInputValidation(shapeAdjustment.children[shapeAdjustment.children.length - 2].children[0]);
-  //   customAddedVolumeUserInputValidation(shapeAdjustment.children[shapeAdjustment.children.length - 2].children[1]);
-  // }
-  // maxFillingUserInputValidation();
   if (id.trim() == "Custom") {
     proceedButton.style.display = "gray";
   proceedButton.disabled = true;
-  // unitsUserInputValidation();
-  // tankShapeUserInputValidation();
-  // maxHeightUserInputValidation();
-  // maxVolumeUserInputValidation();
-  // if (tankShape.value == "Custom") {
-  //   customAddedHeightUserInputValidation(shapeAdjustment.children[shapeAdjustment.children.length - 2].children[0]);
-  //   customAddedVolumeUserInputValidation(shapeAdjustment.children[shapeAdjustment.children.length - 2].children[1]);
-  // }
-  // maxFillingUserInputValidation();
     customAdjustment.style.display = "flex";
-    customAdjustment.style.flexFlow = "column wrap";
+    customAdjustment.style.flexFlow = "row wrap";
     customAdjustment.style.justifyContent = "center";
     customAdjustment.style.alignItems = "center";
     mediumNameInput.disabled = false;
@@ -376,15 +359,6 @@ const customDensity = (id) => {
 const addAnotherCustomTankShape = () => {
   proceedButton.style.display = "gray";
   proceedButton.disabled = true;
-  // unitsUserInputValidation();
-  // densityUserInputValidation();
-  // if (densityInput.value == "Custom") {
-  //   mediumNameUserInputValidation();
-  //   mediumDensityUserInputValidation();
-  // }
-  // maxHeightUserInputValidation();
-  // maxVolumeUserInputValidation();
-  // maxFillingUserInputValidation();
 
   heightInputCount = 0;
 
@@ -544,6 +518,7 @@ const addAnotherCustomTankShape = () => {
 
   buttonsDiv.className = "custom-buttons";
 
+  addButton.style.marginRight = "15vw";
   addButton.className = "custom-button";
   addButton.id = "add-another" + counter;
   addButton.type = "button";
@@ -1032,9 +1007,10 @@ maxFilling.addEventListener("input", maxFillingUserInputValidation);
 
 form.addEventListener("submit", submitSettingsForm);
 modalXButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
-modalXButton.addEventListener("click", () => {
-});
+// modalXButton.addEventListener("click", () => {
+// });
 modalCancelButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
-modalCancelButton.addEventListener("click", () => {
-});
-modalOkButton.addEventListener("click", (e) => submitModalForm(e, modal));
+// modalCancelButton.addEventListener("click", () => {
+// });
+modalCloseButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
+modalOkButton.addEventListener("click", (e) => submitModalForm(e));

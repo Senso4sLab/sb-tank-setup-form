@@ -3,7 +3,9 @@ const backToFormButton = document.querySelector("#back-button");
 const submitSuccessForm = (e) => {
     e.preventDefault();
   
-    window.location.href = "index.html";
+    fetch("https://192.168.4.1/disable_ap")
+    .then(() => window.close())
+    .catch();
   };
   
   backToFormButton.addEventListener("click", submitSuccessForm);

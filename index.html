@@ -84,8 +84,14 @@
       </div>
 
       <div class="custom-density-adjustment">
-        <div class="medium-name">
+      <div class="custom-labels-density">
         <label class="label" id="medium-name-input-label" for="medium-name-input">Medium name:</label>
+        <label class="label" id="density-picker-label" for="density-picker">Density[kg/m3]:</label>
+      </div>
+      <div
+          class="custom-density-adjustment-inner"
+          id="custom-density-adjustment-inner"
+        >
         <input
           type="text"
           inputmode="text"
@@ -96,9 +102,6 @@
           disabled
           placeholder="Insert name..."
         />
-      </div>
-      <div class="density-value">
-        <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
         <input
           type="text"
           inputmode="decimal"
@@ -321,6 +324,12 @@
             value="CONFIRM"
             class="modal-button"
             id="ok-button"
+          />
+          <input
+            type="submit"
+            value="CLOSE"
+            class="modal-button"
+            id="close-button"
           />
           <input
             type="submit"
