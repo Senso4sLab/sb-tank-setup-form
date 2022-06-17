@@ -124,7 +124,10 @@ input[type="button"] {
     border-radius: 25px;
     border-color: rgb(255, 255, 255);
     padding: .5vh .5vw;
+    margin-left: 2.5vw;
+    margin-right: 12.5vw;
 }
+
 
 .button {
     width: 20vw;
@@ -459,11 +462,6 @@ input[type="button"] {
     text-align: center;
 }
 
-/* #max-height-label,
-#max-volume-label {
-    font-size: 18px;
-} */
-
 .custom-tank-shape-adjustment {
     width: 90vw;
 }
@@ -499,6 +497,11 @@ input[type="button"] {
     height: max-content;
     margin-right: 20vw;
     margin-left: 15vw;
+}
+
+.custom-button {
+    margin-left: 12.5vw;
+    margin-right: 12.5vw;
 }
 
 #medium-name-input-label,

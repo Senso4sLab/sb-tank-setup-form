@@ -518,8 +518,8 @@ const addAnotherCustomTankShape = () => {
 
   buttonsDiv.className = "custom-buttons";
 
-  addButton.style.marginRight = "15vw";
   addButton.className = "custom-button";
+  addButton.classList.add("custom-add-button");
   addButton.id = "add-another" + counter;
   addButton.type = "button";
   addButton.value = "+";
