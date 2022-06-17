@@ -22,6 +22,7 @@ export const messageModalContent = async (modal, settingsListDiv, message) => {
   const ms = document.createElement("p");
   ms.textContent = `${message}`;
   await settingsListDiv.appendChild(ms);
+  settingsListDiv.style.textAlign = "center";
   modal.style.display = "block";
   modalOkButton.style.display = "none";
   modalCancelButton.style.display = "none";
@@ -109,6 +110,7 @@ export const modalContent = async (
   fillingLimit.textContent = `Filling limit [%]: ${maxFilling.value}`;
   mFill = maxFilling.value;
   await settingsListDiv.appendChild(fillingLimit);
+  settingsListDiv.style.textAlign = "left";
 
   modal.style.display = "block";
     };
@@ -157,7 +159,7 @@ export const modalContent = async (
             messageModalContent(modal, settingsListDiv, "Tank form was successfully filled. Press button to exit the modal and then close the browser.");
           } else {
             modalCloseButton.style.display = "none";
-            messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form.");
+            messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form and try again.");
           }
         })
         .catch(error => {

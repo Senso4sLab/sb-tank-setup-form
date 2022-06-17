@@ -459,6 +459,11 @@ input[type="button"] {
     text-align: center;
 }
 
+/* #max-height-label,
+#max-volume-label {
+    font-size: 18px;
+} */
+
 .custom-tank-shape-adjustment {
     width: 90vw;
 }
