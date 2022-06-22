@@ -5,6 +5,8 @@ const modalCancelButton = document.querySelector("#cancel-button");
 const modalXButton = document.querySelector("#x-button");
 const settingsListDiv = document.querySelector(".inner-modal-settings-list");
 
+let isSuccessfull = true;
+
 let units;
 let medium;
 let maxH;
@@ -132,38 +134,48 @@ export const modalContent = async (
       };
       
   export const submitModalForm = async (event) => {
-        event.preventDefault();
-        let date = new Date().toLocaleString();
+      //   event.preventDefault();
+      //   let date = new Date().toUTCString();
 
-        const data = JSON.stringify({
-          units: units,
-          medium: medium,
-          maxHeight: maxH,
-          maxVolume: maxV,
-          tankShape: tShape,
-          fillingLimit: mFill,
-          creationDate: date
-        });
+      //   const data = JSON.stringify({
+      //     units: units,
+      //     medium: medium,
+      //     maxHeight: maxH,
+      //     maxVolume: maxV,
+      //     tankShape: tShape,
+      //     fillingLimit: mFill,
+      //     creationDate: date
+      //   });
 
-        fetch("/data", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: data
-        })
-        .then(res => {
+      //   fetch("/data", {
+      //     method: 'POST',
+      //     headers: {
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: data
+      //   })
+      //   .then(res => {
 
-          if (res.ok) {
+      //     if (res.ok) {
+      //       modalCloseButton.style.display = "none";
+      //       messageModalContent(modal, settingsListDiv, "Tank form was successfully filled. Press button to exit the modal and then close the browser.");
+      //     } else {
+      //       modalCloseButton.style.display = "none";
+      //       messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form and try again.");
+      //     }
+      //   })
+      //   .catch(error => {
+          
+      //     console.log('ERROR:' + error)
+      // });
+
+      event.preventDefault();
+                if (isSuccessfull) {
             modalCloseButton.style.display = "none";
             messageModalContent(modal, settingsListDiv, "Tank form was successfully filled. Press button to exit the modal and then close the browser.");
           } else {
             modalCloseButton.style.display = "none";
             messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form and try again.");
           }
-        })
-        .catch(error => {
-          
-          console.log('ERROR:' + error)
-      });
+          isSuccessfull = !isSuccessfull;
       };

@@ -32,8 +32,6 @@ let customTankShapeError = false;
 let isUnitsOpen = false;
 let isTankShapeOpen = false;
 let isMediaOpen = false;
-let currentHeightInput = "";
-let currentVolumeInput = "";
 
 const error = document.querySelector("#error");
 const form = document.querySelector(".tank-settings-form");
@@ -75,28 +73,12 @@ const settingsListDiv = document.querySelector(".inner-modal-settings-list");
 const maxTwoDecimalsValidation = () => {
   errorMessages = errorMessages.filter(message => message != "There can be only two decimals.");
   errorMessages.push(limitDecimals(maxHeight, maxHeight.value, "There can be only two decimals."));
-  if (customHeights.length > 0) {
-    customHeights.forEach(height => {
-      if (height[1].includes(".")) {
-        if (height[1].split(".")[1].length > 2) {
-          customHeightMaxTwoDecimalsValidation(document.querySelector("#" + height[0]));
-        }
-      }
-    });
-  }
   checkForErrorMessages();
 };
 
 const customHeightMaxTwoDecimalsValidation = (element) => {
-  errorMessages = errorMessages.filter(message => message != "There can be only two decimals.");
-  errorMessages.push(limitDecimals(element, element.value, "There can be only two decimals."));
-  if (maxHeight.value != undefined) {
-    if (maxHeight.value.includes(".")) {
-      if (maxHeight.value.split(".")[1].length > 2) {
-        maxTwoDecimalsValidation();
-      }
-    }
-}
+  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+  errorMessages.push(limitDecimals(element, element.value, "Invalid height-volume pair(s)."));
   checkForErrorMessages();
 };
 
@@ -137,6 +119,7 @@ const mediumDensityUserInputValidation = () => {
 const maxHeightUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid tank height.");
   errorMessages.push(maxHeightValidation (maxHeight, "Invalid tank height."));
+  
   checkForErrorMessages();
 };
 
@@ -208,11 +191,11 @@ const checkForErrorMessages = () => {
 };
 
 const customTankShape = (id) => {
-  proceedButton.style.display = "gray";
-  proceedButton.disabled = true;
   customMaxHeight.value = 0;
   customMaxVolume.value = 0;
   if (id.trim() === "Custom") {
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
     shapeAdjustment.style.display = "block";
     customMaxHeight2.disabled = false;
     customMaxHeight2.value = "";
@@ -333,15 +316,17 @@ const getUnitsIntoInput = (id) => {
 };
 
 const customDensity = (id) => {
-  if (id.trim() == "Custom") {
-    proceedButton.style.display = "gray";
-  proceedButton.disabled = true;
+  if (id.trim() === "Custom") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
     customAdjustment.style.display = "flex";
     customAdjustment.style.flexFlow = "row wrap";
     customAdjustment.style.justifyContent = "center";
     customAdjustment.style.alignItems = "center";
     mediumNameInput.disabled = false;
     densityPicker.disabled = false;
+    mediumNameInput.value = "";
+    densityPicker.value = "";
   } else {
     mediumNameInput.value = "";
     densityPicker.value = "";
@@ -477,9 +462,9 @@ const addAnotherCustomTankShape = () => {
         volumeInput.value = volumeInput.value.replace(event.data, "");
       } 
     });
-  heightInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
   heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
+  heightInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
   heightInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
     if (!addButton.disabled) {
@@ -501,9 +486,33 @@ const addAnotherCustomTankShape = () => {
      } else {
       addButton.style.backgroundColor = "gray";
       proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
+      proceedButton.style.backgroundColor = "gray";
     }
   });
+heightInput.addEventListener("input", () => {
+  if (volumeInput.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  }
+});
+
+heightInput.addEventListener("input", () => {
+  if (heightInput.style.borderColor == "red") {
+    return;
+  } else {
+    customAddedHeightUserInputValidation(heightInput);
+  }
+});
+
+volumeInput.addEventListener("input", () => {
+if (heightInput.style.borderColor == "red") {
+  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+  errorMessages.push("Invalid height-volume pair(s).");
+checkForErrorMessages();
+}
+});
+  
   
   otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
     (element) => element.id != heightInput.id
@@ -527,7 +536,7 @@ const addAnotherCustomTankShape = () => {
   addButton.style.backgroundColor = "gray";
   addButton.disabled = true;
   proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
+  proceedButton.style.backgroundColor = "gray";
 
   deleteButton.className = "custom-button";
   deleteButton.id = "delete" + counter;
@@ -595,15 +604,6 @@ const deleteCustomTankShape = (id) => {
       errorMessages = errorMessages.filter(message => message != "There can be only two decimals.");
     }
   }
-  // unitsUserInputValidation();
-  // densityUserInputValidation();
-  // if (densityInput.value == "Custom") {
-  //   mediumNameUserInputValidation();
-  //   mediumDensityUserInputValidation();
-  // }
-  // maxHeightUserInputValidation();
-  // maxVolumeUserInputValidation();
-  // maxFillingUserInputValidation();
 
   checkForErrorMessages();
 };
@@ -685,7 +685,7 @@ const submitSettingsForm = (e) => {
 
 
   if (errorMessages.length > 0) {
-    const proceedButton = document.querySelector("#proceed-button");
+    // const proceedButton = document.querySelector("#proceed-button");
     while (error.children.length > 0) {
       error.removeChild(error.lastElementChild);
       firstChild = error.firstChild;
@@ -798,9 +798,14 @@ maxHeight.addEventListener("input", (event) => {
     maxHeight.value = maxHeight.value.replace(event.data, "");
   } 
 });
-maxHeight.addEventListener("input", maxHeightUserInputValidation);
 maxHeight.addEventListener("input", saveIntoCustomMaxHeight);
 maxHeight.addEventListener("input", maxTwoDecimalsValidation);
+maxHeight.addEventListener("input", maxHeightUserInputValidation);
+maxHeight.addEventListener("input", () => {
+  if(error.textContent.includes("Invalid tank height.") || error.textContent.includes("There can be only two decimals.")) {
+    maxHeight.style.borderColor = "red";
+  }
+});
 maxVolume.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     maxVolume.value = maxVolume.value.replace(event.data, "");
@@ -811,10 +816,8 @@ maxVolume.addEventListener("input", (event) => {
 maxVolume.addEventListener("input", maxVolumeUserInputValidation);
 maxVolume.addEventListener("input", saveIntoCustomMaxVolume);
 unitsInput.addEventListener("focus", addReadonly);
-densityInput.addEventListener("change", customDensity);
 densityInput.addEventListener("focus", addReadonly);
 tankShape.addEventListener("focus", addReadonly);
-tankShape.addEventListener("change", customTankShape);
 customMaxHeight.addEventListener("input", (event) => {
  let length = customMaxHeight.value.length;
   if (event.data === "-" || event.data === " ") {
@@ -992,9 +995,39 @@ customMaxVolume2.addEventListener("input", () => {
     proceedButton.style.backgroundColor = "gray";
   }
 });
-customMaxHeight2.addEventListener("input", customHeightUserInputValidation);
+
 customMaxHeight2.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(customMaxHeight2));
 customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
+customMaxHeight2.addEventListener("input", () => {
+  if (customMaxHeight2.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(
+      (message) => message != "Invalid height-volume pair(s)."
+    );
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  } else {
+    customHeightUserInputValidation();
+  }
+});
+customMaxHeight2.addEventListener("input", () => {
+  if (customMaxVolume2.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(
+      (message) => message != "Invalid height-volume pair(s)."
+    );
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  }
+});
+
+customMaxVolume2.addEventListener("input", () => {
+if (customMaxHeight2.style.borderColor == "red") {
+  errorMessages = errorMessages.filter(
+    (message) => message != "Invalid height-volume pair(s)."
+  );
+  errorMessages.push("Invalid height-volume pair(s).");
+checkForErrorMessages();
+}
+});
 
 maxFilling.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {

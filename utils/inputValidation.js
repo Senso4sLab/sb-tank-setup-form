@@ -5,7 +5,7 @@ const isError = (boolean, element) => {
     error.style.color = "red";
     error.style.fontWeight = "900";
   } else {
-    element.style.borderColor = "black";
+      element.style.borderColor = "black";  
   } 
 };
 
@@ -47,7 +47,7 @@ export const regularNumberValidation = (element, errorMessage) => {
     isError(true, element);
       return errorMessage;
   }
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
  
   if (
     (userInput < 0 ||
@@ -69,7 +69,7 @@ export const maxHeightValidation = (element, errorMessage) => {
     isError(true, element);
       return errorMessage;
   } else {
-    let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+    let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput > 4.7 ||
@@ -91,7 +91,7 @@ export const maxVolumeValidation = (element, errorMessage) => {
     isError(true, element);
       return errorMessage;
   } else {
-    let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+    let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput == undefined ||
@@ -125,7 +125,7 @@ export const customHeightValidation = (element, errorMessage, customHeightsAndVo
     isError(true, element);
       return errorMessage;
   }
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput > 4.7 ||
@@ -151,7 +151,7 @@ export const customVolumeValidation = (element, errorMessage, customHeightsAndVo
     isError(true, element);
       return errorMessage;
   }
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput < 0 ||
       userInput == undefined ||
@@ -192,7 +192,7 @@ export const maxFillingValidation = (element, errorMessage) => {
     isError(true, element);
       return errorMessage;
   }
-  let userInput = (element.value != "") ? Number.parseFloat(element.value).toFixed(2) : "";
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
     if (
       userInput == "" ||
       userInput == undefined ||

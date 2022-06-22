@@ -337,7 +337,7 @@ input[type="button"] {
 
 #close-button {
     display: none;
-    margin-left: 12.5vw;
+    margin-left: 10vw;
 }
 
 #cancel-button {
@@ -564,12 +564,16 @@ input[type="button"] {
         height: max-content;
         padding-bottom: 5vh;
         margin-left: 0;
-        margin-top: 5vh;
+        margin-top: 15vh;
         overflow: hidden;
     }
 
     .modal-form {
         height: fit-content;
+    }
+
+    .modal-form-with-message {
+        height: 40vh;
     }
 
     .inner-modal-header {
@@ -596,7 +600,8 @@ input[type="button"] {
         margin-top: 0vh;
         margin-bottom: 0vh;
         position: relative;
-        width: 100vw;
+        width: 100%;
+        
     }
 
     .inner-modal-settings-list-title {

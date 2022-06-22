@@ -13,7 +13,6 @@
     <form class="tank-settings-form" autocomplete="off">
     <h1 class="h1-font">TANK SETUP</h1>
     <div id="error"></div>
-    <!-- <form class="tank-settings-form" autocomplete="off"> -->
       <div class="units-div">
         <label class="label" for="units">Measuring unit: </label>
         <div class="input-and-options-div">
@@ -86,7 +85,7 @@
       <div class="custom-density-adjustment">
       <div class="custom-labels-density">
         <label class="label" id="medium-name-input-label" for="medium-name-input">Medium name:</label>
-        <label class="label" id="density-picker-label" for="density-picker">Density[kg/m3]:</label>
+        <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
       </div>
       <div
           class="custom-density-adjustment-inner"
@@ -254,7 +253,6 @@
               value="+"
               disabled
               />
-              <!-- onclick="addAnotherCustomTankShape();" -->
             
             <input
               class="custom-button"
@@ -262,8 +260,7 @@
               type="button"
               value="-"
               />
-              <!-- onclick="deleteCustomTankShape('custom-tank-shape-adjustment-inner');" -->
-            
+
           </div>
         </div>
         <div
@@ -295,7 +292,6 @@
         </div>
       </div>
       <div class="max-tank-filling-div">
-        <!-- <div class="max-tank-filling-div-inner"> -->
         <label id="max-fill-label" class="label" for="fill">Filling limit [%]:</label>
         <input
           type="text"
@@ -307,7 +303,6 @@
           value="95"
           placeholder="Insert value..."
         />
-      <!-- </div> -->
       </div>
       <input class="button" type="submit" value="PROCEED" id="proceed-button" />
     </form>
