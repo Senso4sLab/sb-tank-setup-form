@@ -9,29 +9,6 @@ const isError = (boolean, element) => {
   } 
 };
 
-export const limitDecimals = (element, number, errorMessage) => {
-  const stringNum = String(number);
-  if (stringNum.includes(".")) {
-    let numberOfDecimals = stringNum.split(".")[1].length;
-    if (numberOfDecimals > 2) {
-      isError(true, element);
-       return errorMessage;
-    } else {
-   isError(false, element);
-       return "";
-}
-  } else if (stringNum.includes(",")) {
-    let numberOfDecimals = stringNum.split(",")[1].length;
-    if (numberOfDecimals > 2) {
-      isError(true, element);
-       return errorMessage;
-    } else {
-   isError(false, element);
-       return ""; 
-  }
-}
-};
-
 export const dropdownValidation = (element, errorMessage) => {
   if (element.value == "" || element.value == undefined || element.value.length == 0) {
   isError(true, element);

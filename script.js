@@ -1,5 +1,5 @@
 import {
-  limitDecimals,
+  //limitDecimals,
   dropdownValidation, 
   regularNumberValidation, 
   maxHeightValidation, 
@@ -69,18 +69,6 @@ const maxVolume = document.querySelector("#max-volume");
 const tankShape = document.querySelector(".tank-shape-input");
 const maxFilling = document.querySelector("#max-fill");
 const settingsListDiv = document.querySelector(".inner-modal-settings-list");
-
-const maxTwoDecimalsValidation = () => {
-  errorMessages = errorMessages.filter(message => message != "There can be only two decimals.");
-  errorMessages.push(limitDecimals(maxHeight, maxHeight.value, "There can be only two decimals."));
-  checkForErrorMessages();
-};
-
-const customHeightMaxTwoDecimalsValidation = (element) => {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  errorMessages.push(limitDecimals(element, element.value, "Invalid height-volume pair(s)."));
-  checkForErrorMessages();
-};
 
 const unitsUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Measuring unit is required.");
@@ -245,6 +233,12 @@ unitsOptions.forEach((option) => {
     getUnitsIntoInput(option.textContent);
   });
   option.addEventListener("click", unitsUserInputValidation);
+  option.addEventListener("click", () => {
+    if (customHeights.length != customVolumes.length) {
+      proceedButton.style.backgroundColor = "gray";
+      proceedButton.disabled = true;
+    }
+  });
 });
 
 mediaOptions.forEach((option) => {
@@ -252,6 +246,12 @@ mediaOptions.forEach((option) => {
     customDensity(option.textContent);
   });
   option.addEventListener("click", densityUserInputValidation);
+  option.addEventListener("click", () => {
+    if (customHeights.length != customVolumes.length) {
+      proceedButton.style.backgroundColor = "gray";
+      proceedButton.disabled = true;
+    }
+  });
 });
 
 tankShapeOptions.forEach((option) => {
@@ -259,6 +259,12 @@ tankShapeOptions.forEach((option) => {
     customTankShape(option.textContent);
   });
   option.addEventListener("click", tankShapeUserInputValidation);
+  option.addEventListener("click", () => {
+    if (customHeights.length != customVolumes.length) {
+      proceedButton.style.backgroundColor = "gray";
+      proceedButton.disabled = true;
+    }
+  });
 });
 
 const toggleTankShapeInput = (e) => {
@@ -463,7 +469,20 @@ const addAnotherCustomTankShape = () => {
       } 
     });
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
-  heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
+  // heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
+  heightInput.addEventListener("input", (event) => {
+      const stringNum = String(event.target.value);
+  if (stringNum.includes(".")) {
+    let numberOfDecimals = stringNum.split(".")[1].length;
+    if (stringNum[0] === ".") {
+      heightInput.value = `0${heightInput.value}`;
+    }
+    if (numberOfDecimals > 2) {
+      heightInput.value = heightInput.value.slice(0, heightInput.value.length - 1);
+    }
+  }
+  customAddedHeightUserInputValidation(heightInput);
+  });
   heightInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
     if (!addButton.disabled) {
@@ -748,6 +767,14 @@ mediumNameInput.addEventListener("input", () => {
     proceedButton.disabled = true;
   }
 });
+
+mediumNameInput.addEventListener("input", () => {
+  if (customHeights.length != customVolumes.length) {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
+
 densityPicker.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     densityPicker.value = densityPicker.value.replace(event.data, "");
@@ -758,6 +785,13 @@ densityPicker.addEventListener("input", (event) => {
  densityPicker.addEventListener("input", mediumDensityUserInputValidation);
  densityPicker.addEventListener("input", () => {
   if(mediumNameInput.value == undefined || mediumNameInput.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
+
+densityPicker.addEventListener("input", () => {
+  if (customHeights.length != customVolumes.length) {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
@@ -827,13 +861,33 @@ maxHeight.addEventListener("input", (event) => {
   } 
 });
 maxHeight.addEventListener("input", saveIntoCustomMaxHeight);
-maxHeight.addEventListener("input", maxTwoDecimalsValidation);
+// maxHeight.addEventListener("input", maxTwoDecimalsValidation);
+maxHeight.addEventListener("input", (event) => {
+  const stringNum = String(event.target.value);
+if (stringNum.includes(".")) {
+let numberOfDecimals = stringNum.split(".")[1].length;
+if (stringNum[0] === ".") {
+  maxHeight.value = `0${maxHeight.value}`;
+}
+if (numberOfDecimals > 2) {
+  maxHeight.value = maxHeight.value.slice(0, maxHeight.value.length - 1);
+}
+}
+});
 maxHeight.addEventListener("input", maxHeightUserInputValidation);
 maxHeight.addEventListener("input", () => {
   if(error.textContent.includes("Invalid tank height.") || error.textContent.includes("There can be only two decimals.")) {
     maxHeight.style.borderColor = "red";
   }
 });
+
+maxHeight.addEventListener("input", () => {
+  if (customHeights.length != customVolumes.length) {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
+
 maxVolume.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     maxVolume.value = maxVolume.value.replace(event.data, "");
@@ -843,6 +897,12 @@ maxVolume.addEventListener("input", (event) => {
 });
 maxVolume.addEventListener("input", maxVolumeUserInputValidation);
 maxVolume.addEventListener("input", saveIntoCustomMaxVolume);
+maxVolume.addEventListener("input", () => {
+  if (customHeights.length != customVolumes.length) {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
 unitsInput.addEventListener("focus", addReadonly);
 densityInput.addEventListener("focus", addReadonly);
 tankShape.addEventListener("focus", addReadonly);
@@ -1024,7 +1084,20 @@ customMaxVolume2.addEventListener("input", () => {
   }
 });
 
-customMaxHeight2.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(customMaxHeight2));
+// customMaxHeight2.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(customMaxHeight2));
+customMaxHeight2.addEventListener("input", (event) => {
+  const stringNum = String(event.target.value);
+if (stringNum.includes(".")) {
+let numberOfDecimals = stringNum.split(".")[1].length;
+if (stringNum[0] === ".") {
+  customMaxHeight2.value = `0${customMaxHeight2.value}`;
+}
+if (numberOfDecimals > 2) {
+  customMaxHeight2.value = customMaxHeight2.value.slice(0, customMaxHeight2.value.length - 1);
+}
+}
+customHeightUserInputValidation();
+});
 customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
 customMaxHeight2.addEventListener("input", () => {
   if (customMaxHeight2.style.borderColor == "red") {
