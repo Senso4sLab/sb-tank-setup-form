@@ -464,7 +464,6 @@ const addAnotherCustomTankShape = () => {
     });
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
   heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
-  heightInput.addEventListener("input", () => customAddedHeightUserInputValidation(heightInput));
   heightInput.addEventListener("input", () => {
     addButton.disabled = enableButton(heightInput, volumeInput);
     if (!addButton.disabled) {
@@ -489,6 +488,17 @@ const addAnotherCustomTankShape = () => {
       proceedButton.style.backgroundColor = "gray";
     }
   });
+
+heightInput.addEventListener("input", () => {
+  if (heightInput.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  } else {
+    customAddedHeightUserInputValidation(heightInput);
+  }
+});
+
 heightInput.addEventListener("input", () => {
   if (volumeInput.style.borderColor == "red") {
     errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
@@ -498,10 +508,9 @@ heightInput.addEventListener("input", () => {
 });
 
 heightInput.addEventListener("input", () => {
-  if (heightInput.style.borderColor == "red") {
-    return;
-  } else {
-    customAddedHeightUserInputValidation(heightInput);
+  if (volumeInput.value == undefined || volumeInput.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
   }
 });
 
@@ -511,6 +520,13 @@ if (heightInput.style.borderColor == "red") {
   errorMessages.push("Invalid height-volume pair(s).");
 checkForErrorMessages();
 }
+});
+
+  volumeInput.addEventListener("input", () => {
+  if (heightInput.value == undefined || volumeInput.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
 });
   
   
@@ -1029,6 +1045,13 @@ checkForErrorMessages();
 }
 });
 
+customMaxHeight2.addEventListener("input", () => {
+  if(customMaxVolume2.value == undefined || customMaxVolume2.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
+
 maxFilling.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     maxFilling.value = maxFilling.value.replace(event.data, "");
@@ -1036,14 +1059,10 @@ maxFilling.addEventListener("input", (event) => {
     maxFilling.value = maxFilling.value.replace(event.data, "");
   }  
 });
-maxFilling.addEventListener("input", maxFillingUserInputValidation);
 
+maxFilling.addEventListener("input", maxFillingUserInputValidation);
 form.addEventListener("submit", submitSettingsForm);
 modalXButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
-// modalXButton.addEventListener("click", () => {
-// });
 modalCancelButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
-// modalCancelButton.addEventListener("click", () => {
-// });
 modalCloseButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
 modalOkButton.addEventListener("click", (e) => submitModalForm(e));
