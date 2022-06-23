@@ -742,6 +742,12 @@ window.addEventListener("click", toggleUnitsInput);
 window.addEventListener("click", toggleMediaInput);
 window.addEventListener("click", toggleTankShapeInput);
 mediumNameInput.addEventListener("input", mediumNameUserInputValidation);
+mediumNameInput.addEventListener("input", () => {
+  if(densityPicker.value == undefined || densityPicker.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
 densityPicker.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     densityPicker.value = densityPicker.value.replace(event.data, "");
@@ -750,6 +756,12 @@ densityPicker.addEventListener("input", (event) => {
   }
 });
  densityPicker.addEventListener("input", mediumDensityUserInputValidation);
+ densityPicker.addEventListener("input", () => {
+  if(mediumNameInput.value == undefined || mediumNameInput.value == "") {
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+  }
+});
 
 maxHeight.addEventListener("input", (event) => {
   let length = maxHeight.value.length;
