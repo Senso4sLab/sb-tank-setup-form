@@ -33,6 +33,7 @@ let isUnitsOpen = false;
 let isTankShapeOpen = false;
 let isMediaOpen = false;
 
+const pageTitle = document.querySelector(".h1-font");
 const error = document.querySelector("#error");
 const form = document.querySelector(".tank-settings-form");
 const unitsOption = document.querySelector("#units-options");
@@ -52,6 +53,7 @@ const customMaxHeight2 = document.querySelector("#custom-max-height2");
 const customMaxVolume2 = document.querySelector("#custom-max-volume2");
 const customHeightMax = document.querySelector("#custom-max-heightMax");
 const customVolumeMax = document.querySelector("#custom-max-volumeMax");
+const customButtons2 = document.querySelector("#custom-buttons2");
 const addAnotherButton = document.querySelector("#add-another2");
 const deleteButton = document.querySelector("#delete2");
 const proceedButton = document.querySelector("#proceed-button");
@@ -125,7 +127,7 @@ const tankShapeUserInputValidation = () => {
 
 const customHeightUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const chvArray = customHeightValidation(customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights);
+  const chvArray = customHeightValidation(customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, maxHeight);
   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
   customHeights = [...chvArray[1]];
   errorMessages.push(chvArray[2]);
@@ -134,7 +136,7 @@ const customHeightUserInputValidation = () => {
 
 const customVolumeUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const cvvArray = customVolumeValidation(customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes);
+  const cvvArray = customVolumeValidation(customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolume);
   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
   customVolumes = [...cvvArray[1]];
   errorMessages.push(cvvArray[2]);
@@ -143,7 +145,7 @@ const customVolumeUserInputValidation = () => {
 
 const customAddedHeightUserInputValidation = (element) => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const chvArray = customHeightValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights);
+  const chvArray = customHeightValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, maxHeight);
   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
   customHeights = [...chvArray[1]];
   errorMessages.push(chvArray[2]);
@@ -152,7 +154,7 @@ const customAddedHeightUserInputValidation = (element) => {
 
 const customAddedVolumeUserInputValidation = (element) => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const cvvArray = customVolumeValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes);
+  const cvvArray = customVolumeValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolume);
   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
   customVolumes = [...cvvArray[1]];
   errorMessages.push(cvvArray[2]);
@@ -173,59 +175,83 @@ const checkForErrorMessages = () => {
   proceedButton.disabled = false;
   proceedButton.style.backgroundColor = "#0162a6";
  } else {
+  // pageTitle.scrollIntoView(true);
   proceedButton.disabled = true;
   proceedButton.style.backgroundColor = "gray";
  }
 };
 
+const isCustomTankShape = () => {
+  proceedButton.disabled = true;
+  proceedButton.style.backgroundColor = "gray";
+  shapeAdjustment.style.display = "block";
+  customMaxHeight2.disabled = false;
+  customMaxHeight2.value = "";
+  customMaxVolume2.disabled = false;
+  customMaxVolume2.value = "";
+  customHeightMax.disabled = true;
+  customVolumeMax.disabled = true;
+  customButtons2.style.display = "flex";
+  addAnotherButton.style.backgroundColor = "gray";
+  addAnotherButton.style.display = "block";
+  deleteButton.style.display = "none";
+  otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+    (element) => element.id != customMaxHeight2.id
+  );
+  otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+    (element) => element.id != customMaxVolume2.id
+  );
+  otherCustomMaxHeightsAndVolumes.push(
+    { id: customMaxHeight2.id, value: customMaxHeight2.value },
+    { id: customMaxVolume2.id, value: customMaxVolume2.value }
+  );
+};
+
+const notCustomTankShape = () => {
+  while (counter > 3) {
+    document
+      .querySelector(`#custom-tank-shape-adjustment-inner${counter - 1}`)
+      .remove();
+    counter--;
+  }
+  shapeAdjustment.style.display = "none";
+  customMaxHeight.disabled = true;
+  customMaxVolume.disabled = true;
+  customMaxHeight2.disabled = true;
+  customMaxVolume2.disabled = true;
+  addAnotherButton.style.display = "none";
+  deleteButton.style.display = "none";
+  customMaxHeight2.style.borderColor = "black";
+    customMaxVolume2.style.borderColor = "black";
+      errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+      otherCustomMaxHeightsAndVolumes.length = 0;
+      customHeights.length = 0;
+      customVolumes.length = 0;
+};
+
 const customTankShape = (id) => {
+  const trimmedId = id.trim();
+  tankShape.value = trimmedId;
   customMaxHeight.value = 0;
   customMaxVolume.value = 0;
-  if (id.trim() === "Custom") {
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-    shapeAdjustment.style.display = "block";
-    customMaxHeight2.disabled = false;
-    customMaxHeight2.value = "";
-    customMaxVolume2.disabled = false;
-    customMaxVolume2.value = "";
-    customHeightMax.disabled = true;
-    customVolumeMax.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    addAnotherButton.style.display = "block";
-    deleteButton.style.display = "none";
-    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-      (element) => element.id != customMaxHeight2.id
-    );
-    otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-      (element) => element.id != customMaxVolume2.id
-    );
-    otherCustomMaxHeightsAndVolumes.push(
-      { id: customMaxHeight2.id, value: customMaxHeight2.value },
-      { id: customMaxVolume2.id, value: customMaxVolume2.value }
-    );
-  } else {
-    while (counter > 3) {
-      document
-        .querySelector(`#custom-tank-shape-adjustment-inner${counter - 1}`)
-        .remove();
-      counter--;
-    }
-    shapeAdjustment.style.display = "none";
-    customMaxHeight.disabled = true;
-    customMaxVolume.disabled = true;
-    customMaxHeight2.disabled = true;
-    customMaxVolume2.disabled = true;
-    addAnotherButton.style.display = "none";
-    deleteButton.style.display = "none";
-    customMaxHeight2.style.borderColor = "black";
-      customMaxVolume2.style.borderColor = "black";
-        errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-        otherCustomMaxHeightsAndVolumes.length = 0;
-        customHeights.length = 0;
-        customVolumes.length = 0;
+  if (maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0") {
+    notCustomTankShape();
+    return;
+  } else if (maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0") {
+   notCustomTankShape();
+   return;
   }
-  tankShape.value = id.trim();
+  if (trimmedId == "Custom") {
+    maxHeight.disabled = true;
+    maxVolume.disabled = true;
+    isCustomTankShape();
+    return;
+  } else {
+    maxHeight.disabled = false;
+    maxVolume.disabled = false;
+    notCustomTankShape();
+    return;
+  }
 };
 
 unitsOptions.forEach((option) => {
@@ -303,6 +329,13 @@ const saveIntoCustomMaxHeight = (e) => {
     customHeightMax.value = e.target.value.slice(0, - 1);
   } else {
     customHeightMax.value = e.target.value;
+    const stringNum = String(e.target.value);
+if (stringNum.includes(".")) {
+let numberOfDecimals = stringNum.split(".")[1].length;
+if (numberOfDecimals > 2) {
+  customHeightMax.value = customHeightMax.value.slice(0, customHeightMax.value.length - 1);
+}
+}
   } 
 };
 
@@ -351,10 +384,12 @@ const addAnotherCustomTankShape = () => {
   proceedButton.style.display = "gray";
   proceedButton.disabled = true;
 
+
   heightInputCount = 0;
 
-  document.querySelector("#add-another" + (counter - 1)).style.display = "none";
-  document.querySelector("#delete" + (counter - 1)).style.display = "none";
+  document.querySelector("#custom-buttons" + (counter - 1)).style.display = "none";
+  // document.querySelector("#add-another" + (counter - 1)).style.display = "none";
+  // document.querySelector("#delete" + (counter - 1)).style.display = "none";
   document.querySelector("#custom-max-height" + (counter - 1)).disabled = true;
   document.querySelector("#custom-max-volume" + (counter - 1)).disabled = true;
 
@@ -466,10 +501,15 @@ const addAnotherCustomTankShape = () => {
         customAddedVolumeUserInputValidation(volumeInput);
       } else if (isNaN(event.data)) {
         volumeInput.value = volumeInput.value.replace(event.data, "");
-      } 
+      } else if (event.data == "0") {
+        if (volumeInput.value.length === 1) {
+          volumeInput.value = volumeInput.value.replace(event.data, "");
+        } else if (volumeInput.value[0] == event.data) {
+          volumeInput.value = volumeInput.value.replace(event.data, "");
+        }
+      }
     });
   volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
-  // heightInput.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(heightInput));
   heightInput.addEventListener("input", (event) => {
       const stringNum = String(event.target.value);
   if (stringNum.includes(".")) {
@@ -477,35 +517,14 @@ const addAnotherCustomTankShape = () => {
     if (stringNum[0] === ".") {
       heightInput.value = `0${heightInput.value}`;
     }
+    if (stringNum[0] == "0" && stringNum[1] != ".") {
+      heightInput.value = heightInput.value.replace("0", "");
+    }
     if (numberOfDecimals > 2) {
       heightInput.value = heightInput.value.slice(0, heightInput.value.length - 1);
     }
   }
   customAddedHeightUserInputValidation(heightInput);
-  });
-  heightInput.addEventListener("input", () => {
-    addButton.disabled = enableButton(heightInput, volumeInput);
-    if (!addButton.disabled) {
-      addButton.style.backgroundColor = "#0162a6";
-      if (errorMessages.length == 0) {
-        proceedButton.disabled = false;
-        proceedButton.style.backgroundColor = "#0162a6";
-      }
-    } else {
-      addButton.style.backgroundColor = "gray";
-      proceedButton.disabled = true;
-      proceedButton.style.backgroundColor = "gray";
-    }
-  });
-  volumeInput.addEventListener("input", () => {
-    addButton.disabled = enableButton(heightInput, volumeInput);
-    if (!addButton.disabled) {
-      addButton.style.backgroundColor = "#0162a6";
-     } else {
-      addButton.style.backgroundColor = "gray";
-      proceedButton.disabled = true;
-      proceedButton.style.backgroundColor = "gray";
-    }
   });
 
 heightInput.addEventListener("input", () => {
@@ -519,10 +538,16 @@ heightInput.addEventListener("input", () => {
 });
 
 heightInput.addEventListener("input", () => {
-  if (volumeInput.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(
+      (message) => message != "Invalid height-volume pair(s)."
+    );
     errorMessages.push("Invalid height-volume pair(s).");
   checkForErrorMessages();
+  addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
   }
 });
 
@@ -533,21 +558,78 @@ heightInput.addEventListener("input", () => {
   }
 });
 
-volumeInput.addEventListener("input", () => {
-if (heightInput.style.borderColor == "red") {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  errorMessages.push("Invalid height-volume pair(s).");
-checkForErrorMessages();
-}
+heightInput.addEventListener("input", () => {
+  customAddedHeightUserInputValidation(heightInput);
+  if (errorMessages.includes("Invalid height-volume pair(s).")) {
+    addButton.disabled = true;
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  } else {
+    addButton.disabled = enableButton(heightInput, volumeInput);
+  if (!addButton.disabled) {
+    addButton.style.backgroundColor = "#0162a6";
+  } else {
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  }
+  }
+});
+
+heightInput.addEventListener("input", () => {
+  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(
+      (message) => message != "Invalid height-volume pair(s)."
+    );
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  addButton.disabled = true;
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  }
 });
 
   volumeInput.addEventListener("input", () => {
-  if (heightInput.value == undefined || volumeInput.value == "") {
+  if (heightInput.value == undefined || heightInput.value == "") {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
 });
+
+volumeInput.addEventListener("input", () => {
+  customAddedVolumeUserInputValidation(volumeInput);
+  if (errorMessages.includes("Invalid height-volume pair(s).")) {
+    addButton.disabled = true;
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  } else {
+    addButton.disabled = enableButton(heightInput, volumeInput);
+  if (!addButton.disabled) {
+    addButton.style.backgroundColor = "#0162a6";
+  } else {
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  }
+  }
+});
   
+volumeInput.addEventListener("input", () => {
+  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+    errorMessages = errorMessages.filter(
+      (message) => message != "Invalid height-volume pair(s)."
+    );
+    errorMessages.push("Invalid height-volume pair(s).");
+  checkForErrorMessages();
+  addButton.disabled = true;
+    addButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  }
+  });
   
   otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
     (element) => element.id != heightInput.id
@@ -561,6 +643,7 @@ checkForErrorMessages();
   );
 
   buttonsDiv.className = "custom-buttons";
+  buttonsDiv.id = `custom-buttons${counter}`;
 
   addButton.className = "custom-button";
   addButton.classList.add("custom-add-button");
@@ -600,12 +683,15 @@ addAnotherButton.addEventListener("click", addAnotherCustomTankShape);
 
 const deleteCustomTankShape = (id) => {
   counter--;
-  document.querySelector("#add-another" + (counter - 1)).style.display = "block";
-  document.querySelector("#delete" + (counter - 1)).style.display = "block";
+  document.querySelector("#custom-buttons" + (counter - 1)).style.display = "flex";
+  // document.querySelector("#add-another" + (counter - 1)).style.display = "block";
+  // document.querySelector("#delete" + (counter - 1)).style.display = "block";
   document.querySelector("#custom-max-height" + (counter - 1)).disabled = false;
   document.querySelector("#custom-max-volume" + (counter - 1)).disabled = false;
   if (id === "custom-tank-shape-adjustment-inner3") {
-    document.querySelector("#delete2").style.display = "none";
+    addAnotherButton.disabled = false;
+    addAnotherButton.style.backgroundColor = "#0162a6";
+    deleteButton.style.display = "none";
   }
   customHeights = customHeights.filter(height => height[0] != document.querySelector("#" + id).children[0].id);
   customVolumes = customVolumes.filter(volume => volume[0] != document.querySelector("#" + id).children[1].id);  
@@ -720,12 +806,11 @@ const submitSettingsForm = (e) => {
 
 
   if (errorMessages.length > 0) {
-    // const proceedButton = document.querySelector("#proceed-button");
     while (error.children.length > 0) {
       error.removeChild(error.lastElementChild);
       firstChild = error.firstChild;
     }
-    window.scrollTo(0, 0);
+    window.scroll(0, 0);
     e.preventDefault();
     proceedButton.disabled = true;
     proceedButton.style.backgroundColor = "gray";
@@ -869,6 +954,12 @@ let numberOfDecimals = stringNum.split(".")[1].length;
 if (stringNum[0] === ".") {
   maxHeight.value = `0${maxHeight.value}`;
 }
+ if (stringNum[0] == "0") {
+  if (stringNum[1] != ".") {
+    maxHeight.value = maxHeight.value.replace("0", "");
+  }
+}
+
 if (numberOfDecimals > 2) {
   maxHeight.value = maxHeight.value.slice(0, maxHeight.value.length - 1);
 }
@@ -878,6 +969,7 @@ maxHeight.addEventListener("input", maxHeightUserInputValidation);
 maxHeight.addEventListener("input", () => {
   if(error.textContent.includes("Invalid tank height.") || error.textContent.includes("There can be only two decimals.")) {
     maxHeight.style.borderColor = "red";
+    customHeightMax.value = "";
   }
 });
 
@@ -888,11 +980,27 @@ maxHeight.addEventListener("input", () => {
   }
 });
 
+maxHeight.addEventListener("input", () => {
+  if ((maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0" || maxHeight.style.borderColor == "red") || (maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0") || (tankShape.value == "" || tankShape.value == undefined)) {
+    notCustomTankShape();
+    return;
+  } else if(shapeAdjustment.style.display == "none") {
+    customTankShape(tankShape.value);
+    return;
+  }
+});
+
 maxVolume.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
     maxVolume.value = maxVolume.value.replace(event.data, "");
   } else if (isNaN(event.data)) {
     maxVolume.value = maxVolume.value.replace(event.data, "");
+  } else if (event.data == "0") {
+    if (maxVolume.value.length === 1) {
+      maxVolume.value = maxVolume.value.replace(event.data, "");
+    } else if (maxVolume.value[0] == event.data) {
+      maxVolume.value = maxVolume.value.replace(event.data, "");
+    }
   } 
 });
 maxVolume.addEventListener("input", maxVolumeUserInputValidation);
@@ -903,6 +1011,16 @@ maxVolume.addEventListener("input", () => {
     proceedButton.disabled = true;
   }
 });
+maxVolume.addEventListener("input", () => {
+  if ((maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0" || maxVolume.style.borderColor == "red") || (maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0" || maxHeight.style.borderColor == "red") || (tankShape.value == "" || tankShape.value == undefined)) {
+    notCustomTankShape();
+    return;
+  } else if(shapeAdjustment.style.display == "none") {
+    customTankShape(tankShape.value);
+    return;
+  }
+});
+
 unitsInput.addEventListener("focus", addReadonly);
 densityInput.addEventListener("focus", addReadonly);
 tankShape.addEventListener("focus", addReadonly);
@@ -995,7 +1113,6 @@ customMaxHeight2.addEventListener("input", (event) => {
       customMaxHeight2.value = customMaxHeight2.value.replace(customMaxHeight2.value[0], "0.");
       customMaxHeight2Count++;
       if (customMaxHeight2Count > 1) {
-        
         customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
         customMaxHeight2Count--;
       }
@@ -1045,6 +1162,10 @@ customMaxHeight2.addEventListener("input", (event) => {
       }
       return;
     } 
+  } else if (customMaxHeight2.value[0] == "0") {
+      if (customMaxHeight2.value[1] != ".") {
+        customMaxHeight2.value = customMaxHeight2.value.replace("0", "");
+      }  
   } else if (event.data == null) {
     if (customMaxHeight2.value.includes(".") == false && customMaxHeight2.value.includes(",") == false) {
       customMaxHeight2Count = 0;
@@ -1061,20 +1182,41 @@ customMaxVolume2.addEventListener("input", (event) => {
       customVolumeUserInputValidation();
   } else if (isNaN(event.data)) {
     customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
-  } 
+  } else if (event.data == "0") {
+    if (customMaxVolume2.value.length === 1) {
+      customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
+    } else if (customMaxVolume2.value[0] == event.data) {
+      customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
+    }
+  }
 });
 customMaxHeight2.addEventListener("input", () => {
-  addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
+  customHeightUserInputValidation();
+  if (errorMessages.includes("Invalid height-volume pair(s).")) {
+    addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  } else {
+    addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
   if (!addAnotherButton.disabled) {
     addAnotherButton.style.backgroundColor = "#0162a6";
   } else {
     addAnotherButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
     proceedButton.style.backgroundColor = "gray";
+  }
   }
 });
 customMaxVolume2.addEventListener("input", () => {
-  addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
+  customVolumeUserInputValidation();
+  if (errorMessages.includes("Invalid height-volume pair(s).")) {
+    addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+  } else {
+    addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
   if (!addAnotherButton.disabled) {
     addAnotherButton.style.backgroundColor = "#0162a6";
   } else {
@@ -1082,9 +1224,8 @@ customMaxVolume2.addEventListener("input", () => {
     proceedButton.disabled = true;
     proceedButton.style.backgroundColor = "gray";
   }
+  }
 });
-
-// customMaxHeight2.addEventListener("input", () => customHeightMaxTwoDecimalsValidation(customMaxHeight2));
 customMaxHeight2.addEventListener("input", (event) => {
   const stringNum = String(event.target.value);
 if (stringNum.includes(".")) {
@@ -1094,46 +1235,50 @@ if (stringNum[0] === ".") {
 }
 if (numberOfDecimals > 2) {
   customMaxHeight2.value = customMaxHeight2.value.slice(0, customMaxHeight2.value.length - 1);
+  if (customMaxVolume2.value != undefined || customMaxVolume2.value != "") {
+    addAnotherButton.disabled = false;
+    addAnotherButton.style.backgroundColor = "#0162a6";
+  }
 }
 }
 customHeightUserInputValidation();
 });
 customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
 customMaxHeight2.addEventListener("input", () => {
-  if (customMaxHeight2.style.borderColor == "red") {
+  if (customMaxVolume2.style.borderColor == "red" || customMaxHeight2.style.borderColor == "red") {
     errorMessages = errorMessages.filter(
       (message) => message != "Invalid height-volume pair(s)."
     );
     errorMessages.push("Invalid height-volume pair(s).");
   checkForErrorMessages();
-  } else {
-    customHeightUserInputValidation();
-  }
-});
-customMaxHeight2.addEventListener("input", () => {
-  if (customMaxVolume2.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
-    );
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
+  addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
   }
 });
 
 customMaxVolume2.addEventListener("input", () => {
-if (customMaxHeight2.style.borderColor == "red") {
+if (customMaxHeight2.style.borderColor == "red" || customMaxVolume2.style.borderColor == "red") {
   errorMessages = errorMessages.filter(
     (message) => message != "Invalid height-volume pair(s)."
   );
   errorMessages.push("Invalid height-volume pair(s).");
 checkForErrorMessages();
+addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
 }
 });
 
 customMaxHeight2.addEventListener("input", () => {
   if(customMaxVolume2.value == undefined || customMaxVolume2.value == "") {
-    proceedButton.style.backgroundColor = "gray";
+    checkForErrorMessages();
+    addAnotherButton.disabled = true;
+    addAnotherButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
   }
 });
 

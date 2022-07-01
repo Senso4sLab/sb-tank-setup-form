@@ -14,9 +14,8 @@
     <h1 class="h1-font">TANK SETUP</h1>
     <div id="error"></div>
       <div class="units-div">
-        <label class="label" for="units">Measuring unit: </label>
-        <div class="input-and-options-div">
-          <input
+        <label class="label" id="units-label" for="units">Measuring unit: </label>
+        <input
             type="text"
             inputmode="none"
             class="units-input input"
@@ -24,6 +23,7 @@
             placeholder="Choose..."
             value=""
           />
+        <div class="options-div">
           <div class="option" id="units-options">
             <div class="units-option-element" id="percent">Percent</div>
             <div class="units-option-element" id="meter">Meter</div>
@@ -31,10 +31,9 @@
           </div>
         </div>
       </div>
-      <div class="media-div" onchange="customDensity();">
-        <label class="label" for="media">Medium type: </label>
-        <div class="input-and-options-div">
-          <input
+      <div class="media-div">
+        <label class="label" id="media-label" for="media">Medium type: </label>
+        <input
             type="text"
             inputmode="none"
             class="density-input input"
@@ -42,6 +41,7 @@
             placeholder="Choose..."
             value=""
           />
+        <div class="options-div">
           <div class="option" id="media-options">
             <div class="media-option-element" id="heating-oil">
               Heating oil (845 kg/m3)
@@ -143,9 +143,8 @@
         />
       </div>
       <div class="tank-shape-div">
-        <label id="tank-shape-label" class="label" for="shape">Tank shape: </label>
-        <div class="input-and-options-div">
-          <input
+        <label id="tank-shape-label" class="label" id="tank-shape-label" for="shape">Tank shape: </label>
+        <input
             type="text"
             id="shape"
             inputmode="none"
@@ -153,6 +152,7 @@
             placeholder="Choose..."
             value=""
           />
+        <div class="options-div">
           <div class="option" id="tank-shape-options">
             <div class="shape-option-element" id="linear">
               <img src="images/Linear.jpg" alt="linear" />Linear</div>
@@ -245,7 +245,7 @@
             placeholder="Insert value..."
             disabled
           />
-          <div class="custom-buttons">
+          <div class="custom-buttons" id="custom-buttons2">
             <input
               class="custom-button"
               id="add-another2"

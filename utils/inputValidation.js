@@ -4,6 +4,7 @@ const isError = (boolean, element) => {
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
+    window.scroll(0, 0);
   } else {
       element.style.borderColor = "black";  
   } 
@@ -72,7 +73,8 @@ export const maxVolumeValidation = (element, errorMessage) => {
     if (
       userInput < 0 ||
       userInput == undefined ||
-      userInput == ""
+      userInput == "" ||
+      userInput == Infinity
     ) {
       isError(true, element);
       return errorMessage;
@@ -81,7 +83,6 @@ export const maxVolumeValidation = (element, errorMessage) => {
       return "";
      }
   }
-  
 };
 
 export const regularTextValidation = (element, errorMessage) => {
@@ -97,7 +98,7 @@ export const regularTextValidation = (element, errorMessage) => {
   }
 };
 
-export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray, customHeights) => {
+export const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray, customHeights, maxHeight) => {
   if (element.value.includes("-") || element.value.includes(" ")) {
     isError(true, element);
       return errorMessage;
@@ -114,7 +115,37 @@ export const customHeightValidation = (element, errorMessage, customHeightsAndVo
         customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
         customHeights = customHeights.filter(el => el[0] != element.id);
         return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
-    } else {
+    } else if (element.id === "custom-max-height2") {
+      if (userInput <= 0 || userInput >= Number.parseFloat(maxHeight.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customHeights = customHeights.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
+      } else {
+        isError(false, element);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights = customHeights.filter(el => el[0] != element.id);
+        customHeights.push([element.id, element.value]);
+        return ([customHeightsAndVolumesArray, customHeights, ""]);
+      }
+    } else if (element.id != "custom-max-height2") {
+      const idNumber = Number.parseInt(element.id.split("height")[1]);
+      const previousElement = document.querySelector(`#custom-max-height${idNumber - 1}`);
+      if (userInput <= Number.parseFloat(previousElement.value) || userInput >= Number.parseFloat(maxHeight.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customHeights = customHeights.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
+      } else {
+        isError(false, element);
+        customHeights = customHeights.filter((height) => height[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customHeights, ""]);
+      }
+    }  else {
       isError(false, element);
       customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
       customHeights = customHeights.filter(el => el[0] != element.id);
@@ -123,22 +154,53 @@ export const customHeightValidation = (element, errorMessage, customHeightsAndVo
     }
 };
 
-export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray, customVolumes) => {
+export const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray, customVolumes, maxVolume) => {
   if (element.value.includes(".") || element.value.includes("-") || element.value.includes(",") || element.value.includes(" ")) {
     isError(true, element);
       return errorMessage;
   }
-  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+  let userInput = (element.value != "") ? Number.parseInt(element.value) : "";
     if (
       userInput < 0 ||
       userInput == undefined ||
-      userInput == ""
+      userInput == "" ||
+      userInput == Infinity
     ) {
       isError(true, element);
         customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
         customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
         customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
         return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+    } else if (element.id === "custom-max-volume2") {
+      if (userInput <= 0 || userInput >= Number.parseInt(maxVolume.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customVolumes = customVolumes.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+      } else {
+        isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
+      }
+    } else if (element.id != "custom-max-volume2") {
+      const idNumber = Number.parseInt(element.id.split("volume")[1]);
+      const previousElement = document.querySelector(`#custom-max-volume${idNumber - 1}`);
+      if (userInput <= Number.parseInt(previousElement.value) || userInput >= Number.parseInt(maxVolume.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customVolumes = customVolumes.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+      } else {
+        isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
+      }
     } else {
       isError(false, element);
       customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
@@ -183,6 +245,10 @@ export const maxFillingValidation = (element, errorMessage) => {
       return "";
     }
 };
+
+// Check if volume's value is less than 50000l and add an error to it if it is
+
+// Check if volume's value is more than 50000l or equal to it and add an error to it if it is
 
 export const errorMessageOutput = (element, errorMessages) => {
   const proceedButton = document.querySelector("#proceed-button");
