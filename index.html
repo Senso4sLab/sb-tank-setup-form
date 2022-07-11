@@ -13,36 +13,33 @@
     <form class="tank-settings-form" autocomplete="off">
     <h1 class="h1-font">TANK SETUP</h1>
     <div id="error"></div>
-      <div class="units-div">
+      <div id="units-div" class="container">
         <label class="label" id="units-label" for="units">Measuring unit: </label>
         <input
             type="text"
             inputmode="none"
-            class="units-input input"
-            id="units"
+            class="input"
+            id="units-input"
             placeholder="Choose..."
             value=""
           />
-        <div class="options-div">
-          <div class="option" id="units-options">
+          <div class="options-div" id="units-options">
             <div class="units-option-element" id="percent">Percent</div>
             <div class="units-option-element" id="meter">Meter</div>
             <div class="units-option-element" id="liter">Liter</div>
           </div>
-        </div>
       </div>
-      <div class="media-div">
+      <div id="media-div" class="container">
         <label class="label" id="media-label" for="media">Medium type: </label>
         <input
             type="text"
             inputmode="none"
-            class="density-input input"
-            id="media"
+            class="input"
+            id="media-input"
             placeholder="Choose..."
             value=""
           />
-        <div class="options-div">
-          <div class="option" id="media-options">
+          <div class="options-div" id="media-options">
             <div class="media-option-element" id="heating-oil">
               Heating oil (845 kg/m3)
             </div>
@@ -79,127 +76,114 @@
             </div>
             <div class="media-option-element" id="user-specific-density">Custom</div>
           </div>
-        </div>
       </div>
 
-      <div class="custom-density-adjustment">
-      <div class="custom-labels-density">
+      <div id="custom-density-div" >
+      <div id="medium-name-div" class="container">
         <label class="label" id="medium-name-input-label" for="medium-name-input">Medium name:</label>
-        <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
-      </div>
-      <div
-          class="custom-density-adjustment-inner"
-          id="custom-density-adjustment-inner"
-        >
         <input
           type="text"
           inputmode="text"
           id="medium-name-input"
           name="medium-name-input"
-          class="input"
+          class="input custom-field-input"
           value=""
-          disabled
           placeholder="Insert name..."
+          disabled
         />
+      </div>
+      <div id="density-picker-div" class="container">
+        <label class="label" id="density-picker-label" for="density-picker">Density [kg/m3]:</label>
         <input
           type="text"
           inputmode="decimal"
-          id="density-picker"
-          name="density-picker"
-          class="input"
+          id="density-picker-input"
+          name="density-picker-input"
+          class="input custom-field-input"
           value=""
-          disabled
           placeholder="Insert value..."
+          disabled
         />
       </div>
     </div>
-    
-      <div class="max-tank-height-div" id="complete-tank-height">
-        
+
+      <div id="max-tank-height-div" class="container">
         <label class="label" id="max-height-label" for="max-height">Tank height [m]:</label>
         <input
           type="text"
           inputmode="decimal"
-          id="max-height"
+          id="max-height-input"
           class="input"
-          name="max-height"
+          name="max-height-input"
           step="0.01"
           value=""
           placeholder="Insert value..."
         />
         </div>
       
-      <div class="max-tank-volume-div" id="complete-tank-volume">
+      <div id="max-tank-volume-div" class="container">
         <label class="label" id="max-volume-label" for="max-volume">Tank volume [l]:</label>
         <input
           type="text"
           inputmode="decimal"
-          id="max-volume"
+          id="max-volume-input"
           class="input"
-          name="max-volume"
+          name="max-volume-input"
           step="1"
           value=""
           placeholder="Insert value..."
         />
       </div>
-      <div class="tank-shape-div">
+      <div id="tank-shape-div" class="container">
         <label id="tank-shape-label" class="label" id="tank-shape-label" for="shape">Tank shape: </label>
         <input
             type="text"
-            id="shape"
+            id="tank-shape-input"
             inputmode="none"
-            class="tank-shape-input input"
+            class="input"
             placeholder="Choose..."
             value=""
+            disabled
           />
-        <div class="options-div">
-          <div class="option" id="tank-shape-options">
+          <div class="options-div" id="tank-shape-options">
             <div class="shape-option-element" id="linear">
-              <img src="images/Linear.jpg" alt="linear" />Linear</div>
+              <!-- <img src="images/Linear.jpg" alt="linear" /> -->
+              Linear</div>
             <div class="shape-option-element" id="cylinder-small">
-              <img
-                src="images/Cylinder.jpg"
-                alt="small cylinder"
-              />Cylinder (<=50000l)</div>
+              <!-- <img src="images/Cylinder.jpg" alt="small cylinder"/> -->
+              Cylinder (<=50000l)</div>
             <div class="shape-option-element" id="cylinder-big">
-              <img
-                src="images/Cylinder2.jpg"
-                alt="big cylinder"
-              />Cylinder (>50000l)</div>
+              <!-- <img src="images/Cylinder2.jpg"alt="big cylinder"/> -->
+              Cylinder (>50000l)</div>
             <div class="shape-option-element" id="ball">
-              <img src="images/Ball.jpg" alt="ball" />Ball</div>
+              <!-- <img src="images/Ball.jpg" alt="ball" /> -->
+              Ball</div>
             <div class="shape-option-element" id="oval">
-              <img src="images/Oval.jpg" alt="oval" />Oval</div>
+              <!-- <img src="images/Oval.jpg" alt="oval" /> -->
+              Oval</div>
             <div class="shape-option-element" id="convex">
-              <img src="images/Konvex.jpg" alt="convex" />Convex</div>
+              <!-- <img src="images/Konvex.jpg" alt="convex" /> -->
+              Convex</div>
             <div class="shape-option-element" id="concave">
-              <img src="images/Konkav.jpg" alt="concave" />Concave</div>
+              <!-- <img src="images/Konkav.jpg" alt="concave" /> -->
+              Concave</div>
             <div class="shape-option-element" id="steel-tank">
-              <img src="images/SteelTank.jpg" alt="steel tank" />Sheet steel or battery</div>
+              <!-- <img src="images/SteelTank.jpg" alt="steel tank" /> -->
+              Sheet steel or battery</div>
             <div class="shape-option-element" id="custom">
-              <img src="images/Custom.png" alt="custom" />Custom</div>
+              <!-- <img src="images/Custom.png" alt="custom" /> -->
+              Custom</div>
           </div>
-        </div>
       </div>
-      <div class="custom-tank-shape-adjustment">
-        <div class="custom-labels">
-          <label class="label" id="custom-height-label" for="custom-max-height"
-            >Height [m]:</label
-          >
-          <label class="label" id="custom-volume-label" for="custom-max-volume"
-            >Volume [l]:</label
-          >
-        </div>
-        <div
-          class="custom-tank-shape-adjustment-inner"
-          id="custom-tank-shape-adjustment-inner"
-        >
+      <div id="custom-tank-shape-div">
+        <div id="custom-height-input-fields-div" class="container">
+          <label class="label" id="custom-height-label" for="custom-max-height">Height [m]:</label>
           <input
             type="text"
             inputmode="decimal"
-            id="custom-max-height1"
-            class="input"
-            name="custom-max-height1"
+            id="custom-height1-input"
+            class="input custom-field-input custom-height-input"
+            name="custom-height1-input"
             value="0"
             step="0.01"
             placeholder="Insert value..."
@@ -207,98 +191,403 @@
           />
 
           <input
-            type="text"
-            inputmode="decimal"
-            id="custom-max-volume1"
-            class="input"
-            name="custom-max-volume1"
-            value="0"
-            step="1"
-            placeholder="Insert value..."
-            disabled
-          />
-        </div>
-        <div
-          class="custom-tank-shape-adjustment-inner2"
-          id="custom-tank-shape-adjustment-inner2"
-        >
-          <input
-            type="text"
-            inputmode="decimal"
-            id="custom-max-height2"
-            class="input"
-            name="custom-max-height"
-            value=""
-            step="0.01"
-            placeholder="Insert value..."
-            disabled
-          />
+          type="text"
+          inputmode="decimal"
+          id="custom-height2-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height2-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
 
-          <input
-            type="text"
-            inputmode="decimal"
-            id="custom-max-volume2"
-            class="input"
-            name="custom-max-volume"
-            value=""
-            step="1"
-            placeholder="Insert value..."
-            disabled
-          />
-          <div class="custom-buttons" id="custom-buttons2">
-            <input
-              class="custom-button"
-              id="add-another2"
-              type="button"
-              value="+"
-              disabled
-              />
-            
-            <input
-              class="custom-button"
-              id="delete2"
-              type="button"
-              value="-"
-              />
-
-          </div>
-        </div>
-        <div
-          class="custom-tank-shape-adjustment-innerMax"
-          id="custom-tank-shape-adjustment-innerMax"
-        >
-          <input
-            type="text"
-            inputmode="decimal"
-            id="custom-max-heightMax"
-            class="input"
-            name="custom-max-heightMax"
-            value=""
-            step="0.01"
-            placeholder="Insert value..."
-            disabled
-          />
-          <input
-            type="text"
-            inputmode="decimal"
-            id="custom-max-volumeMax"
-            class="input"
-            name="custom-max-volumeMax"
-            value=""
-            step="1"
-            placeholder="Insert value..."
-            disabled
-          />
-        </div>
-      </div>
-      <div class="max-tank-filling-div">
-        <label id="max-fill-label" class="label" for="fill">Filling limit [%]:</label>
         <input
           type="text"
           inputmode="decimal"
-          id="max-fill"
-          class="max-filling input"
-          name="fill"
+          id="custom-height3-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height3-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height4-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height4-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height5-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height5-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height6-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height6-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height7-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height7-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height8-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height8-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height9-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height9-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height10-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height10-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height11-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height11-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height12-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height12-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height13-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height13-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height14-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height14-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-height15-input"
+          class="input custom-field-input custom-height-input"
+          name="custom-height15-input"
+          value=""
+          step="0.01"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+        class="button custom-button"
+        id="add-another-custom-button"
+        type="button"
+        value="+"
+        />
+
+        <input
+            type="text"
+            inputmode="decimal"
+            id="custom-max-height-input"
+            class="input custom-field-input custom-height-input"
+            name="custom-max-height-input"
+            value=""
+            step="0.01"
+            placeholder="Insert value..."
+            disabled
+          />
+
+        </div>
+        <div id="custom-volume-input-fields-div" class="container">
+        <label class="label" id="custom-volume-label" for="custom-max-volume">Volume [l]:</label>
+          <input
+            type="text"
+            inputmode="decimal"
+            id="custom-volume1-input"
+            class="input custom-field-input custom-volume-input"
+            name="custom-volume1-input"
+            value="0"
+            step="1"
+            placeholder="Insert value..."
+            disabled
+          />
+
+          <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume2-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume2-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume3-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume3-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume4-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume4-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume5-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume5-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume6-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume6-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume7-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume7-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume8-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume8-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume9-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume9-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume10-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume10-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume11-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume11-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume12-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume12-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume13-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume13-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume14-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume14-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+          type="text"
+          inputmode="decimal"
+          id="custom-volume15-input"
+          class="input custom-field-input custom-volume-input"
+          name="custom-volume15-input"
+          value=""
+          step="1"
+          placeholder="Insert value..."
+          disabled
+        />
+
+        <input
+        class="button custom-button"
+        id="delete-custom-button"
+        type="button"
+        value="-"
+        />
+
+        <input
+        type="text"
+        inputmode="decimal"
+        id="custom-max-volume-input"
+        class="input custom-field-input custom-volume-input"
+        name="custom-max-volume-input"
+        value=""
+        step="1"
+        placeholder="Insert value..."
+        disabled
+      />
+        </div>
+      </div>
+      <div id="max-tank-filling-div" class="container">
+        <label id="max-fill-label" class="label" for="max-filling-input">Filling limit [%]:</label>
+        <input
+          type="text"
+          inputmode="decimal"
+          id="max-filling-input"
+          class="input"
+          name="max-filling-input"
           step="1"
           value="95"
           placeholder="Insert value..."
@@ -310,28 +599,30 @@
       <div class="inner-modal">
         <form class="modal-form">
           <div class="inner-modal-header">
-            <input type="submit" value="X" class="close" id="x-button" />
+            <input type="submit" value="X" class="button modal-button" id="x-button" />
           </div>
           <div class="inner-modal-settings-list">
           </div>
+          <div class="inner-modal-buttons">
           <input
             type="submit"
             value="CONFIRM"
-            class="modal-button"
+            class="button modal-button"
             id="ok-button"
           />
           <input
             type="submit"
-            value="CLOSE"
-            class="modal-button"
+            value="OK"
+            class="button modal-button"
             id="close-button"
           />
           <input
             type="submit"
             value="BACK"
-            class="modal-button"
+            class="button modal-button"
             id="cancel-button"
           />
+        </div>
         </form>
       </div>
     </div>

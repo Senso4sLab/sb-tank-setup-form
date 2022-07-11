@@ -4,7 +4,7 @@ const isError = (boolean, element) => {
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
-    window.scroll(0, 0);
+    // window.scroll(0, 0);
   } else {
       element.style.borderColor = "black";  
   } 

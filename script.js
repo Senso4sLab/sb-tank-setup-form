@@ -1,16 +1,299 @@
-import {
-  //limitDecimals,
-  dropdownValidation, 
-  regularNumberValidation, 
-  maxHeightValidation, 
-  maxVolumeValidation, 
-  regularTextValidation,
-  customHeightValidation, 
-  customVolumeValidation,
-  enableButton, 
-  maxFillingValidation,
-  errorMessageOutput,
-} from './utils/inputValidation.js';
+const isError = (boolean, element) => {
+  if (boolean) {
+    element.style.borderColor = "red";
+    error.style.display = "block";
+    error.style.color = "red";
+    error.style.fontWeight = "900";
+    // window.scroll(0, 0);
+  } else {
+      element.style.borderColor = "black";  
+  } 
+};
+
+const dropdownValidation = (element, errorMessage) => {
+  if (element.value == "" || element.value == undefined || element.value.length == 0) {
+  isError(true, element);
+  window.scroll(0, 0);
+  return errorMessage;
+   } else {
+   isError(false, element);
+   return "";
+   }
+};
+
+const regularNumberValidation = (element, errorMessage) => {
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  }
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+ 
+  if (
+    (userInput < 0 ||
+      userInput == undefined ||
+      userInput == "") 
+      &&
+    element.disabled == false
+  ) {
+   isError(true, element);
+   window.scroll(0, 0);
+   return errorMessage;
+  } else {
+   isError(false, element);
+   return "";
+  }
+};
+
+const regularTextValidation = (element, errorMessage) => {
+  if ((
+    element.value == "" ||
+    element.value == undefined
+  ) && element.disabled === false) {
+    isError(true, element);
+    window.scroll(0, 0);
+    return errorMessage;
+  } else {
+    isError(false, element);
+    return "";
+  }
+};
+
+const maxHeightValidation = (element, errorMessage) => {
+  if (element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  } else {
+    let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+    if (
+      userInput < 0 ||
+      userInput > 4.7 ||
+      userInput == undefined ||
+      userInput == ""
+    ) {
+      isError(true, element);
+      window.scroll(0, 0);
+      return errorMessage;
+     } else {
+      isError(false, element);
+      return "";
+     }
+  }
+};
+
+const maxVolumeValidation = (element, errorMessage) => {
+  if (element.value.includes(".") || element.value.includes("-")) {
+    isError(true, element);
+      return errorMessage;
+  } else {
+    let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+    if (
+      userInput < 0 ||
+      userInput == undefined ||
+      userInput == "" ||
+      userInput == Infinity
+    ) {
+      isError(true, element);
+      window.scroll(0, 0);
+      return errorMessage;
+     } else {
+      isError(false, element);
+      return "";
+     }
+  }
+};
+
+ const customHeightValidation = (element, errorMessage, customHeightsAndVolumesArray, customHeights, maxHeight) => {
+  if (element.value.includes("-") || element.value.includes(" ")) {
+    isError(true, element);
+      return errorMessage;
+  }
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+    if (
+      userInput < 0 ||
+      userInput > 4.7 ||
+      userInput == undefined ||
+      userInput == ""
+    ) {  
+      isError(true, element);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+        customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        customHeights = customHeights.filter(el => el[0] != element.id);
+        return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
+    } else if (element.id === "custom-height2-input") {
+      if (userInput <= 0 || userInput >= Number.parseFloat(maxHeight.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customHeights = customHeights.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
+      } else {
+        isError(false, element);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights = customHeights.filter(el => el[0] != element.id);
+        customHeights.push([element.id, element.value]);
+        return ([customHeightsAndVolumesArray, customHeights, ""]);
+      }
+    } else if (element.id != "custom-height2-input") {
+      const idElements = element.id.split("-");
+      const idNumber = Number.parseInt(idElements[1].split("height")[1]);
+      const previousElement = document.querySelector(`#custom-height${idNumber - 1}-input`);
+      if (userInput <= Number.parseFloat(previousElement.value) || userInput >= Number.parseFloat(maxHeight.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customHeights = customHeights.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customHeights, errorMessage]);
+      } else {
+        isError(false, element);
+        customHeights = customHeights.filter((height) => height[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customHeights, ""]);
+      }
+    }  else {
+      isError(false, element);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+      customHeights = customHeights.filter(el => el[0] != element.id);
+        customHeights.push([element.id, element.value]);
+        return ([customHeightsAndVolumesArray, customHeights, ""]);
+    }
+};
+
+ const customVolumeValidation = (element, errorMessage, customHeightsAndVolumesArray, customVolumes, maxVolume) => {
+  if (element.value.includes(".") || element.value.includes("-") || element.value.includes(",") || element.value.includes(" ")) {
+    isError(true, element);
+      return errorMessage;
+  }
+  let userInput = (element.value != "") ? Number.parseInt(element.value) : "";
+    if (
+      userInput < 0 ||
+      userInput == undefined ||
+      userInput == "" ||
+      userInput == Infinity
+    ) {
+      isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+        customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+        customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+        return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+    } else if (element.id === "custom-volume2-input") {
+      if (userInput <= 0 || userInput >= Number.parseInt(maxVolume.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customVolumes = customVolumes.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+      } else {
+        isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
+      }
+    } else if (element.id != "custom-volume2-input") {
+      const idElements = element.id.split("-");
+      const idNumber = Number.parseInt(idElements[1].split("volume")[1]);
+      const previousElement = document.querySelector(`#custom-volume${idNumber - 1}-input`);
+      if (userInput <= Number.parseInt(previousElement.value) || userInput >= Number.parseInt(maxVolume.value)) {
+        isError(true, element);
+        customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customHeightsAndVolumesArray.push({id: element.id, value: userInput,});
+          customVolumes = customVolumes.filter(el => el[0] != element.id);
+          return ([customHeightsAndVolumesArray, customVolumes, errorMessage]);
+      } else {
+        isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
+      }
+    } else {
+      isError(false, element);
+      customVolumes = customVolumes.filter((volume) => volume[0] != element.id);
+      customHeightsAndVolumesArray = customHeightsAndVolumesArray.filter((el) => el.id != element.id);
+          customVolumes.push([element.id, element.value]);
+          return ([customHeightsAndVolumesArray, customVolumes, ""]);
+    }
+};
+
+const enableButton = (heightElement, volumeElement) => {
+  if (counter > 15) {
+    return true;
+  }
+  if (heightElement.value.includes(".")) {
+      const numOfDecimals = heightElement.value.split(".")[1].length;
+      if (numOfDecimals > 2) {
+        return true;
+      }  
+  }
+  const heightElementValue = Number.parseFloat(heightElement.value);
+  const volumeElementValue = Number.parseInt(volumeElement.value); 
+  if ((heightElementValue > 0 && heightElementValue <= 4.7) && (volumeElementValue > 0)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const maxFillingValidation = (element, errorMessage) => {
+  if (element.value.includes(".") || element.value.includes("-") || element.value.includes(",") || element.value.includes(" ")) {
+    isError(true, element);
+      return errorMessage;
+  }
+  let userInput = (element.value != "") ? Number.parseFloat(element.value) : "";
+    if (
+      userInput == "" ||
+      userInput == undefined ||
+      userInput < 0 ||
+      userInput > 100 
+    ) {
+      isError(true, element);
+      return errorMessage;
+    } else {
+      isError(false, element);
+      return "";
+    }
+};
+
+const errorMessageOutput = (element, errorMessages) => {
+  const proceedButton = document.querySelector("#proceed-button");
+  if (errorMessages.length > 0) {
+    let firstChild = element.firstChild;
+    while (element.children.length > 0) {
+      element.removeChild(firstChild);
+      firstChild = element.firstChild;
+    }
+    proceedButton.disabled = true;
+    proceedButton.backgroundColor = "gray";
+    element.style.display = "block";
+    errorMessages.forEach((message) => {
+      const errorParagraph = document.createElement("p");
+      errorParagraph.textContent = message;
+      error.appendChild(errorParagraph);
+    });
+    return errorMessages;
+  } else if (errorMessages.length == 0) {
+    proceedButton.disabled = false;
+    proceedButton.backgroundColor = "#0162a6";
+    error.style.display = "none";
+    error.textContent = "";
+    return [];
+  }
+};
+
+// import {
+//   //limitDecimals,
+//   dropdownValidation, 
+//   regularNumberValidation, 
+//   maxHeightValidation, 
+//   maxVolumeValidation, 
+//   regularTextValidation,
+//   customHeightValidation, 
+//   customVolumeValidation,
+//   enableButton, 
+//   maxFillingValidation,
+//   errorMessageOutput,
+// } from './utils/inputValidation.js';
 
 import { 
   modalContent,
@@ -19,8 +302,10 @@ import {
 } from "./utils/modal.js";
 
 let maxHeightCount = 0;
-let customMaxHeightCount = 0;
-let customMaxHeight2Count = 0;
+// let customMaxHeightCount = 0;
+// let customMaxHeight2Count = 0;
+let currentCustomHeightInput;
+let currentCustomVolumeInput;
 let heightInputCount = 0;
 let counter = 3;
 let otherCustomMaxHeightsAndVolumes = [];
@@ -33,44 +318,107 @@ let isUnitsOpen = false;
 let isTankShapeOpen = false;
 let isMediaOpen = false;
 
-const pageTitle = document.querySelector(".h1-font");
 const error = document.querySelector("#error");
 const form = document.querySelector(".tank-settings-form");
+const unitsInput = document.querySelector("#units-input");
 const unitsOption = document.querySelector("#units-options");
-const mediaOption = document.querySelector("#media-options");
-const tankShapeOption = document.querySelector("#tank-shape-options");
 const unitsOptions = document.querySelectorAll(".units-option-element");
+const mediaInput = document.querySelector("#media-input");
+const mediaOption = document.querySelector("#media-options");
 const mediaOptions = document.querySelectorAll(".media-option-element");
+const customAdjustment = document.querySelector("#custom-density-div");
+const mediumNameInput = document.querySelector("#medium-name-input");
+const densityPickerInput = document.querySelector("#density-picker-input");
+const maxHeightInput = document.querySelector("#max-height-input");
+const maxVolumeInput = document.querySelector("#max-volume-input");
+const tankShapeInput = document.querySelector("#tank-shape-input");
+const tankShapeOption = document.querySelector("#tank-shape-options");
 const tankShapeOptions = document.querySelectorAll(".shape-option-element");
-const shapeAdjustment = document.querySelector(".custom-tank-shape-adjustment");
-const shapeAdjustmentInnerMax = document.querySelector(
-  ".custom-tank-shape-adjustment-innerMax"
-);
-const customAdjustment = document.querySelector(".custom-density-adjustment");
-const customMaxHeight = document.querySelector("#custom-max-height1");
-const customMaxVolume = document.querySelector("#custom-max-volume1");
-const customMaxHeight2 = document.querySelector("#custom-max-height2");
-const customMaxVolume2 = document.querySelector("#custom-max-volume2");
-const customHeightMax = document.querySelector("#custom-max-heightMax");
-const customVolumeMax = document.querySelector("#custom-max-volumeMax");
-const customButtons2 = document.querySelector("#custom-buttons2");
-const addAnotherButton = document.querySelector("#add-another2");
-const deleteButton = document.querySelector("#delete2");
+const shapeAdjustment = document.querySelector("#custom-tank-shape-div");
+const customHeightInputFields = document.querySelectorAll(".custom-height-input");
+const customVolumeInputFields = document.querySelectorAll(".custom-volume-input");
+const customHeight = document.querySelector("#custom-height1-input");
+const customVolume = document.querySelector("#custom-volume1-input");
+const customHeight2 = document.querySelector("#custom-height2-input");
+const customVolume2 = document.querySelector("#custom-volume2-input");
+// const customHeight3 = document.querySelector("#custom-height3-input");
+// const customVolume3 = document.querySelector("#custom-volume3-input");
+// const customHeight4 = document.querySelector("#custom-height4-input");
+// const customVolume4 = document.querySelector("#custom-volume4-input");
+// const customHeight5 = document.querySelector("#custom-height5-input");
+// const customVolume5 = document.querySelector("#custom-volume5-input");
+// const customHeight6 = document.querySelector("#custom-height6-input");
+// const customVolume6 = document.querySelector("#custom-volume6-input");
+// const customHeight7 = document.querySelector("#custom-height7-input");
+// const customVolume7 = document.querySelector("#custom-volume7-input");
+// const customHeight8 = document.querySelector("#custom-height8-input");
+// const customVolume8 = document.querySelector("#custom-volume8-input");
+// const customHeight9 = document.querySelector("#custom-height9-input");
+// const customVolume9 = document.querySelector("#custom-volume9-input");
+// const customHeight10 = document.querySelector("#custom-height10-input");
+// const customVolume10 = document.querySelector("#custom-volume10-input");
+// const customHeight11 = document.querySelector("#custom-height11-input");
+// const customVolume11 = document.querySelector("#custom-volume11-input");
+// const customHeight12 = document.querySelector("#custom-height12-input");
+// const customVolume12 = document.querySelector("#custom-volume12-input");
+// const customHeight13 = document.querySelector("#custom-height13-input");
+// const customVolume13 = document.querySelector("#custom-volume13-input");
+// const customHeight14 = document.querySelector("#custom-height14-input");
+// const customVolume14 = document.querySelector("#custom-volume14-input");
+// const customHeight15 = document.querySelector("#custom-height15-input");
+// const customVolume15 = document.querySelector("#custom-volume15-input");
+// const customHeight16 = document.querySelector("#custom-height16-input");
+// const customVolume16 = document.querySelector("#custom-volume16-input");
+const customMaxHeightInput = document.querySelector("#custom-max-height-input");
+const customMaxVolumeInput = document.querySelector("#custom-max-volume-input");
+const addAnotherButton = document.querySelector("#add-another-custom-button");
+const deleteButton = document.querySelector("#delete-custom-button");
+const maxFillingLimitInput = document.querySelector("#max-filling-input");
 const proceedButton = document.querySelector("#proceed-button");
 const modal = document.querySelector(".modal");
 const modalXButton = document.querySelector("#x-button");
 const modalOkButton = document.querySelector("#ok-button");
 const modalCloseButton = document.querySelector("#close-button");
 const modalCancelButton = document.querySelector("#cancel-button");
-const unitsInput = document.querySelector(".units-input");
-const densityInput = document.querySelector(".density-input");
-const mediumNameInput = document.querySelector("#medium-name-input");
-const densityPicker = document.querySelector("#density-picker");
-const maxHeight = document.querySelector("#max-height");
-const maxVolume = document.querySelector("#max-volume");
-const tankShape = document.querySelector(".tank-shape-input");
-const maxFilling = document.querySelector("#max-fill");
 const settingsListDiv = document.querySelector(".inner-modal-settings-list");
+
+class Heightinput {
+  constructor(props) {
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "text";
+    this.inputElement.inputMode = "decimal";
+    this.inputElement.classList.add("input", "custom-field-input", "custom-height-input");
+    this.inputElement.id = props.id;
+    this.inputElement.name = props.id;
+    this.inputElement.value="";
+    this.inputElement.step="0.01";
+    this.inputElement.placeholder="Insert value...";
+  }
+
+  addToParent() {
+    const customHeightsDiv = document.querySelector("#custom-height-input-fields-div");
+    customHeightsDiv.appendChild(this.inputElement);
+  }
+}
+
+class Volumeinput {
+  constructor(id) {
+    this.inputElement = document.createElement("input");
+    this.inputElement.type = "text";
+    this.inputElement.inputMode = "decimal";
+    this.inputElement.classList.add("input", "custom-field-input", "custom-volume-input");
+    this.inputElement.id = id;
+    this.inputElement.name = id;
+    this.inputElement.value="";
+    this.inputElement.step="1";
+    this.inputElement.placeholder="Insert value...";
+  }
+
+  addToParent() {
+    const customVolumesDiv = document.querySelector("#custom-volume-input-fields-div");
+    customVolumesDiv.appendChild(this.inputElement);
+  }
+}
 
 const unitsUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Measuring unit is required.");
@@ -80,12 +428,12 @@ const unitsUserInputValidation = () => {
 
 const densityUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Medium type is required.");
-  errorMessages.push(dropdownValidation(densityInput, "Medium type is required."));
+  errorMessages.push(dropdownValidation(mediaInput, "Medium type is required."));
   checkForErrorMessages();
 };
 
 const mediumNameUserInputValidation = () => {
-  if (densityInput.value != "Custom") {
+  if (mediaInput.value != "Custom") {
     errorMessages = errorMessages.filter(message => message != "Medium name is required.");
     errorMessages = errorMessages.filter(message => message != "Invalid density.");
     checkForErrorMessages();
@@ -96,56 +444,55 @@ const mediumNameUserInputValidation = () => {
 };
 
 const mediumDensityUserInputValidation = () => {
-  if (densityInput.value != "Custom") {
+  if (mediaInput.value != "Custom") {
     errorMessages = errorMessages.filter(message => message != "Medium name is required.");
     errorMessages = errorMessages.filter(message => message != "Invalid density.");
     checkForErrorMessages();
   }
   errorMessages = errorMessages.filter(message => message != "Invalid density.");
-  errorMessages.push(regularNumberValidation(densityPicker, "Invalid density."));
+  errorMessages.push(regularNumberValidation(densityPickerInput, "Invalid density."));
   checkForErrorMessages();
 };
 
 const maxHeightUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid tank height.");
-  errorMessages.push(maxHeightValidation (maxHeight, "Invalid tank height."));
-  
+  errorMessages.push(maxHeightValidation (maxHeightInput, "Invalid tank height."));
   checkForErrorMessages();
 };
 
 const maxVolumeUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid tank volume.");
-  errorMessages.push(maxVolumeValidation(maxVolume, "Invalid tank volume."));
+  errorMessages.push(maxVolumeValidation(maxVolumeInput, "Invalid tank volume."));
   checkForErrorMessages();
 };
 
 const tankShapeUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Tank shape is required.");
-  errorMessages.push(dropdownValidation(tankShape, "Tank shape is required."));
+  errorMessages.push(dropdownValidation(tankShapeInput, "Tank shape is required."));
   checkForErrorMessages();
 };
 
-const customHeightUserInputValidation = () => {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const chvArray = customHeightValidation(customMaxHeight2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, maxHeight);
-  otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
-  customHeights = [...chvArray[1]];
-  errorMessages.push(chvArray[2]);
-  checkForErrorMessages();
-};
+// const customHeightUserInputValidation = () => {
+//   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+//   const chvArray = customHeightValidation(customHeight2, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customHeights, maxHeightInput);
+//   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
+//   customHeights = [...chvArray[1]];
+//   errorMessages.push(chvArray[2]);
+//   checkForErrorMessages();
+// };
 
-const customVolumeUserInputValidation = () => {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const cvvArray = customVolumeValidation(customMaxVolume2, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolume);
-  otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
-  customVolumes = [...cvvArray[1]];
-  errorMessages.push(cvvArray[2]);
-  checkForErrorMessages();
-};
+// const customVolumeUserInputValidation = () => {
+//   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+//   const cvvArray = customVolumeValidation(customVolume2, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolumeInput);
+//   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
+//   customVolumes = [...cvvArray[1]];
+//   errorMessages.push(cvvArray[2]);
+//   checkForErrorMessages();
+// };
 
 const customAddedHeightUserInputValidation = (element) => {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const chvArray = customHeightValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customHeights, maxHeight);
+  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+  const chvArray = customHeightValidation(element, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customHeights, maxHeightInput);
   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
   customHeights = [...chvArray[1]];
   errorMessages.push(chvArray[2]);
@@ -153,8 +500,8 @@ const customAddedHeightUserInputValidation = (element) => {
 };
 
 const customAddedVolumeUserInputValidation = (element) => {
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  const cvvArray = customVolumeValidation(element, "Invalid height-volume pair(s).", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolume);
+  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+  const cvvArray = customVolumeValidation(element, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolumeInput);
   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
   customVolumes = [...cvvArray[1]];
   errorMessages.push(cvvArray[2]);
@@ -163,7 +510,7 @@ const customAddedVolumeUserInputValidation = (element) => {
 
 const maxFillingUserInputValidation = () => {
   errorMessages = errorMessages.filter(message => message != "Invalid filling limit.");
-  errorMessages.push(maxFillingValidation(maxFilling, "Invalid filling limit."));
+  errorMessages.push(maxFillingValidation(maxFillingLimitInput, "Invalid filling limit."));
   checkForErrorMessages();
 };
 
@@ -182,73 +529,75 @@ const checkForErrorMessages = () => {
 };
 
 const isCustomTankShape = () => {
-  proceedButton.disabled = true;
-  proceedButton.style.backgroundColor = "gray";
-  shapeAdjustment.style.display = "block";
-  customMaxHeight2.disabled = false;
-  customMaxHeight2.value = "";
-  customMaxVolume2.disabled = false;
-  customMaxVolume2.value = "";
-  customHeightMax.disabled = true;
-  customVolumeMax.disabled = true;
-  customButtons2.style.display = "flex";
+  shapeAdjustment.style.display = "flex";
+  customHeight2.disabled = false;
+  customHeight2.value = "";
+  customVolume2.disabled = false;
+  customVolume2.value = "";
   addAnotherButton.style.backgroundColor = "gray";
-  addAnotherButton.style.display = "block";
-  deleteButton.style.display = "none";
+  addAnotherButton.disabled = true;
+  deleteButton.style.backgroundColor = "gray";
+  deleteButton.disabled = true;
   otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    (element) => element.id != customMaxHeight2.id
+    (element) => element.id != customHeight2.id
   );
   otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    (element) => element.id != customMaxVolume2.id
+    (element) => element.id != customVolume2.id
   );
   otherCustomMaxHeightsAndVolumes.push(
-    { id: customMaxHeight2.id, value: customMaxHeight2.value },
-    { id: customMaxVolume2.id, value: customMaxVolume2.value }
+    { id: customHeight2.id, value: customHeight2.value },
+    { id: customVolume2.id, value: customVolume2.value }
   );
 };
 
 const notCustomTankShape = () => {
   while (counter > 3) {
-    document
-      .querySelector(`#custom-tank-shape-adjustment-inner${counter - 1}`)
-      .remove();
+    document.querySelector(`#custom-height${counter - 1}-input`).style.display = "none";
+    document.querySelector(`#custom-height${counter - 1}-input`).value = "";
+    document.querySelector(`#custom-height${counter - 1}-input`).style.borderColor = "black";
+    document.querySelector(`#custom-height${counter - 1}-input`).disabled = true;
+    document.querySelector(`#custom-volume${counter - 1}-input`).style.display = "none";
+    document.querySelector(`#custom-volume${counter - 1}-input`).value = "";
+    document.querySelector(`#custom-volume${counter - 1}-input`).style.borderColor = "black";
+    document.querySelector(`#custom-volume${counter - 1}-input`).disabled = true;
     counter--;
   }
   shapeAdjustment.style.display = "none";
-  customMaxHeight.disabled = true;
-  customMaxVolume.disabled = true;
-  customMaxHeight2.disabled = true;
-  customMaxVolume2.disabled = true;
-  addAnotherButton.style.display = "none";
-  deleteButton.style.display = "none";
-  customMaxHeight2.style.borderColor = "black";
-    customMaxVolume2.style.borderColor = "black";
-      errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
+  customHeight.disabled = true;
+  customVolume.disabled = true;
+  customHeight2.disabled = true;
+  customHeight2.value = "";
+  customVolume2.disabled = true;
+  customVolume2.value = "";
+  addAnotherButton.disabled = true;
+  addAnotherButton.style.backgroundColor = "gray";
+  deleteButton.disabled = true;
+  deleteButton.style.backgroundColor = "gray";
+  customHeight2.style.borderColor = "black";
+    customVolume2.style.borderColor = "black";
+      errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
       otherCustomMaxHeightsAndVolumes.length = 0;
       customHeights.length = 0;
       customVolumes.length = 0;
 };
 
 const customTankShape = (id) => {
+  
   const trimmedId = id.trim();
-  tankShape.value = trimmedId;
-  customMaxHeight.value = 0;
-  customMaxVolume.value = 0;
-  if (maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0") {
+  tankShapeInput.value = trimmedId;
+  if (maxHeightInput.value == "" || maxHeightInput.value == undefined || maxHeightInput.value == "0") {
     notCustomTankShape();
     return;
-  } else if (maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0") {
+  } else if (maxVolumeInput.value == "" || maxVolumeInput.value == undefined || maxVolumeInput.value == "0") {
    notCustomTankShape();
    return;
   }
   if (trimmedId == "Custom") {
-    maxHeight.disabled = true;
-    maxVolume.disabled = true;
+    proceedButton.disabled = true;
+    proceedButton.style.backgroundColor = "gray";
     isCustomTankShape();
     return;
   } else {
-    maxHeight.disabled = false;
-    maxVolume.disabled = false;
     notCustomTankShape();
     return;
   }
@@ -293,28 +642,8 @@ tankShapeOptions.forEach((option) => {
   });
 });
 
-const toggleTankShapeInput = (e) => {
-  if (!isTankShapeOpen && e.target.classList[0] === "tank-shape-input") {
-    tankShapeOption.style.display = "block";
-    isTankShapeOpen = true;
-  } else {
-    tankShapeOption.style.display = "none";
-    isTankShapeOpen = false;
-  }
-};
-
-const toggleMediaInput = (e) => {
-  if (!isMediaOpen && e.target.classList[0] === "density-input") {
-    mediaOption.style.display = "block";
-    isMediaOpen = true;
-  } else {
-    mediaOption.style.display = "none";
-    isMediaOpen = false;
-  }
-};
-
 const toggleUnitsInput = (e) => {
-  if (!isUnitsOpen && e.target.classList[0] === "units-input") {
+  if (!isUnitsOpen && e.target.id === "units-input") {
     unitsOption.style.display = "block";
     isUnitsOpen = true;
   } else {
@@ -323,30 +652,342 @@ const toggleUnitsInput = (e) => {
   }
 };
 
+const toggleMediaInput = (e) => {
+  if (!isMediaOpen && e.target.id === "media-input") {
+    mediaOption.style.display = "block";
+    isMediaOpen = true;
+  } else {
+    mediaOption.style.display = "none";
+    isMediaOpen = false;
+  }
+};
+
+const toggleTankShapeInput = (e) => {
+  if (!isTankShapeOpen && e.target.id === "tank-shape-input" && e.target.disabled == false) {
+    tankShapeOption.style.display = "block";
+    isTankShapeOpen = true;
+  } else {
+    tankShapeOption.style.display = "none";
+    isTankShapeOpen = false;
+  }
+};
+
+customHeightInputFields.forEach(heightInput => {
+  const id = heightInput.id;
+  const volumeId = id.replace("height", "volume");
+   if (heightInput.id === "custom-height1-input" || heightInput.id === "custom-max-height-input") {
+    return;
+   } else {
+    const volumeInput = document.querySelector(`#${volumeId}`);
+
+    // Dodaj potrebno logiko (validacije)
+
+    // 1. Height
+    heightInput.addEventListener("input", (event) => {
+      heightInputCount = 0;
+      if (heightInput.value.length > 2) {
+        if (heightInput.value.includes(".") == false) {
+          heightInputCount = 0;
+        } else {
+          heightInputCount = 1;
+        }
+      }
+      let length = heightInput.value.length;
+      if (event.data === "-" || event.data === " ") {
+        heightInput.value = heightInput.value.replace(event.data, "");
+      } else if (event.data === ",") {
+        if (heightInput.value[0] === ",") {
+          heightInput.value = heightInput.value.replace(heightInput.value[0], "0.");
+          heightInputCount++;
+          if (heightInputCount > 1) {
+            heightInput.value = heightInput.value.slice(0, length - 1);
+            heightInputCount--;
+          }
+          return;
+        } else {
+          heightInput.value = heightInput.value.replace(event.data, ".");
+          heightInputCount++;
+          if (heightInputCount > 1) {
+            heightInput.value = heightInput.value.slice(0, length - 1);
+            heightInputCount--;
+            return;
+          } else {
+            for (let char of heightInput.value) {
+              if (char === ".") {
+                if (heightInputCount > 1) {
+                  heightInput.value = heightInput.value.slice(0, length - 1);
+                  heightInputCount--;
+                }
+              }
+            }
+          }
+          return;
+        }
+    } else if (event.data === ".") {
+        if (heightInput.value[0] === ".") {
+          heightInput.value = `0${heightInput.value}`;
+          heightInputCount++;
+          if (heightInputCount > 1) {
+            heightInput.value = heightInput.value.slice(0, length - 1);
+            heightInputCount--;
+          }
+          return;
+        } else {
+          heightInputCount++;
+          if (heightInputCount > 1) {
+            heightInput.value = heightInput.value.slice(0, length - 1);
+            heightInputCount--;
+          } else {
+            for (let char of heightInput.value) {
+              if (char == ".") {
+                if (heightInputCount > 1) {
+                  heightInput.value = heightInput.value.slice(0, length - 1);
+                  heightInputCount--;
+                }
+              }
+            }
+          }
+          return;
+        } 
+      } else if (event.data == null) {
+        if (heightInput.value.includes(".") === false && heightInput.value.includes(",") === false) {
+          heightInputCount = 0;
+          customAddedHeightUserInputValidation(heightInput);
+        }
+      } else if (isNaN(event.data)) {
+        heightInput.value = heightInput.value.replace(event.data, "");
+      } 
+      });
+
+      // 1.Volume
+      volumeInput.addEventListener("input", (event) => {
+      if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+        volumeInput.value = volumeInput.value.replace(event.data, "");
+      } else if (event.data == null) {
+        customAddedVolumeUserInputValidation(volumeInput);
+      } else if (isNaN(event.data)) {
+        volumeInput.value = volumeInput.value.replace(event.data, "");
+      } else if (event.data == "0") {
+        if (volumeInput.value.length === 1) {
+          volumeInput.value = volumeInput.value.replace(event.data, "");
+        } else if (volumeInput.value[0] == event.data) {
+          volumeInput.value = volumeInput.value.replace(event.data, "");
+        }
+      }
+      });
+
+      // 2. Volume
+      volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
+
+
+      // 2. Height
+      heightInput.addEventListener("input", (event) => {
+        const stringNum = String(event.target.value);
+    if (stringNum.includes(".")) {
+      let numberOfDecimals = stringNum.split(".")[1].length;
+      if (stringNum[0] === ".") {
+        heightInput.value = `0${heightInput.value}`;
+      }
+      if (stringNum[0] == "0" && stringNum[1] != ".") {
+        heightInput.value = heightInput.value.replace("0", "");
+      }
+      if (numberOfDecimals > 2) {
+        heightInput.value = heightInput.value.slice(0, heightInput.value.length - 1);
+      }
+    }
+    customAddedHeightUserInputValidation(heightInput);
+    });
+
+    // 3. Height
+    heightInput.addEventListener("input", () => {
+      if (heightInput.style.borderColor == "red") {
+        errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+        errorMessages.push("Invalid height-volume pair");
+      checkForErrorMessages();
+      } else {
+        customAddedHeightUserInputValidation(heightInput);
+      }
+    });
+    
+    // 4. Height
+    heightInput.addEventListener("input", () => {
+      if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+        errorMessages = errorMessages.filter(
+          (message) => message != "Invalid height-volume pair"
+        );
+        errorMessages.push("Invalid height-volume pair");
+      checkForErrorMessages();
+      addAnotherButton.disabled = true;
+        addAnotherButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      }
+    });
+    
+    // 5. Height
+    heightInput.addEventListener("input", () => {
+      if (volumeInput.value == undefined || volumeInput.value == "") {
+        proceedButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+      }
+    });
+    
+    // 6. Height
+    heightInput.addEventListener("input", () => {
+      customAddedHeightUserInputValidation(heightInput);
+      if (errorMessages.includes("Invalid height-volume pair")) {
+        addAnotherButton.disabled = true;
+        addAnotherButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      } else {
+        addAnotherButton.disabled = enableButton(heightInput, volumeInput);
+      if (!addAnotherButton.disabled) {
+        addAnotherButton.style.backgroundColor = "#0162a6";
+      } else {
+        addAnotherButton.style.backgroundColor = "gray";
+        if (counter > 15) {
+        proceedButton.disabled = false;
+        proceedButton.style.backgroundColor = "#0162a6";
+        return;
+        }
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      }
+      }
+    });
+    
+    // 7. Height
+    heightInput.addEventListener("input", () => {
+      if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+        errorMessages = errorMessages.filter(
+          (message) => message != "Invalid height-volume pair"
+        );
+        errorMessages.push("Invalid height-volume pair");
+      checkForErrorMessages();
+      addAnotherButton.disabled = true;
+        addAnotherButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      }
+    });
+
+    // 8. Height
+    heightInput.addEventListener("blur", () => {
+      if (heightInput.style.borderColor === "red") {
+        window.scroll(0, 0);
+      }
+    });
+
+    // 9. Height
+    heightInput.addEventListener("focus", () => {
+      if (volumeInput.style.borderColor === "red") {
+        heightInput.blur();
+        window.scroll(0, 0);
+      }
+    });
+
+    // 3. Volume
+    volumeInput.addEventListener("input", () => {
+      if (heightInput.value == undefined || heightInput.value == "") {
+        proceedButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+      }
+    });
+    
+    // 4. Volume
+    volumeInput.addEventListener("input", () => {
+      customAddedVolumeUserInputValidation(volumeInput);
+      if (errorMessages.includes("Invalid height-volume pair")) {
+        addAnotherButton.disabled = true;
+        addAnotherButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      } else {
+        addAnotherButton.disabled = enableButton(heightInput, volumeInput);
+      if (!addAnotherButton.disabled) {
+        addAnotherButton.style.backgroundColor = "#0162a6";
+      } else {
+        addAnotherButton.style.backgroundColor = "gray";
+        if (counter > 15) {
+          proceedButton.disabled = false;
+          proceedButton.style.backgroundColor = "#0162a6";
+          return;
+          }
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      }
+      }
+    });
+    
+    // 5. Volume
+    volumeInput.addEventListener("input", () => {
+      if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
+        errorMessages = errorMessages.filter(
+          (message) => message != "Invalid height-volume pair"
+        );
+        errorMessages.push("Invalid height-volume pair");
+        checkForErrorMessages();
+        addAnotherButton.disabled = true;
+        addAnotherButton.style.backgroundColor = "gray";
+        proceedButton.disabled = true;
+        proceedButton.style.backgroundColor = "gray";
+      }
+      });
+
+      // 6. Volume
+      volumeInput.addEventListener("blur", () => {
+        // customAddedVolumeUserInputValidation(volumeInput);
+        if (volumeInput.style.borderColor === "red") {
+          window.scroll(0, 0);
+        }
+      });
+
+      // 7. Volume
+      volumeInput.addEventListener("focus", () => {
+        if (heightInput.style.borderColor === "red") {
+          volumeInput.blur();
+          window.scroll(0, 0);
+        }
+      });
+    
+      otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+        (element) => element.id != heightInput.id
+      );
+      otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
+        (element) => element.id != volumeInput.id
+      );
+      otherCustomMaxHeightsAndVolumes.push(
+        { id: heightInput.id, value: heightInput.value },
+        { id: volumeInput.id, value: volumeInput.value }
+      );
+   }
+});
+
 const saveIntoCustomMaxHeight = (e) => {
   e.preventDefault();
   if (e.target.value.endsWith(".")) {
-    customHeightMax.value = e.target.value.slice(0, - 1);
+    customMaxHeightInput.value = e.target.value.slice(0, - 1);
   } else {
-    customHeightMax.value = e.target.value;
+    customMaxHeightInput.value = e.target.value;
     const stringNum = String(e.target.value);
 if (stringNum.includes(".")) {
 let numberOfDecimals = stringNum.split(".")[1].length;
 if (numberOfDecimals > 2) {
-  customHeightMax.value = customHeightMax.value.slice(0, customHeightMax.value.length - 1);
-}
-}
+  customMaxHeightInput.value = customMaxHeightInput.value.slice(0, customMaxHeightInput.value.length - 1);
+      }
+    }
   } 
 };
 
 const saveIntoCustomMaxVolume = (e) => {
   e.preventDefault();
-  customVolumeMax.value = e.target.value;
+  customMaxVolumeInput.value = e.target.value;
 };
 
 const addReadonly = () => {
-  tankShape.setAttribute("readonly", "true");
-  densityInput.setAttribute("readonly", "true");
+  tankShapeInput.setAttribute("readonly", "true");
+  mediaInput.setAttribute("readonly", "true");
   unitsInput.setAttribute("readonly", "true");
 };
 
@@ -362,379 +1003,113 @@ const customDensity = (id) => {
     customAdjustment.style.flexFlow = "row wrap";
     customAdjustment.style.justifyContent = "center";
     customAdjustment.style.alignItems = "center";
+    mediumNameInput.style.display = "block";
+    densityPickerInput.style.display = "block";
     mediumNameInput.disabled = false;
-    densityPicker.disabled = false;
+    densityPickerInput.disabled = false;
     mediumNameInput.value = "";
-    densityPicker.value = "";
+    densityPickerInput.value = "";
   } else {
     mediumNameInput.value = "";
-    densityPicker.value = "";
+    densityPickerInput.value = "";
     customAdjustment.style.display = "none";
     mediumNameInput.disabled = true;
-    densityPicker.disabled = true;
+    densityPickerInput.disabled = true;
     mediumNameInput.style.borderColor = "black";
-    densityPicker.style.borderColor = "black";
+    densityPickerInput.style.borderColor = "black";
     errorMessages = errorMessages.filter(message => message != "Medium name is required.");
     errorMessages = errorMessages.filter(message => message != "Invalid density.");
   }
-  densityInput.value = id.trim();
+  mediaInput.value = id.trim();
 };
 
-const addAnotherCustomTankShape = () => {
-  proceedButton.style.display = "gray";
-  proceedButton.disabled = true;
 
 
-  heightInputCount = 0;
+const addAnotherCustomTankShapeHeightVolumePair = () => {
 
-  document.querySelector("#custom-buttons" + (counter - 1)).style.display = "none";
-  // document.querySelector("#add-another" + (counter - 1)).style.display = "none";
-  // document.querySelector("#delete" + (counter - 1)).style.display = "none";
-  document.querySelector("#custom-max-height" + (counter - 1)).disabled = true;
-  document.querySelector("#custom-max-volume" + (counter - 1)).disabled = true;
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
 
-  const innerDiv = document.createElement("div");
-  const heightInput = document.createElement("input");
-  const volumeInput = document.createElement("input");
-  const buttonsDiv = document.createElement("div");
-  const addButton = document.createElement("input");
-  const deleteButton = document.createElement("input");
-
-  innerDiv.className = "custom-tank-shape-adjustment-inner";
-  innerDiv.id = "custom-tank-shape-adjustment-inner" + counter;
-
-  heightInput.type = "text";
-  heightInput.inputMode = "decimal";
-  heightInput.id = `custom-max-height${counter}`;
-  heightInput.className = "custom-fields";
-  heightInput.name = `custom-max-height${counter}`;
-  heightInput.placeholder = "Insert value...";
-  heightInput.step = "0.01";
-  heightInput.value = "";
-  volumeInput.type = "text";
-  volumeInput.inputMode = "decimal";
-  volumeInput.id = `custom-max-volume${counter}`;
-  volumeInput.className = "custom-fields";
-  volumeInput.name = `custom-max-volume${counter}`;
-  volumeInput.placeholder = "Insert value...";
-  volumeInput.value = "";
-  volumeInput.step = "1";
-  heightInput.addEventListener("input", (event) => {
-    heightInputCount = 0;
-    if (heightInput.value.length > 2) {
-      if (heightInput.value.includes(".") == false) {
-        heightInputCount = 0;
-      } else {
-        heightInputCount = 1;
-      }
-    }
-    let length = heightInput.value.length;
-    if (event.data === "-" || event.data === " ") {
-      heightInput.value = heightInput.value.replace(event.data, "");
-    } else if (event.data === ",") {
-      if (heightInput.value[0] === ",") {
-        heightInput.value = heightInput.value.replace(heightInput.value[0], "0.");
-        heightInputCount++;
-        if (heightInputCount > 1) {
-          heightInput.value = heightInput.value.slice(0, length - 1);
-          heightInputCount--;
-        }
-        return;
-      } else {
-        heightInput.value = heightInput.value.replace(event.data, ".");
-        heightInputCount++;
-        if (heightInputCount > 1) {
-          heightInput.value = heightInput.value.slice(0, length - 1);
-          heightInputCount--;
-          return;
-        } else {
-          for (let char of heightInput.value) {
-            if (char === ".") {
-              if (heightInputCount > 1) {
-                heightInput.value = heightInput.value.slice(0, length - 1);
-                heightInputCount--;
-              }
-            }
-          }
-        }
-        return;
-      }
-  } else if (event.data === ".") {
-      if (heightInput.value[0] === ".") {
-        heightInput.value = `0${heightInput.value}`;
-        heightInputCount++;
-        if (heightInputCount > 1) {
-          heightInput.value = heightInput.value.slice(0, length - 1);
-          heightInputCount--;
-        }
-        return;
-      } else {
-        heightInputCount++;
-        if (heightInputCount > 1) {
-          heightInput.value = heightInput.value.slice(0, length - 1);
-          heightInputCount--;
-        } else {
-          for (let char of heightInput.value) {
-            if (char == ".") {
-              if (heightInputCount > 1) {
-                heightInput.value = heightInput.value.slice(0, length - 1);
-                heightInputCount--;
-              }
-            }
-          }
-        }
-        return;
-      } 
-    } else if (event.data == null) {
-      if (heightInput.value.includes(".") === false && heightInput.value.includes(",") === false) {
-        heightInputCount = 0;
-        customAddedHeightUserInputValidation(heightInput);
-      }
-    } else if (isNaN(event.data)) {
-      heightInput.value = heightInput.value.replace(event.data, "");
-    } 
-    });
-    volumeInput.addEventListener("input", (event) => {
-      if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-        volumeInput.value = volumeInput.value.replace(event.data, "");
-      } else if (event.data == null) {
-        customAddedVolumeUserInputValidation(volumeInput);
-      } else if (isNaN(event.data)) {
-        volumeInput.value = volumeInput.value.replace(event.data, "");
-      } else if (event.data == "0") {
-        if (volumeInput.value.length === 1) {
-          volumeInput.value = volumeInput.value.replace(event.data, "");
-        } else if (volumeInput.value[0] == event.data) {
-          volumeInput.value = volumeInput.value.replace(event.data, "");
-        }
-      }
-    });
-  volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
-  heightInput.addEventListener("input", (event) => {
-      const stringNum = String(event.target.value);
-  if (stringNum.includes(".")) {
-    let numberOfDecimals = stringNum.split(".")[1].length;
-    if (stringNum[0] === ".") {
-      heightInput.value = `0${heightInput.value}`;
-    }
-    if (stringNum[0] == "0" && stringNum[1] != ".") {
-      heightInput.value = heightInput.value.replace("0", "");
-    }
-    if (numberOfDecimals > 2) {
-      heightInput.value = heightInput.value.slice(0, heightInput.value.length - 1);
-    }
-  }
-  customAddedHeightUserInputValidation(heightInput);
-  });
-
-heightInput.addEventListener("input", () => {
-  if (heightInput.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
-  } else {
-    customAddedHeightUserInputValidation(heightInput);
-  }
-});
-
-heightInput.addEventListener("input", () => {
-  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
-    );
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
-  addAnotherButton.disabled = true;
+    addAnotherButton.disabled = true;
     addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-});
 
-heightInput.addEventListener("input", () => {
-  if (volumeInput.value == undefined || volumeInput.value == "") {
-    proceedButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-  }
-});
+    deleteButton.disabled = false;
+    deleteButton.style.backgroundColor = "#0162a6";
 
-heightInput.addEventListener("input", () => {
-  customAddedHeightUserInputValidation(heightInput);
-  if (errorMessages.includes("Invalid height-volume pair(s).")) {
-    addButton.disabled = true;
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  } else {
-    addButton.disabled = enableButton(heightInput, volumeInput);
-  if (!addButton.disabled) {
-    addButton.style.backgroundColor = "#0162a6";
-  } else {
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-  }
-});
+    const prevHeightInput = document.querySelector(`#custom-height${counter - 1}-input`);
+    const prevVolumeInput = document.querySelector(`#custom-volume${counter - 1}-input`);
 
-heightInput.addEventListener("input", () => {
-  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
-    );
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
-  addButton.disabled = true;
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-});
+    const heightInput = document.querySelector(`#custom-height${counter}-input`);
+    const volumeInput = document.querySelector(`#custom-volume${counter}-input`);
 
-  volumeInput.addEventListener("input", () => {
-  if (heightInput.value == undefined || heightInput.value == "") {
-    proceedButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-  }
-});
+    currentCustomHeightInput = heightInput;
+    currentCustomVolumeInput = volumeInput;
 
-volumeInput.addEventListener("input", () => {
-  customAddedVolumeUserInputValidation(volumeInput);
-  if (errorMessages.includes("Invalid height-volume pair(s).")) {
-    addButton.disabled = true;
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  } else {
-    addButton.disabled = enableButton(heightInput, volumeInput);
-  if (!addButton.disabled) {
-    addButton.style.backgroundColor = "#0162a6";
-  } else {
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-  }
-});
-  
-volumeInput.addEventListener("input", () => {
-  if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
-    );
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
-  addButton.disabled = true;
-    addButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-  });
-  
-  otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    (element) => element.id != heightInput.id
-  );
-  otherCustomMaxHeightsAndVolumes = otherCustomMaxHeightsAndVolumes.filter(
-    (element) => element.id != volumeInput.id
-  );
-  otherCustomMaxHeightsAndVolumes.push(
-    { id: heightInput.id, value: heightInput.value },
-    { id: volumeInput.id, value: volumeInput.value }
-  );
+    // Onemogoči prejšnji par polj 
+    prevHeightInput.disabled = true;
+    prevVolumeInput.disabled = true;
 
-  buttonsDiv.className = "custom-buttons";
-  buttonsDiv.id = `custom-buttons${counter}`;
+    // Prikaži in omogoči naslednji par polj
+    heightInput.style.display = "block";
+    volumeInput.style.display = "block";
 
-  addButton.className = "custom-button";
-  addButton.classList.add("custom-add-button");
-  addButton.id = "add-another" + counter;
-  addButton.type = "button";
-  addButton.value = "+";
-  addButton.addEventListener("click", addAnotherCustomTankShape);
-  addButton.style.backgroundColor = "gray";
-  addButton.disabled = true;
-  proceedButton.disabled = true;
-  proceedButton.style.backgroundColor = "gray";
+    heightInput.disabled = false;
+    volumeInput.disabled = false;
 
-  deleteButton.className = "custom-button";
-  deleteButton.id = "delete" + counter;
-  deleteButton.type = "button";
-  deleteButton.value = "-";
-  deleteButton.addEventListener("click", () => deleteCustomTankShape(innerDiv.id));
-
-  innerDiv.appendChild(heightInput);
-  innerDiv.appendChild(volumeInput);
-  buttonsDiv.appendChild(addButton);
-  buttonsDiv.appendChild(deleteButton);
-  innerDiv.appendChild(buttonsDiv);
-
-  document
-    .querySelector(".custom-tank-shape-adjustment")
-    .insertBefore(innerDiv, shapeAdjustmentInnerMax);
-  counter++;
-  if (counter > 16) {
-    document.querySelector("#add-another" + (counter - 1)).style.display =
-      "none";
-    return;
-  }
+    counter++;
 };
 
-addAnotherButton.addEventListener("click", addAnotherCustomTankShape);
+// addAnotherButton.addEventListener("click", addAnotherCustomTankShape);
 
-const deleteCustomTankShape = (id) => {
+const deleteCustomTankShapeHeightVolumePair = (heightInput, volumeInput) => {
+  console.log(errorMessages);
+  customHeights = customHeights.filter(height => height[0] != `custom-height${counter - 1}-input`);
+  customVolumes = customVolumes.filter(volume => volume[0] != `custom-volume${counter - 1}-input`);
+  const prevHeightInput = document.querySelector(`#custom-height${counter - 2}-input`);
+  const prevVolumeInput = document.querySelector(`#custom-volume${counter - 2}-input`);
+  addAnotherButton.disabled = false;
+  addAnotherButton.style.backgroundColor = "#0162a6";
+  console.log(customHeights);
+  console.log(customVolumes);
+
+  if(heightInput.style.borderColor === "red") {
+    heightInput.style.borderColor = "black";
+    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+    customAddedHeightUserInputValidation(prevHeightInput);
+  } else if(volumeInput.style.borderColor === "red") {
+    volumeInput.style.borderColor = "black";
+    errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
+    customAddedVolumeUserInputValidation(prevVolumeInput);
+  }
+
+  heightInput.value = "";
+  heightInput.style.display = "none";
+  heightInput.disabled = true;
+  // Ponovno omogoči prejšnje polje z višino
+  prevHeightInput.disabled = false;
+
+  volumeInput.value = "";
+  volumeInput.style.display = "none";
+  volumeInput.disabled = true;
+  // Ponovno omogoči prejšnje polje z prostornino
+  prevVolumeInput.disabled = false;
+
+  currentCustomHeightInput = prevHeightInput;
+  currentCustomVolumeInput = prevVolumeInput;
+
   counter--;
-  document.querySelector("#custom-buttons" + (counter - 1)).style.display = "flex";
-  // document.querySelector("#add-another" + (counter - 1)).style.display = "block";
-  // document.querySelector("#delete" + (counter - 1)).style.display = "block";
-  document.querySelector("#custom-max-height" + (counter - 1)).disabled = false;
-  document.querySelector("#custom-max-volume" + (counter - 1)).disabled = false;
-  if (id === "custom-tank-shape-adjustment-inner3") {
-    addAnotherButton.disabled = false;
-    addAnotherButton.style.backgroundColor = "#0162a6";
-    deleteButton.style.display = "none";
+  if (counter === 3) {
+    deleteButton.disabled = true;
+    deleteButton.style.backgroundColor = "gray";
   }
-  customHeights = customHeights.filter(height => height[0] != document.querySelector("#" + id).children[0].id);
-  customVolumes = customVolumes.filter(volume => volume[0] != document.querySelector("#" + id).children[1].id);  
-  document
-    .querySelector(".custom-tank-shape-adjustment")
-    .removeChild(document.querySelector("#" + id));
-    if (otherCustomMaxHeightsAndVolumes.length % 2 != 0) {
-      otherCustomMaxHeightsAndVolumes.length = 0;
-    }
-    else if (otherCustomMaxHeightsAndVolumes.length >= 2) {
-      otherCustomMaxHeightsAndVolumes = [...otherCustomMaxHeightsAndVolumes.slice(0, otherCustomMaxHeightsAndVolumes.length - 1)];
-      otherCustomMaxHeightsAndVolumes = [...otherCustomMaxHeightsAndVolumes.slice(0, otherCustomMaxHeightsAndVolumes.length - 1)];
-    } else if (otherCustomMaxHeightsAndVolumes.length < 2) {
-      otherCustomMaxHeightsAndVolumes.length = 0;
-    }
-    
-  errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair(s).");
-  if ((maxHeight.value.includes(".") == false) || (maxHeight.value.split(".")[1].length <= 2)) {
-    let decimalError = false;
-    if (customHeights.length > 0) {
-      customHeights.forEach(height => {
-        if (height[1].includes(".")) {
-          if (height[1].split(".")[1].length > 2) {
-            decimalError = true;
-          }
-        }
-      }); 
-    }
-     
-    if (decimalError == false) {
-      errorMessages = errorMessages.filter(message => message != "There can be only two decimals.");
-    }
-  }
-
-  checkForErrorMessages();
+  proceedButton.disabled = false;
+  proceedButton.style.backgroundColor = "#0162a6";
 };
-
-deleteButton.addEventListener("click", () => deleteCustomTankShape('custom-tank-shape-adjustment-inner'));
 
 const submitSettingsForm = (e) => {
   e.preventDefault();
-  if (maxHeight.value.endsWith(".")) {
-    maxHeight.value = maxHeight.value.slice(0, - 1);
+  if (maxHeightInput.value.endsWith(".")) {
+    maxHeightInput.value = maxHeightInput.value.slice(0, - 1);
   }
   customHeights.forEach(element => {
     if (element[1].endsWith(".")) {
@@ -751,21 +1126,24 @@ const submitSettingsForm = (e) => {
   }
 
   errorMessages.push(dropdownValidation(unitsInput, "Measuring unit is required."));
-  errorMessages.push(dropdownValidation(densityInput, "Medium type is required."));
+  errorMessages.push(dropdownValidation(mediaInput, "Medium type is required."));
   errorMessages.push(regularTextValidation(mediumNameInput, "Medium name is required."));
-  errorMessages.push(regularNumberValidation(densityPicker, "Invalid density."));
-  errorMessages.push(maxHeightValidation (maxHeight, "Invalid tank height."));
-  errorMessages.push(maxVolumeValidation (maxVolume, "Invalid tank volume."));
-  errorMessages.push(dropdownValidation(tankShape, "Tank shape is required."));
-
+  errorMessages.push(regularNumberValidation(densityPickerInput, "Invalid density."));
+  errorMessages.push(maxHeightValidation (maxHeightInput, "Invalid tank height."));
+  errorMessages.push(maxVolumeValidation (maxVolumeInput, "Invalid tank volume."));
+  errorMessages.push(dropdownValidation(tankShapeInput, "Tank shape is required."));
 
   if (otherCustomMaxHeightsAndVolumes.length > 0) {
     errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
+      (message) => message != "Invalid height-volume pair"
     );
     customTankShapeError = false;
     otherCustomMaxHeightsAndVolumes.forEach((element) => {
       const inputField = document.querySelector(`#${element.id}`);
+      if (inputField.disabled === true) {
+        inputField.style.borderColor = "black";
+        return;
+      }
       if (element.id.includes("height")) {
         if (element.value == "" || element.value == undefined || element.value > 4.7 || element.value < 0) {
           customTankShapeError = true;
@@ -793,14 +1171,14 @@ const submitSettingsForm = (e) => {
       }
     });
     if (customTankShapeError) {
-      errorMessages.push("Invalid height-volume pair(s).");
+      errorMessages.push("Invalid height-volume pair");
       error.style.display = "block";
       error.style.color = "red";
       error.style.fontWeight = "900";
     }
   }
 
-  errorMessages.push(maxFillingValidation(maxFilling, "Invalid filling limit."));
+  errorMessages.push(maxFillingValidation(maxFillingLimitInput, "Invalid filling limit."));
   errorMessages = errorMessages.filter(message => message != "");
 
 
@@ -830,16 +1208,16 @@ const submitSettingsForm = (e) => {
     modal,
     settingsListDiv,
     unitsInput, 
-    densityInput, 
+    mediaInput, 
     mediumNameInput, 
-    densityPicker, 
-    maxHeight, 
-    maxVolume, 
-    tankShape, 
+    densityPickerInput, 
+    maxHeightInput, 
+    maxVolumeInput, 
+    tankShapeInput, 
     customHeights, 
     customVolumes, 
     heightsAndVolumes, 
-    maxFilling);
+    maxFillingLimitInput);
 };
 
 window.addEventListener("click", toggleUnitsInput);
@@ -847,7 +1225,7 @@ window.addEventListener("click", toggleMediaInput);
 window.addEventListener("click", toggleTankShapeInput);
 mediumNameInput.addEventListener("input", mediumNameUserInputValidation);
 mediumNameInput.addEventListener("input", () => {
-  if(densityPicker.value == undefined || densityPicker.value == "") {
+  if(densityPickerInput.value == undefined || densityPickerInput.value == "") {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
@@ -860,49 +1238,49 @@ mediumNameInput.addEventListener("input", () => {
   }
 });
 
-densityPicker.addEventListener("input", (event) => {
+densityPickerInput.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-    densityPicker.value = densityPicker.value.replace(event.data, "");
+    densityPickerInput.value = densityPickerInput.value.replace(event.data, "");
   } else if (isNaN(event.data)) {
-    densityPicker.value = densityPicker.value.replace(event.data, "");
+    densityPickerInput.value = densityPickerInput.value.replace(event.data, "");
   }
 });
- densityPicker.addEventListener("input", mediumDensityUserInputValidation);
- densityPicker.addEventListener("input", () => {
+ densityPickerInput.addEventListener("input", mediumDensityUserInputValidation);
+ densityPickerInput.addEventListener("input", () => {
   if(mediumNameInput.value == undefined || mediumNameInput.value == "") {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
 });
 
-densityPicker.addEventListener("input", () => {
+densityPickerInput.addEventListener("input", () => {
   if (customHeights.length != customVolumes.length) {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
 });
 
-maxHeight.addEventListener("input", (event) => {
-  let length = maxHeight.value.length;
+maxHeightInput.addEventListener("input", (event) => {
+  let length = maxHeightInput.value.length;
   if (event.data === "-" || event.data === " ") {
-    maxHeight.value = maxHeight.value.replace(event.data, "");
+    maxHeightInput.value = maxHeightInput.value.replace(event.data, "");
   } else if(event.data === ",") {
-    if (maxHeight.value[0] === ",") {
-      maxHeight.value = maxHeight.value.replace(maxHeight.value[0], "0.");
+    if (maxHeightInput.value[0] === ",") {
+      maxHeightInput.value = maxHeightInput.value.replace(maxHeightInput.value[0], "0.");
       maxHeightCount++;
       return;
     } else {
-      maxHeight.value = maxHeight.value.replace(event.data, ".");
+      maxHeightInput.value = maxHeightInput.value.replace(event.data, ".");
       maxHeightCount++;
       if (maxHeightCount > 1) {
-        maxHeight.value = maxHeight.value.slice(0, length - 1);
+        maxHeightInput.value = maxHeightInput.value.slice(0, length - 1);
         maxHeightCount--;
         return;
       } else {
-        for (let char of maxHeight.value) {
+        for (let char of maxHeightInput.value) {
           if (char === ".") {
             if (maxHeightCount > 1) {
-              maxHeight.value = maxHeight.value.slice(0, length - 1);
+              maxHeightInput.value = maxHeightInput.value.slice(0, length - 1);
               maxHeightCount--;
             }
           }
@@ -911,24 +1289,24 @@ maxHeight.addEventListener("input", (event) => {
       return;
     }
 } else if (event.data === ".") {
-    if (maxHeight.value[0] === ".") {
-      maxHeight.value = `0${maxHeight.value}`;
+    if (maxHeightInput.value[0] === ".") {
+      maxHeightInput.value = `0${maxHeightInput.value}`;
       maxHeightCount++;
       if (maxHeightCount > 1) {
-        maxHeight.value = maxHeight.value.slice(0, length - 1);
+        maxHeightInput.value = maxHeightInput.value.slice(0, length - 1);
         maxHeightCount--;
       }
       return;
     } else {
       maxHeightCount++;
       if (maxHeightCount > 1) {
-        maxHeight.value = maxHeight.value.slice(0, length - 1);
+        maxHeightInput.value = maxHeightInput.value.slice(0, length - 1);
         maxHeightCount--;
       } else {
-        for (let char of maxHeight.value) {
+        for (let char of maxHeightInput.value) {
           if (char == ".") {
             if (maxHeightCount > 1) {
-              maxHeight.value = maxHeight.value.slice(0, length - 1);
+              maxHeightInput.value = maxHeightInput.value.slice(0, length - 1);
               maxHeightCount--;
             }
           }
@@ -937,360 +1315,154 @@ maxHeight.addEventListener("input", (event) => {
       return;
     } 
   } else if (event.data == null) {
-    if (maxHeight.value.includes(".") == false && maxHeight.value.includes(",") == false) {
+    if (maxHeightInput.value.includes(".") == false && maxHeightInput.value.includes(",") == false) {
       maxHeightCount = 0;
       maxHeightUserInputValidation();
     }
   } else if (isNaN(event.data)) {
-    maxHeight.value = maxHeight.value.replace(event.data, "");
+    maxHeightInput.value = maxHeightInput.value.replace(event.data, "");
   } 
 });
-maxHeight.addEventListener("input", saveIntoCustomMaxHeight);
-// maxHeight.addEventListener("input", maxTwoDecimalsValidation);
-maxHeight.addEventListener("input", (event) => {
+maxHeightInput.addEventListener("input", saveIntoCustomMaxHeight);
+maxHeightInput.addEventListener("input", (event) => {
   const stringNum = String(event.target.value);
 if (stringNum.includes(".")) {
 let numberOfDecimals = stringNum.split(".")[1].length;
 if (stringNum[0] === ".") {
-  maxHeight.value = `0${maxHeight.value}`;
+  maxHeightInput.value = `0${maxHeightInput.value}`;
 }
  if (stringNum[0] == "0") {
   if (stringNum[1] != ".") {
-    maxHeight.value = maxHeight.value.replace("0", "");
+    maxHeightInput.value = maxHeightInput.value.replace("0", "");
   }
 }
 
 if (numberOfDecimals > 2) {
-  maxHeight.value = maxHeight.value.slice(0, maxHeight.value.length - 1);
+  maxHeightInput.value = maxHeightInput.value.slice(0, maxHeightInput.value.length - 1);
 }
 }
 });
-maxHeight.addEventListener("input", maxHeightUserInputValidation);
-maxHeight.addEventListener("input", () => {
+maxHeightInput.addEventListener("input", maxHeightUserInputValidation);
+maxHeightInput.addEventListener("input", () => {
   if(error.textContent.includes("Invalid tank height.") || error.textContent.includes("There can be only two decimals.")) {
-    maxHeight.style.borderColor = "red";
-    customHeightMax.value = "";
+    maxHeightInput.style.borderColor = "red";
+    customMaxHeightInput.value = "";
+    tankShapeInput.disabled = true;
   }
 });
 
-maxHeight.addEventListener("input", () => {
+maxHeightInput.addEventListener("input", () => {
   if (customHeights.length != customVolumes.length) {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
 });
 
-maxHeight.addEventListener("input", () => {
-  if ((maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0" || maxHeight.style.borderColor == "red") || (maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0") || (tankShape.value == "" || tankShape.value == undefined)) {
+maxHeightInput.addEventListener("input", () => {
+  if ((maxHeightInput.value == "" || maxHeightInput.value == undefined || maxHeightInput.value == "0" || maxHeightInput.style.borderColor == "red") || (maxVolumeInput.value == "" || maxVolumeInput.value == undefined || maxVolumeInput.value == "0") || (tankShapeInput.value == "" || tankShapeInput.value == undefined)) {
     notCustomTankShape();
+    tankShapeInput.value = "";
+    tankShapeInput.disabled = true;
     return;
-  } else if(shapeAdjustment.style.display == "none") {
-    customTankShape(tankShape.value);
+  } 
+  else {
+    tankShapeInput.disabled = false;
+    customTankShape(tankShapeInput.value);
     return;
   }
 });
 
-maxVolume.addEventListener("input", (event) => {
-  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-    maxVolume.value = maxVolume.value.replace(event.data, "");
-  } else if (isNaN(event.data)) {
-    maxVolume.value = maxVolume.value.replace(event.data, "");
-  } else if (event.data == "0") {
-    if (maxVolume.value.length === 1) {
-      maxVolume.value = maxVolume.value.replace(event.data, "");
-    } else if (maxVolume.value[0] == event.data) {
-      maxVolume.value = maxVolume.value.replace(event.data, "");
+maxHeightInput.addEventListener("input", () => {
+  const maxHeightNumber = parseFloat(maxHeightInput.value);
+  const maxVolumeNumber = parseInt(maxVolumeInput.value);
+  if((maxHeightNumber > 0) && maxHeightNumber <= 4.7) {
+    if (maxVolumeNumber > 0) {
+      tankShapeInput.disabled = false;
+      tankShapeInput.value = "";
+      notCustomTankShape();
+    } else {
+      tankShapeInput.disabled = true;
     }
   } 
 });
-maxVolume.addEventListener("input", maxVolumeUserInputValidation);
-maxVolume.addEventListener("input", saveIntoCustomMaxVolume);
-maxVolume.addEventListener("input", () => {
+
+maxVolumeInput.addEventListener("input", (event) => {
+  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
+    maxVolumeInput.value = maxVolumeInput.value.replace(event.data, "");
+  } else if (isNaN(event.data)) {
+    maxVolumeInput.value = maxVolumeInput.value.replace(event.data, "");
+  } else if (event.data == "0") {
+    if (maxVolumeInput.value.length === 1) {
+      maxVolumeInput.value = maxVolumeInput.value.replace(event.data, "");
+    } else if (maxVolumeInput.value[0] == event.data) {
+      maxVolumeInput.value = maxVolumeInput.value.replace(event.data, "");
+    }
+  } 
+});
+maxVolumeInput.addEventListener("input", maxVolumeUserInputValidation);
+maxVolumeInput.addEventListener("input", saveIntoCustomMaxVolume);
+maxVolumeInput.addEventListener("input", () => {
   if (customHeights.length != customVolumes.length) {
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
   }
 });
-maxVolume.addEventListener("input", () => {
-  if ((maxVolume.value == "" || maxVolume.value == undefined || maxVolume.value == "0" || maxVolume.style.borderColor == "red") || (maxHeight.value == "" || maxHeight.value == undefined || maxHeight.value == "0" || maxHeight.style.borderColor == "red") || (tankShape.value == "" || tankShape.value == undefined)) {
+maxVolumeInput.addEventListener("input", () => {
+  if ((maxVolumeInput.value == "" || maxVolumeInput.value == undefined || maxVolumeInput.value == "0" || maxVolumeInput.style.borderColor == "red") || (maxHeightInput.value == "" || maxHeightInput.value == undefined || maxHeightInput.value == "0" || maxHeightInput.style.borderColor == "red") || (tankShapeInput.value == "" || tankShapeInput.value == undefined)) {
     notCustomTankShape();
+    tankShapeInput.disabled = true;
     return;
-  } else if(shapeAdjustment.style.display == "none") {
-    customTankShape(tankShape.value);
+  } 
+  else {
+    tankShapeInput.disabled = false;
+    customTankShape(tankShapeInput.value);
     return;
   }
+});
+
+maxVolumeInput.addEventListener("input", () => {
+  const maxHeightNumber = parseFloat(maxHeightInput.value);
+  const maxVolumeNumber = parseInt(maxVolumeInput.value);
+  if((maxHeightNumber > 0) && maxHeightNumber <= 4.7) {
+    if (maxVolumeNumber > 0) {
+      tankShapeInput.disabled = false;
+      tankShapeInput.value = "";
+      notCustomTankShape();
+    } else {
+      tankShapeInput.disabled = true;
+    }
+  } 
 });
 
 unitsInput.addEventListener("focus", addReadonly);
-densityInput.addEventListener("focus", addReadonly);
-tankShape.addEventListener("focus", addReadonly);
-customMaxHeight.addEventListener("input", (event) => {
- let length = customMaxHeight.value.length;
-  if (event.data === "-" || event.data === " ") {
-    customMaxHeight.value = customMaxHeight.value.replace(event.data, "");
-  } else if(event.data === ",") {
-    if (customMaxHeight.value[0] === ",") {
-      customMaxHeight.value = customMaxHeight.value.replace(customMaxHeight.value[0], "0.");
-      customMaxHeightCount++;
-      if (customMaxHeightCount > 1) {
-        
-        customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-        customMaxHeightCount--;
-      }
-      return;
-    } else {
-      customMaxHeight.value = customMaxHeight.value.replace(event.data, ".");
-      customMaxHeightCount++;
-      if (customMaxHeightCount > 1) {
-        customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-        customMaxHeightCount--;
-        return;
-      } else {
-        for (let char of customMaxHeight.value) {
-          if (char === ".") {
-            if (customMaxHeightCount > 1) {
-              customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-              customMaxHeightCount--;
-            }
-          }
-        }
-      }
-      return;
-    }
-} else if (event.data === ".") {
-    if (customMaxHeight.value[0] === ".") {
-      customMaxHeight.value = `0${customMaxHeight.value}`;
-      customMaxHeightCount++;
-      if (customMaxHeightCount > 1) {
-        customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-        customMaxHeightCount--;
-      }
-      return;
-    } else {
-      customMaxHeightCount++;
-      if (customMaxHeightCount > 1) {
-        customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-        customMaxHeightCount--;
-      } else {
-        for (let char of customMaxHeight.value) {
-          if (char == ".") {
-            if (customMaxHeightCount > 1) {
-              customMaxHeight.value = customMaxHeight.value.slice(0, length - 1);
-              customMaxHeightCount--;
-            }
-          }
-        }
-      }
-      return;
-    } 
-  } else if (event.data == null) {
-    if (customMaxHeight.value.includes(".") == false && customMaxHeight.value.includes(",") == false) {
-      customMaxHeightCount = 0;
-      customHeightUserInputValidation();
-    }
-  } else if (isNaN(event.data)) {
-    customMaxHeight.value = customMaxHeight.value.replace(event.data, "");
-  } 
-});
-customMaxVolume.addEventListener("input", (event) => {
+mediaInput.addEventListener("focus", addReadonly);
+tankShapeInput.addEventListener("focus", addReadonly);
+addAnotherButton.addEventListener("click", addAnotherCustomTankShapeHeightVolumePair);
+deleteButton.addEventListener("click", () => deleteCustomTankShapeHeightVolumePair(currentCustomHeightInput, currentCustomVolumeInput));
+maxFillingLimitInput.addEventListener("input", (event) => {
   if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-    customMaxVolume.value = customMaxVolume.value.replace(event.data, "");
-  } else if (event.data == null) {
-    if (customMaxVolume.value.includes(".") === false && customMaxVolume.value.includes(",") === false) {
-      customVolumeUserInputValidation();
-    }
+    maxFillingLimitInput.value = maxFillingLimitInput.value.replace(event.data, "");
   } else if (isNaN(event.data)) {
-    customMaxVolume.value = customMaxVolume.value.replace(event.data, "");
-  } 
-});
-customMaxHeight2.addEventListener("input", (event) => {
-  let length = customMaxHeight2.value.length;
-  if (event.data === "-" || event.data === " ") {
-    customMaxHeight2.value = customMaxHeight2.value.replace(event.data, "");
-    return;
-  } else if (event.data === ",") {
-    if (customMaxHeight2.value[0] === ",") {
-      customMaxHeight2.value = customMaxHeight2.value.replace(customMaxHeight2.value[0], "0.");
-      customMaxHeight2Count++;
-      if (customMaxHeight2Count > 1) {
-        customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-        customMaxHeight2Count--;
-      }
+    maxFillingLimitInput.value = maxFillingLimitInput.value.replace(event.data, "");
+  } else if (maxFillingLimitInput.value.length > 2) {
+    if (maxFillingLimitInput.value === "100") {
       return;
     } else {
-      customMaxHeight2.value = customMaxHeight2.value.replace(event.data, ".");
-      customMaxHeight2Count++;
-      if (customMaxHeight2Count > 1) {
-        customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-        customMaxHeight2Count--;
-        return;
-      } else {
-        for (let char of customMaxHeight2.value) {
-          if (char === ".") {
-            if (customMaxHeight2Count > 1) {
-              customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-              customMaxHeight2Count--;
-            }
-          }
-        }
-      }
-      return;
-    }
-} else if (event.data === ".") {
-    if (customMaxHeight2.value[0] === ".") {
-      customMaxHeight2.value = `0${customMaxHeight2.value}`;
-      customMaxHeight2Count++;
-      if (customMaxHeight2Count > 1) {
-        customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-        customMaxHeight2Count--;
-      }
-      return;
-    } else {
-      customMaxHeight2Count++;
-      if (customMaxHeight2Count > 1) {
-        customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-        customMaxHeight2Count--;
-      } else {
-        for (let char of customMaxHeight2.value) {
-          if (char == ".") {
-            if (customMaxHeight2Count > 1) {
-              customMaxHeight2.value = customMaxHeight2.value.slice(0, length - 1);
-              customMaxHeight2Count--;
-            }
-          }
-        }
-      }
-      return;
-    } 
-  } else if (customMaxHeight2.value[0] == "0") {
-      if (customMaxHeight2.value[1] != ".") {
-        customMaxHeight2.value = customMaxHeight2.value.replace("0", "");
-      }  
-  } else if (event.data == null) {
-    if (customMaxHeight2.value.includes(".") == false && customMaxHeight2.value.includes(",") == false) {
-      customMaxHeight2Count = 0;
-      customHeightUserInputValidation();
-    } else if (isNaN(event.data)) {
-      customMaxHeight2.value = customMaxHeight2.value.replace(event.data, "");
-    } 
-  }
-});
-customMaxVolume2.addEventListener("input", (event) => {
-  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-    customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
-  } else if (event.data == null) {
-      customVolumeUserInputValidation();
-  } else if (isNaN(event.data)) {
-    customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
-  } else if (event.data == "0") {
-    if (customMaxVolume2.value.length === 1) {
-      customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
-    } else if (customMaxVolume2.value[0] == event.data) {
-      customMaxVolume2.value = customMaxVolume2.value.replace(event.data, "");
+      const index = maxFillingLimitInput.value.lastIndexOf(event.data);
+      maxFillingLimitInput.value = maxFillingLimitInput.value.substring(0, index) + "" + maxFillingLimitInput.value.substring(index + 1);   
     }
   }
-});
-customMaxHeight2.addEventListener("input", () => {
-  customHeightUserInputValidation();
-  if (errorMessages.includes("Invalid height-volume pair(s).")) {
-    addAnotherButton.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  } else {
-    addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
-  if (!addAnotherButton.disabled) {
-    addAnotherButton.style.backgroundColor = "#0162a6";
-  } else {
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-  }
-});
-customMaxVolume2.addEventListener("input", () => {
-  customVolumeUserInputValidation();
-  if (errorMessages.includes("Invalid height-volume pair(s).")) {
-    addAnotherButton.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  } else {
-    addAnotherButton.disabled = enableButton(customMaxHeight2, customMaxVolume2);
-  if (!addAnotherButton.disabled) {
-    addAnotherButton.style.backgroundColor = "#0162a6";
-  } else {
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-  }
-  }
-});
-customMaxHeight2.addEventListener("input", (event) => {
-  const stringNum = String(event.target.value);
-if (stringNum.includes(".")) {
-let numberOfDecimals = stringNum.split(".")[1].length;
-if (stringNum[0] === ".") {
-  customMaxHeight2.value = `0${customMaxHeight2.value}`;
-}
-if (numberOfDecimals > 2) {
-  customMaxHeight2.value = customMaxHeight2.value.slice(0, customMaxHeight2.value.length - 1);
-  if (customMaxVolume2.value != undefined || customMaxVolume2.value != "") {
-    addAnotherButton.disabled = false;
-    addAnotherButton.style.backgroundColor = "#0162a6";
-  }
-}
-}
-customHeightUserInputValidation();
-});
-customMaxVolume2.addEventListener("input", customVolumeUserInputValidation);
-customMaxHeight2.addEventListener("input", () => {
-  if (customMaxVolume2.style.borderColor == "red" || customMaxHeight2.style.borderColor == "red") {
-    errorMessages = errorMessages.filter(
-      (message) => message != "Invalid height-volume pair(s)."
-    );
-    errorMessages.push("Invalid height-volume pair(s).");
-  checkForErrorMessages();
-  addAnotherButton.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
+  if (maxFillingLimitInput.value[0] == "0") {
+    maxFillingLimitInput.value = maxFillingLimitInput.value.replace(event.data, "");
   }
 });
 
-customMaxVolume2.addEventListener("input", () => {
-if (customMaxHeight2.style.borderColor == "red" || customMaxVolume2.style.borderColor == "red") {
-  errorMessages = errorMessages.filter(
-    (message) => message != "Invalid height-volume pair(s)."
-  );
-  errorMessages.push("Invalid height-volume pair(s).");
-checkForErrorMessages();
-addAnotherButton.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
-}
-});
-
-customMaxHeight2.addEventListener("input", () => {
-  if(customMaxVolume2.value == undefined || customMaxVolume2.value == "") {
-    checkForErrorMessages();
-    addAnotherButton.disabled = true;
-    addAnotherButton.style.backgroundColor = "gray";
-    proceedButton.disabled = true;
-    proceedButton.style.backgroundColor = "gray";
+maxFillingLimitInput.addEventListener("input", () => {
+  maxFillingUserInputValidation();
+  if(maxFillingLimitInput.style.borderColor == "red" && errorMessages.includes("Invalid filling limit.")) {
+    window.scroll(0, 0);
   }
 });
-
-maxFilling.addEventListener("input", (event) => {
-  if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
-    maxFilling.value = maxFilling.value.replace(event.data, "");
-  } else if (isNaN(event.data)) {
-    maxFilling.value = maxFilling.value.replace(event.data, "");
-  }  
-});
-
-maxFilling.addEventListener("input", maxFillingUserInputValidation);
 form.addEventListener("submit", submitSettingsForm);
 modalXButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));
 modalCancelButton.addEventListener("click", (e) => cancelAndExitModal(e, modal, settingsListDiv));

@@ -1,4 +1,6 @@
 const modal = document.querySelector(".modal");
+const innerModal = document.querySelector(".inner-modal");
+const modalButtons = document.querySelector(".inner-modal-buttons");
 const modalOkButton = document.querySelector("#ok-button");
 const modalCloseButton = document.querySelector("#close-button");
 const modalCancelButton = document.querySelector("#cancel-button");
@@ -24,14 +26,13 @@ export const messageModalContent = async (modal, settingsListDiv, message) => {
   }
   const ms = document.createElement("p");
   ms.textContent = `${message}`;
-  ms.style.width = "80%";
+  ms.classList.add("inner-modal-result-message");
   await settingsListDiv.appendChild(ms);
   settingsListDiv.style.textAlign = "center";
-  modal.style.display = "block";
+  modal.style.display = "flex";
   modalOkButton.style.display = "none";
   modalCancelButton.style.display = "none";
-  // modalXButton.style.display = "none";
-  modalCloseButton.style.display = "inline";
+  modalCloseButton.style.display = "block";
 };
 
 export const modalContent = async (
@@ -49,12 +50,17 @@ export const modalContent = async (
     heightsAndVolumes, 
     maxFilling
     ) => {
+      const body = document.querySelector("body");
+      body.style.position = "fixed";
       hvPairs = "";
       modalOkButton.style.display = "inline";
       modalXButton.style.display = "block";
       modalCancelButton.value = "BACK";
       modalCancelButton.style.display = "inline";
       modalCloseButton.style.display = "none";
+      const emptyDiv = document.createElement("div");
+      emptyDiv.style.height = "1vh";
+      await settingsListDiv.appendChild(emptyDiv);
         const modalTitle = document.createElement("h3");
   modalTitle.className = "inner-modal-settings-list-title";
   modalTitle.textContent = "Please check the entered data";
@@ -64,7 +70,8 @@ export const modalContent = async (
   unitsTypeAndValue.className = "inner-modal-settings-list-ul";
   const unitsPreText = document.createElement("li");
   const unitsName = document.createElement("li");
-  unitsPreText.textContent = "Measuring unit:";
+  unitsPreText.textContent = "Measuring unit: ";
+  unitsPreText.classList.add("pre-text");
   unitsName.textContent = `${unitsInput.value}`;
   unitsTypeAndValue.appendChild(unitsPreText);
   unitsTypeAndValue.appendChild(unitsName);
@@ -76,6 +83,7 @@ export const modalContent = async (
   const mediaPreText = document.createElement("li");
   const mediaName = document.createElement("li");
   mediaPreText.textContent = "Medium type:";
+  mediaPreText.classList.add("pre-text");
   if (densityInput.value == "Custom") {
     mediaName.textContent = `${mediumNameInput.value} (${densityPicker.value} kg/m3)`;
     medium = `${mediumNameInput.value} (${densityPicker.value} kg/m3)`;
@@ -91,6 +99,7 @@ export const modalContent = async (
   const maximumHeightPreText = document.createElement("li");
   const maximumHeightValue = document.createElement("li");
   maximumHeightPreText.textContent = "Tank height [m]:";
+  maximumHeightPreText.classList.add("pre-text");
   maximumHeightValue.textContent = `${maxHeight.value}`;
   maximumHeight.appendChild(maximumHeightPreText);
   maximumHeight.appendChild(maximumHeightValue);
@@ -102,6 +111,7 @@ export const modalContent = async (
   const maximumVolumePreText = document.createElement("li");
   const maximumVolumeValue = document.createElement("li");
   maximumVolumePreText.textContent = "Tank volume [l]:";
+  maximumVolumePreText.classList.add("pre-text");
   maximumVolumeValue.textContent = `${maxVolume.value}`;
   maximumVolume.appendChild(maximumVolumePreText);
   maximumVolume.appendChild(maximumVolumeValue);
@@ -113,6 +123,7 @@ export const modalContent = async (
   const tankShapePreText = document.createElement("li");
   const tankShapeName = document.createElement("li");
   tankShapePreText.textContent = `Tank shape:`;
+  tankShapePreText.classList.add("pre-text");
   tankShapeName.textContent = `${tankShape.value}`;
   tankShapeTypeAndValue.appendChild(tankShapePreText);
   tankShapeTypeAndValue.appendChild(tankShapeName);
@@ -125,10 +136,10 @@ export const modalContent = async (
     customHeightVolumePairsList.className = "inner-modal-settings-list-ul";
     customHeightVolumePairsList.id = "inner-modal-settings-list-ul-custom-pairs-list";
     const customHeightVolumePairsListElementPreText = document.createElement("li");
-    customHeightVolumePairsListElementPreText.textContent = `Height - Volume pairs [m,l]:`;
+    customHeightVolumePairsListElementPreText.textContent = `Height - volume pairs [m,l]: `;
+    customHeightVolumePairsListElementPreText.classList.add("pre-text");
     customHeightVolumePairsListElementPreText.id = "inner-modal-settings-list-ul-custom-pairs-list-pre-text";
     customHeightVolumePairsList.appendChild(customHeightVolumePairsListElementPreText);
-    // customHeightVolumePairsList.style.width = "80%";
     for (let i = 0; i < customHeights.length; i++) {
       const height = await customHeights[i][1];
       for (let j = 0; j < customVolumes.length; j++) {
@@ -139,6 +150,7 @@ export const modalContent = async (
          await heightsAndVolumes.push(`(${height}, ${volume})`);
          const customHeightVolumePairsListElement = document.createElement("li");
          customHeightVolumePairsListElement.textContent = `(${height}, ${volume})`;
+         customHeightVolumePairsListElement.classList.add("inner-modal-height-volume-pair");
          customHeightVolumePairsList.appendChild(customHeightVolumePairsListElement);
           break;
         }
@@ -158,6 +170,7 @@ export const modalContent = async (
   const fillingLimitPreText = document.createElement("li");
   const fillingLimitValue = document.createElement("li");
   fillingLimitPreText.textContent = `Filling limit [%]:`;
+  fillingLimitPreText.classList.add("pre-text");
   fillingLimitValue.textContent =  `${maxFilling.value}`;
   fillingLimit.appendChild(fillingLimitPreText);
   fillingLimit.appendChild(fillingLimitValue);
@@ -165,11 +178,13 @@ export const modalContent = async (
   await settingsListDiv.appendChild(fillingLimit);
 
   settingsListDiv.style.textAlign = "left";
-
-  modal.style.display = "block";
+  modal.style.display = "flex";
+  emptyDiv.scrollIntoView();
     };
 
   export const cancelAndExitModal = async (event, element, listElement) => {
+    const body = document.querySelector("body");
+      body.style.position = "static";
         event.preventDefault();
         units = "";
         medium = "";
@@ -183,6 +198,11 @@ export const modalContent = async (
         ) {
           await listElement.removeChild(listElement.lastChild);
         }
+        
+        modal.id = "";
+        innerModal.id = "";
+        modalButtons.id = "";
+        settingsListDiv.id ="";
       };
       
   export const submitModalForm = async (event) => {
@@ -219,14 +239,17 @@ export const modalContent = async (
           
       //     console.log('ERROR:' + error)
       // });
-
       event.preventDefault();
-                if (isSuccessfull) {
-            modalCloseButton.style.display = "none";
-            messageModalContent(modal, settingsListDiv, "Tank form was successfully filled. Press button to exit the modal and then close the browser.");
+      
+      modal.id = "message-modal";
+      innerModal.id = "message-inner-modal";
+      settingsListDiv.id ="message-inner-modal-settings-list";
+      modalButtons.id = "message-inner-modal-buttons";
+      modalCloseButton.style.display = "none";
+          if (isSuccessfull) {
+            messageModalContent(modal, settingsListDiv, "Tank setup was successful. You can now safely close the browser.");
           } else {
-            modalCloseButton.style.display = "none";
-            messageModalContent(modal, settingsListDiv, "Tank form was not successfully filled. Press button to return to form and try again.");
+            messageModalContent(modal, settingsListDiv, "Tank setup was not successful. Press OK button and try again.");
           }
           isSuccessfull = !isSuccessfull;
           let date = new Date().toUTCString();
