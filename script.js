@@ -4,7 +4,6 @@ const isError = (boolean, element) => {
     error.style.display = "block";
     error.style.color = "red";
     error.style.fontWeight = "900";
-    // window.scroll(0, 0);
   } else {
       element.style.borderColor = "black";  
   } 
@@ -334,6 +333,7 @@ const maxVolumeInput = document.querySelector("#max-volume-input");
 const tankShapeInput = document.querySelector("#tank-shape-input");
 const tankShapeOption = document.querySelector("#tank-shape-options");
 const tankShapeOptions = document.querySelectorAll(".shape-option-element");
+const customTankShapeOption = document.querySelector("#custom-tank-shape");
 const shapeAdjustment = document.querySelector("#custom-tank-shape-div");
 const customHeightInputFields = document.querySelectorAll(".custom-height-input");
 const customVolumeInputFields = document.querySelectorAll(".custom-volume-input");
@@ -341,34 +341,6 @@ const customHeight = document.querySelector("#custom-height1-input");
 const customVolume = document.querySelector("#custom-volume1-input");
 const customHeight2 = document.querySelector("#custom-height2-input");
 const customVolume2 = document.querySelector("#custom-volume2-input");
-// const customHeight3 = document.querySelector("#custom-height3-input");
-// const customVolume3 = document.querySelector("#custom-volume3-input");
-// const customHeight4 = document.querySelector("#custom-height4-input");
-// const customVolume4 = document.querySelector("#custom-volume4-input");
-// const customHeight5 = document.querySelector("#custom-height5-input");
-// const customVolume5 = document.querySelector("#custom-volume5-input");
-// const customHeight6 = document.querySelector("#custom-height6-input");
-// const customVolume6 = document.querySelector("#custom-volume6-input");
-// const customHeight7 = document.querySelector("#custom-height7-input");
-// const customVolume7 = document.querySelector("#custom-volume7-input");
-// const customHeight8 = document.querySelector("#custom-height8-input");
-// const customVolume8 = document.querySelector("#custom-volume8-input");
-// const customHeight9 = document.querySelector("#custom-height9-input");
-// const customVolume9 = document.querySelector("#custom-volume9-input");
-// const customHeight10 = document.querySelector("#custom-height10-input");
-// const customVolume10 = document.querySelector("#custom-volume10-input");
-// const customHeight11 = document.querySelector("#custom-height11-input");
-// const customVolume11 = document.querySelector("#custom-volume11-input");
-// const customHeight12 = document.querySelector("#custom-height12-input");
-// const customVolume12 = document.querySelector("#custom-volume12-input");
-// const customHeight13 = document.querySelector("#custom-height13-input");
-// const customVolume13 = document.querySelector("#custom-volume13-input");
-// const customHeight14 = document.querySelector("#custom-height14-input");
-// const customVolume14 = document.querySelector("#custom-volume14-input");
-// const customHeight15 = document.querySelector("#custom-height15-input");
-// const customVolume15 = document.querySelector("#custom-volume15-input");
-// const customHeight16 = document.querySelector("#custom-height16-input");
-// const customVolume16 = document.querySelector("#custom-volume16-input");
 const customMaxHeightInput = document.querySelector("#custom-max-height-input");
 const customMaxVolumeInput = document.querySelector("#custom-max-volume-input");
 const addAnotherButton = document.querySelector("#add-another-custom-button");
@@ -472,24 +444,6 @@ const tankShapeUserInputValidation = () => {
   checkForErrorMessages();
 };
 
-// const customHeightUserInputValidation = () => {
-//   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
-//   const chvArray = customHeightValidation(customHeight2, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customHeights, maxHeightInput);
-//   otherCustomMaxHeightsAndVolumes = [...chvArray[0]];
-//   customHeights = [...chvArray[1]];
-//   errorMessages.push(chvArray[2]);
-//   checkForErrorMessages();
-// };
-
-// const customVolumeUserInputValidation = () => {
-//   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
-//   const cvvArray = customVolumeValidation(customVolume2, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customVolumes, maxVolumeInput);
-//   otherCustomMaxHeightsAndVolumes = [...cvvArray[0]];
-//   customVolumes = [...cvvArray[1]];
-//   errorMessages.push(cvvArray[2]);
-//   checkForErrorMessages();
-// };
-
 const customAddedHeightUserInputValidation = (element) => {
   errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
   const chvArray = customHeightValidation(element, "Invalid height-volume pair", otherCustomMaxHeightsAndVolumes, customHeights, maxHeightInput);
@@ -519,8 +473,24 @@ const checkForErrorMessages = () => {
  errorMessages = errorMessages.filter(message => message != "");
  errorMessages = errorMessages.filter(message => message != undefined);
  if (errorMessages.length == 0) {
-  proceedButton.disabled = false;
-  proceedButton.style.backgroundColor = "#0162a6";
+  let anyEmptyHeightField = false;
+  let anyEmptyVolumeField = false;
+  customHeightInputFields.forEach(el => {
+    if (el.disabled == false && (el.value == "" || el.value == undefined)) {
+      anyEmptyHeightField = true;
+      return;
+    }
+  });
+  customVolumeInputFields.forEach(el => {
+    if (el.disabled == false && (el.value == "" || el.value == undefined)) {
+      anyEmptyVolumeField = true;
+      return;
+    }
+  });
+  if(anyEmptyHeightField === false || anyEmptyVolumeField === false) {
+    proceedButton.disabled = false;
+    proceedButton.style.backgroundColor = "#0162a6";
+  }
  } else {
   // pageTitle.scrollIntoView(true);
   proceedButton.disabled = true;
@@ -581,8 +551,7 @@ const notCustomTankShape = () => {
       customVolumes.length = 0;
 };
 
-const customTankShape = (id) => {
-  
+const customTankShape = async (id) => {
   const trimmedId = id.trim();
   tankShapeInput.value = trimmedId;
   if (maxHeightInput.value == "" || maxHeightInput.value == undefined || maxHeightInput.value == "0") {
@@ -593,9 +562,9 @@ const customTankShape = (id) => {
    return;
   }
   if (trimmedId == "Custom") {
+    isCustomTankShape();
     proceedButton.disabled = true;
     proceedButton.style.backgroundColor = "gray";
-    isCustomTankShape();
     return;
   } else {
     notCustomTankShape();
@@ -679,8 +648,6 @@ customHeightInputFields.forEach(heightInput => {
     return;
    } else {
     const volumeInput = document.querySelector(`#${volumeId}`);
-
-    // Dodaj potrebno logiko (validacije)
 
     // 1. Height
     heightInput.addEventListener("input", (event) => {
@@ -1437,6 +1404,11 @@ maxVolumeInput.addEventListener("input", () => {
 unitsInput.addEventListener("focus", addReadonly);
 mediaInput.addEventListener("focus", addReadonly);
 tankShapeInput.addEventListener("focus", addReadonly);
+customTankShapeOption.addEventListener("click", () => {
+    console.log("In the if block!!!!");
+    proceedButton.style.backgroundColor = "gray";
+    proceedButton.disabled = true;
+});
 addAnotherButton.addEventListener("click", addAnotherCustomTankShapeHeightVolumePair);
 deleteButton.addEventListener("click", () => deleteCustomTankShapeHeightVolumePair(currentCustomHeightInput, currentCustomVolumeInput));
 maxFillingLimitInput.addEventListener("input", (event) => {
