@@ -93,7 +93,7 @@ form {
 .shape-option-element:hover,
 .media-option-element:hover {
     color: rgb(255, 255, 255);
-    background-color: #1E90FF;
+    background-color: var(--blue-bg-color);
 }
 
 #custom-density-div,
@@ -157,8 +157,6 @@ form {
 #custom-max-volume-input {
     display: block;
 }
-
-
 
 .button {
     width: auto;
@@ -257,11 +255,6 @@ form {
     border-radius:0;
 }
 
-#x-button:hover {
-    background: rgb(255, 0, 0);
-    color: rgb(0, 0, 0);
-}
-
  .inner-modal-settings-list {
     position: relative;
     height: var(--font-size);
@@ -354,17 +347,8 @@ margin-right: 2vw;
     border-color: rgb(255, 255, 255);
 }
 
-.modal-button:hover {
-    background: rgb(255, 0, 0);
-    color: rgb(0, 0, 0);
-}
-
 #ok-button {
     margin: auto;
-}
-
-#ok-button:hover {
-    background: rgb(0, 255, 0);
 }
 
 #close-button {
@@ -484,7 +468,6 @@ margin-right: 2vw;
     }
 
     .inner-modal-settings-list {
-        overflow-y: scroll;
         width: 100%;
     }
 

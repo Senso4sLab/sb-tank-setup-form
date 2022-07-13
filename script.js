@@ -280,20 +280,6 @@ const errorMessageOutput = (element, errorMessages) => {
   }
 };
 
-// import {
-//   //limitDecimals,
-//   dropdownValidation, 
-//   regularNumberValidation, 
-//   maxHeightValidation, 
-//   maxVolumeValidation, 
-//   regularTextValidation,
-//   customHeightValidation, 
-//   customVolumeValidation,
-//   enableButton, 
-//   maxFillingValidation,
-//   errorMessageOutput,
-// } from './utils/inputValidation.js';
-
 import { 
   modalContent,
   cancelAndExitModal,
@@ -301,8 +287,6 @@ import {
 } from "./utils/modal.js";
 
 let maxHeightCount = 0;
-// let customMaxHeightCount = 0;
-// let customMaxHeight2Count = 0;
 let currentCustomHeightInput;
 let currentCustomVolumeInput;
 let heightInputCount = 0;
@@ -492,7 +476,6 @@ const checkForErrorMessages = () => {
     proceedButton.style.backgroundColor = "#0162a6";
   }
  } else {
-  // pageTitle.scrollIntoView(true);
   proceedButton.disabled = true;
   proceedButton.style.backgroundColor = "gray";
  }
@@ -649,7 +632,6 @@ customHeightInputFields.forEach(heightInput => {
    } else {
     const volumeInput = document.querySelector(`#${volumeId}`);
 
-    // 1. Height
     heightInput.addEventListener("input", (event) => {
       heightInputCount = 0;
       if (heightInput.value.length > 2) {
@@ -726,7 +708,6 @@ customHeightInputFields.forEach(heightInput => {
       } 
       });
 
-      // 1.Volume
       volumeInput.addEventListener("input", (event) => {
       if (event.data === "." || event.data === "-" || event.data === "," || event.data === " ") {
         volumeInput.value = volumeInput.value.replace(event.data, "");
@@ -743,11 +724,8 @@ customHeightInputFields.forEach(heightInput => {
       }
       });
 
-      // 2. Volume
       volumeInput.addEventListener("input", () => customAddedVolumeUserInputValidation(volumeInput));
 
-
-      // 2. Height
       heightInput.addEventListener("input", (event) => {
         const stringNum = String(event.target.value);
     if (stringNum.includes(".")) {
@@ -765,7 +743,6 @@ customHeightInputFields.forEach(heightInput => {
     customAddedHeightUserInputValidation(heightInput);
     });
 
-    // 3. Height
     heightInput.addEventListener("input", () => {
       if (heightInput.style.borderColor == "red") {
         errorMessages = errorMessages.filter(message => message != "Invalid height-volume pair");
@@ -776,7 +753,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 4. Height
     heightInput.addEventListener("input", () => {
       if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
         errorMessages = errorMessages.filter(
@@ -791,7 +767,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 5. Height
     heightInput.addEventListener("input", () => {
       if (volumeInput.value == undefined || volumeInput.value == "") {
         proceedButton.style.backgroundColor = "gray";
@@ -799,7 +774,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 6. Height
     heightInput.addEventListener("input", () => {
       customAddedHeightUserInputValidation(heightInput);
       if (errorMessages.includes("Invalid height-volume pair")) {
@@ -824,7 +798,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 7. Height
     heightInput.addEventListener("input", () => {
       if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
         errorMessages = errorMessages.filter(
@@ -839,14 +812,12 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
 
-    // 8. Height
     heightInput.addEventListener("blur", () => {
       if (heightInput.style.borderColor === "red") {
         window.scroll(0, 0);
       }
     });
 
-    // 9. Height
     heightInput.addEventListener("focus", () => {
       if (volumeInput.style.borderColor === "red") {
         heightInput.blur();
@@ -854,7 +825,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
 
-    // 3. Volume
     volumeInput.addEventListener("input", () => {
       if (heightInput.value == undefined || heightInput.value == "") {
         proceedButton.style.backgroundColor = "gray";
@@ -862,7 +832,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 4. Volume
     volumeInput.addEventListener("input", () => {
       customAddedVolumeUserInputValidation(volumeInput);
       if (errorMessages.includes("Invalid height-volume pair")) {
@@ -887,7 +856,6 @@ customHeightInputFields.forEach(heightInput => {
       }
     });
     
-    // 5. Volume
     volumeInput.addEventListener("input", () => {
       if (heightInput.style.borderColor == "red" || volumeInput.style.borderColor == "red") {
         errorMessages = errorMessages.filter(
@@ -902,15 +870,12 @@ customHeightInputFields.forEach(heightInput => {
       }
       });
 
-      // 6. Volume
       volumeInput.addEventListener("blur", () => {
-        // customAddedVolumeUserInputValidation(volumeInput);
         if (volumeInput.style.borderColor === "red") {
           window.scroll(0, 0);
         }
       });
 
-      // 7. Volume
       volumeInput.addEventListener("focus", () => {
         if (heightInput.style.borderColor === "red") {
           volumeInput.blur();
@@ -1012,11 +977,9 @@ const addAnotherCustomTankShapeHeightVolumePair = () => {
     currentCustomHeightInput = heightInput;
     currentCustomVolumeInput = volumeInput;
 
-    // Onemogoči prejšnji par polj 
     prevHeightInput.disabled = true;
     prevVolumeInput.disabled = true;
 
-    // Prikaži in omogoči naslednji par polj
     heightInput.style.display = "block";
     volumeInput.style.display = "block";
 
@@ -1026,18 +989,13 @@ const addAnotherCustomTankShapeHeightVolumePair = () => {
     counter++;
 };
 
-// addAnotherButton.addEventListener("click", addAnotherCustomTankShape);
-
 const deleteCustomTankShapeHeightVolumePair = (heightInput, volumeInput) => {
-  console.log(errorMessages);
   customHeights = customHeights.filter(height => height[0] != `custom-height${counter - 1}-input`);
   customVolumes = customVolumes.filter(volume => volume[0] != `custom-volume${counter - 1}-input`);
   const prevHeightInput = document.querySelector(`#custom-height${counter - 2}-input`);
   const prevVolumeInput = document.querySelector(`#custom-volume${counter - 2}-input`);
   addAnotherButton.disabled = false;
   addAnotherButton.style.backgroundColor = "#0162a6";
-  console.log(customHeights);
-  console.log(customVolumes);
 
   if(heightInput.style.borderColor === "red") {
     heightInput.style.borderColor = "black";
@@ -1052,13 +1010,11 @@ const deleteCustomTankShapeHeightVolumePair = (heightInput, volumeInput) => {
   heightInput.value = "";
   heightInput.style.display = "none";
   heightInput.disabled = true;
-  // Ponovno omogoči prejšnje polje z višino
   prevHeightInput.disabled = false;
 
   volumeInput.value = "";
   volumeInput.style.display = "none";
   volumeInput.disabled = true;
-  // Ponovno omogoči prejšnje polje z prostornino
   prevVolumeInput.disabled = false;
 
   currentCustomHeightInput = prevHeightInput;
@@ -1405,7 +1361,6 @@ unitsInput.addEventListener("focus", addReadonly);
 mediaInput.addEventListener("focus", addReadonly);
 tankShapeInput.addEventListener("focus", addReadonly);
 customTankShapeOption.addEventListener("click", () => {
-    console.log("In the if block!!!!");
     proceedButton.style.backgroundColor = "gray";
     proceedButton.disabled = true;
 });

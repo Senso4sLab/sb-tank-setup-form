@@ -110,7 +110,7 @@ export const modalContent = async (
   maximumVolume.className = "inner-modal-settings-list-ul";
   const maximumVolumePreText = document.createElement("li");
   const maximumVolumeValue = document.createElement("li");
-  maximumVolumePreText.textContent = "Tank volume [l]:";
+  maximumVolumePreText.textContent = "Tank volume [L]:";
   maximumVolumePreText.classList.add("pre-text");
   maximumVolumeValue.textContent = `${maxVolume.value}`;
   maximumVolume.appendChild(maximumVolumePreText);
