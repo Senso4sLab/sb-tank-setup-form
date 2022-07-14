@@ -18,6 +18,10 @@
     --button-border-radius: 25px;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 form {
     height: auto;
     margin-bottom: 0;
@@ -220,8 +224,9 @@ form {
     line-height: 1.5;
     z-index: 800;
     padding-bottom: 5vh;
-    border-radius:5px;
+    border-radius: 5px;
     overflow: auto;
+    scrollbar-color: black;
 }
 
 #message-inner-modal {
@@ -237,6 +242,8 @@ form {
     padding: auto;
     overflow: hidden;
     z-index: 810;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 #x-button {
@@ -460,6 +467,9 @@ margin-right: 2vw;
         height: 80vh;
         margin-top: auto;
         margin-bottom: auto;
+        overflow: auto;
+        border-bottom-right-radius:5px;
+        border-top-right-radius: 5px;
     }
 
     .inner-modal-header {
@@ -469,6 +479,9 @@ margin-right: 2vw;
 
     .inner-modal-settings-list {
         width: 100%;
+        overflow: hidden;
+        border-bottom-right-radius:5px;
+        border-top-right-radius: 5px;
     }
 
     #message-inner-modal {

@@ -136,7 +136,7 @@ export const modalContent = async (
     customHeightVolumePairsList.className = "inner-modal-settings-list-ul";
     customHeightVolumePairsList.id = "inner-modal-settings-list-ul-custom-pairs-list";
     const customHeightVolumePairsListElementPreText = document.createElement("li");
-    customHeightVolumePairsListElementPreText.textContent = `Height - volume pairs [m,l]: `;
+    customHeightVolumePairsListElementPreText.textContent = `Height - volume pairs [m,L]: `;
     customHeightVolumePairsListElementPreText.classList.add("pre-text");
     customHeightVolumePairsListElementPreText.id = "inner-modal-settings-list-ul-custom-pairs-list-pre-text";
     customHeightVolumePairsList.appendChild(customHeightVolumePairsListElementPreText);
