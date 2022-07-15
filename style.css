@@ -367,6 +367,7 @@ margin-right: 2vw;
     margin: auto;
 }
 
+/*iPhone 6/7/8*/
 @media only screen 
   and (device-width: 375px) 
   and (device-height: 667px) 
@@ -381,13 +382,26 @@ margin-right: 2vw;
         margin-top: 0vh;
         height: 80vh;
     }
-
-    #ok-button,
-    #cancel-button {
-       margin: auto; 
-    }
   }
 
+    /*iPhone 6/7/8 Plus*/
+    @media only screen 
+    and (device-width: 414px) 
+    and (device-height: 736px) 
+    and (-webkit-min-device-pixel-ratio: 1) {
+  
+      #custom-height-label,
+      #custom-volume-label {
+          width: 20vw;
+      }
+      
+      .inner-modal {
+          margin-top: 0vh;
+          height: 80vh;
+      }
+    }
+
+  /*iPhone X*/
   @media only screen 
   and (device-width: 375px) 
   and (device-height: 812px) 
@@ -401,27 +415,6 @@ margin-right: 2vw;
     .inner-modal {
         margin-top: 0vh;
         height: 80vh;
-    }
-  }
-
-  @media only screen 
-  and (device-width: 414px) 
-  and (device-height: 736px) 
-  and (-webkit-min-device-pixel-ratio: 1) {
-
-    #custom-height-label,
-    #custom-volume-label {
-        width: 20vw;
-    }
-    
-    .inner-modal {
-        margin-top: 0vh;
-        height: 80vh;
-    }
-
-    #ok-button,
-    #cancel-button {
-       margin: auto; 
     }
   }
 
